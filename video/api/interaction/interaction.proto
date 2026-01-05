@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package api.interaction.v1;
+
+option go_package = "api/interaction/v1;v1";
+
+import "api/common/base.proto";
+import "api/video/video.proto";
+import "api/user/user.proto";
+
+// ========= 评论通用结构（文档“评论” Schema） =========
+message Comment {
+  int64 id                          = 1;
+  int64 video_id                    = 2;
+  int64 user_id                     = 3;
+  api.user.v1.User user             = 4;
+  string content                    = 5;
+  api.common.v1.Timestamp created_at = 6;
+}
+
+// ========= Service 定义 =========
+service InteractionService {
+  // 点赞操作（只对视频）
+  rpc LikeAction(LikeActionRequest) returns (LikeActionReply);
+
+  // 点赞列表（指定用户点赞的视频）
+  rpc LikeList(LikeListRequest) returns (LikeListReply);
+
+  // 评论（对视频评论，本次作业不要求对评论进行评论）
+  rpc CommentAction(CommentActionRequest) returns (CommentActionReply);
+
+  // 评论列表
+  rpc CommentList(CommentListRequest) returns (CommentListReply);
+
+  // 删除评论（不可删除他人评论）
+  rpc DeleteComment(DeleteCommentRequest) returns (DeleteCommentReply);
+}
+
+// ========= 点赞操作 =========
+message LikeActionRequest {
+  int64 video_id   = 1;
+  // action_type: 1 点赞, 2 取消点赞
+  int32 action_type = 2;
+}
+
+message LikeActionReply {
+  api.common.v1.BaseResponse base = 1;
+}
+
+// ========= 点赞列表 =========
+message LikeListRequest {
+  int64 user_id                   = 1;
+  api.common.v1.PageRequest page  = 2;
+}
+
+message LikeListReply {
+  api.common.v1.BaseResponse base     = 1;
+  repeated api.video.v1.Video videos  = 2;
+  api.common.v1.PageResponse page     = 3;
+}
+
+// ========= 评论 =========
+message CommentActionRequest {
+  int64 video_id   = 1;
+  string content   = 2;
+  // comment_id 字段题目说本次不要求实现，这里仅保留以兼容文档
+  int64 comment_id = 3;
+}
+
+message CommentActionReply {
+  api.common.v1.BaseResponse base = 1;
+  Comment comment                 = 2;
+}
+
+// ========= 评论列表 =========
+message CommentListRequest {
+  int64 video_id                  = 1;
+  api.common.v1.PageRequest page  = 2;
+}
+
+message CommentListReply {
+  api.common.v1.BaseResponse base = 1;
+  repeated Comment comments       = 2;
+  api.common.v1.PageResponse page = 3;
+}
+
+// ========= 删除评论 =========
+message DeleteCommentRequest {
+  int64 comment_id = 1;
+}
+
+message DeleteCommentReply {
+  api.common.v1.BaseResponse base = 1;
+}
+
+

@@ -1,0 +1,11 @@
+go 1.24.3
+
+use (
+	./api
+	./common
+	./gateway
+	./userService
+	./videoService
+	./interactionService
+	./socialService
+)

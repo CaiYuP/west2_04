@@ -1,0 +1,60 @@
+server:
+  name: "user"
+  addr: "127.0.0.1:8081"
+zap:
+  debugFileName: "E:\\west2\\04\\west2_04\\logs\\debug\\user-debug.log"
+  infoFileName: "E:\\west2\\04\\west2_04\\logs\\debug\\user-info.log"
+  warnFileName: "E:\\west2\\04\\west2_04\\logs\\debug\\user-error.log"
+  maxSize: 500,
+  maxAge: 28,
+  MaxBackups: 3
+redis:
+  host: "127.0.0.1"
+  port: "6379"
+  password: ""
+  db: 0
+grpc:
+  addr: "0.0.0.0:9991"
+  name: "user"
+  version: "1.0.0"
+  weight: 2
+etcd:
+  addrs:
+    - "127.0.0.1:2379"
+mysql:
+  username: root
+  password: root
+  host: 127.0.0.1
+  port: 3309
+  db: west2_video
+jwt:
+  accessExp: 604800 #7天
+  refreshExp: 1209600
+  accessSecret: west2
+  refreshSecret: cai
+db:
+  separation: false
+  master:
+    name: master
+    username: root
+    password: root
+    host: 127.0.0.1
+    port: 3309
+    db: west2_video
+  slave:
+    - username: root
+      password: root
+      host: 127.0.0.1
+      port: 3309
+      db: west2_video_slave1
+      name: slave1
+    - username: root
+      password: root
+      host: 127.0.0.1
+      port: 3309
+      db: west2_video_slave1
+      name: slave2
+minio:
+  endpoint: localhost:9009,
+  accessKey: O7TUtHOJfKO8YL9gUUuz
+  secretKey: E4ffA2ji7sPrxxkN7b7DXiZBoIctugIBgHT60kx2

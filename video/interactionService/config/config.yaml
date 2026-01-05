@@ -1,0 +1,52 @@
+server:
+  name: "interaction-service"
+  addr: "127.0.0.1:8083"
+zap:
+  debugFileName: "E:\\west2\\04\\west2_04\\logs\\debug\\interaction-debug.log"
+  infoFileName: "E:\\west2\\04\\west2_04\\logs\\debug\\interaction-info.log"
+  warnFileName: "E:\\west2\\04\\west2_04\\logs\\debug\\interaction-error.log"
+  maxSize: 500
+  maxAge: 28
+  MaxBackups: 3
+redis:
+  host: "127.0.0.1"
+  port: "6379"
+  password: ""
+  db: 0
+grpc:
+  addr: "0.0.0.0:9993"
+  name: "interaction"
+  version: "1.0.0"
+  weight: 2
+etcd:
+  addrs:
+    - "127.0.0.1:2379"
+mysql:
+  username: root
+  password: root
+  host: 127.0.0.1
+  port: 3306
+  db: west2_video
+jwt:
+  accessExp: 7 #天
+  refreshExp: 14
+  accessSecret: west2-video
+  refreshSecret: cai
+db:
+  separation: false
+  master:
+    name: master
+    username: root
+    password: root
+    host: 127.0.0.1
+    port: 3306
+    db: west2_video
+  slave: []
+  max_idle_conns: 10
+  max_open_conns: 200
+  conn_max_lifetime: 3600
+minio:
+  endpoint: localhost:9000
+  accessKey: ""
+  secretKey: ""
+

@@ -1,0 +1,33 @@
+{"level":"ERROR","time":"2025-12-26T18:01:49.673+0800","caller":"domain/user.go:28","msg":"UserDomain FindUserByUserName FindUserByUserName error","error":"Error 1146 (42S02): Table 'msproject.users' doesn't exist"}
+{"level":"ERROR","time":"2025-12-26T18:01:49.674+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:-888, msg:数据库出错"}
+{"level":"ERROR","time":"2025-12-26T18:04:10.061+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"ERROR","time":"2025-12-26T18:07:28.162+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"ERROR","time":"2025-12-26T18:08:15.055+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"ERROR","time":"2025-12-26T18:08:52.370+0800","caller":"domain/user.go:42","msg":"UserDomain Register Create error","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2025-12-26T18:08:52.370+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:-888, msg:数据库出错"}
+{"level":"ERROR","time":"2025-12-26T18:09:13.322+0800","caller":"domain/user.go:28","msg":"UserDomain FindUserByUserName FindUserByUserName error","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2025-12-26T18:09:13.322+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:-888, msg:数据库出错"}
+{"level":"ERROR","time":"2025-12-26T18:12:21.011+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"ERROR","time":"2025-12-26T19:13:30.067+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"ERROR","time":"2025-12-26T19:20:23.610+0800","caller":"service/userservice.go:33","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"ERROR","time":"2025-12-26T19:25:21.215+0800","caller":"service/userservice.go:33","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"ERROR","time":"2026-01-03T11:11:21.362+0800","caller":"service/userservice.go:33","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"ERROR","time":"2026-01-04T16:26:26.113+0800","caller":"domain/user.go:82","msg":"UserDomain RefreshToken error","error":"Token is expired"}
+{"level":"ERROR","time":"2026-01-04T16:26:26.113+0800","caller":"service/userservice.go:65","msg":"UserServiceService RefreshToken error","error":"code:-777, msg:jwt出错"}
+{"level":"ERROR","time":"2026-01-04T17:39:11.159+0800","caller":"domain/user.go:91","msg":"UserDomain FindUserById error","error":"record not found"}
+{"level":"ERROR","time":"2026-01-04T17:39:11.159+0800","caller":"service/userservice.go:83","msg":"UserServiceService userDomain FindUserById error","error":"code:-888, msg:数据库出错"}
+{"level":"ERROR","time":"2026-01-04T19:56:38.777+0800","caller":"domain/user.go:100","msg":"UserDomain UpdateAvatar error","error":"WHERE conditions required"}
+{"level":"ERROR","time":"2026-01-04T19:56:38.778+0800","caller":"service/userservice.go:105","msg":"UserServiceService userDomain UpdateAvatar error","error":"code:-888, msg:数据库出错"}
+{"level":"ERROR","time":"2026-01-04T20:57:04.985+0800","caller":"domain/user.go:102","msg":"UserDomain UploadImage error","error":"上传失败，错误码: 400, 消息: 只支持上传图片文件（JPG、PNG、GIF、WEBP）"}
+{"level":"ERROR","time":"2026-01-04T20:57:04.986+0800","caller":"service/userservice.go:105","msg":"UserServiceService userDomain UpdateAvatar error","error":"code:105, msg:头像上次错误"}
+{"level":"ERROR","time":"2026-01-04T21:07:06.989+0800","caller":"domain/user.go:102","msg":"UserDomain UploadImage error","error":"上传失败，错误码: 400, 消息: 只支持上传图片文件（JPG、PNG、GIF、WEBP）"}
+{"level":"ERROR","time":"2026-01-04T21:07:06.989+0800","caller":"service/userservice.go:105","msg":"UserServiceService userDomain UpdateAvatar error","error":"code:105, msg:头像上次错误"}
+{"level":"ERROR","time":"2026-01-04T21:18:56.017+0800","caller":"config/mysql.go:92","msg":"连接MySQL数据库失败, error=dial tcp :0: connectex: The requested address is not valid in its context."}
+{"level":"ERROR","time":"2026-01-04T21:19:01.313+0800","caller":"config/mysql.go:92","msg":"连接MySQL数据库失败, error=dial tcp :0: connectex: The requested address is not valid in its context."}
+{"level":"ERROR","time":"2026-01-04T22:30:28.555+0800","caller":"handler/user_handler.go:203","msg":"上传图片失败: 上传失败，错误码: 400, 消息: 只支持上传图片文件（JPG、PNG、GIF、WEBP）"}
+{"level":"ERROR","time":"2026-01-05T17:56:16.743+0800","caller":"domain/user.go:112","msg":"UserDomain CreateMfaQrcode error","error":"AccountName must be set"}
+{"level":"ERROR","time":"2026-01-05T17:56:16.743+0800","caller":"service/userservice.go:118","msg":"UserServiceService CreateMfaQrcode error","error":"code:106, msg:生成 MFA 密钥失败"}
+{"level":"ERROR","time":"2026-01-05T17:58:09.528+0800","caller":"domain/user.go:112","msg":"UserDomain CreateMfaQrcode error","error":"AccountName must be set"}
+{"level":"ERROR","time":"2026-01-05T17:58:09.528+0800","caller":"service/userservice.go:118","msg":"UserServiceService CreateMfaQrcode error","error":"code:106, msg:生成 MFA 密钥失败"}
+{"level":"ERROR","time":"2026-01-05T17:59:06.043+0800","caller":"domain/user.go:112","msg":"UserDomain CreateMfaQrcode error","error":"AccountName must be set"}
+{"level":"ERROR","time":"2026-01-05T17:59:06.043+0800","caller":"service/userservice.go:118","msg":"UserServiceService CreateMfaQrcode error","error":"code:106, msg:生成 MFA 密钥失败"}

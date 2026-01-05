@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.common.v1;
+
+option go_package = "api/common/v1;v1";
+
+// 通用响应状态（对应文档中的“响应状态” Schema）
+message BaseResponse {
+  int32 code = 1;   // 10000 表示 success，其他为错误码
+  string msg = 2;   // 提示信息
+}
+
+// 通用时间戳（对应文档中的“时间戳” Schema）
+message Timestamp {
+  int64 seconds = 1; // Unix 秒
+  int32 nanos   = 2; // 纳秒
+}
+
+// 通用分页请求
+message PageRequest {
+  int32 page_num  = 1;
+  int32 page_size = 2;
+}
+
+// 通用分页响应
+message PageResponse {
+  int32 page_num  = 1;
+  int32 page_size = 2;
+  int64 total     = 3;
+}

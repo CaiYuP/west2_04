@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package api.video.v1;
+
+option go_package = "api/video/v1;v1";
+
+import "api/common/base.proto";
+import "api/user/user.proto";
+
+// ========= 视频通用结构（文档“视频” Schema） =========
+message Video {
+  int64 id                        = 1;
+  int64 author_id                 = 2;
+  api.user.v1.User author         = 3;
+  string play_url                 = 4; // 视频访问地址
+  string cover_url                = 5;
+  string title                    = 6;
+  string description              = 7;
+  int64 favorite_count            = 8;  // 点赞数
+  int64 comment_count             = 9;
+  int64 visit_count               = 10; // 点击/播放次数（用于热门榜）
+  api.common.v1.Timestamp created_at = 11;
+}
+
+// ========= Service 定义 =========
+service VideoService {
+  // 首页视频流
+  rpc Feed(FeedRequest) returns (FeedReply);
+
+  // 投稿（HTTP 单文件上传）
+  rpc Publish(PublishRequest) returns (PublishReply);
+
+  // 发布列表
+  rpc PublishList(PublishListRequest) returns (PublishListReply);
+
+  // 热门排行榜（需要 Redis 缓存）
+  rpc HotRanking(HotRankingRequest) returns (HotRankingReply);
+
+  // 搜索视频（条件全部满足）
+  rpc Search(SearchRequest) returns (SearchReply);
+}
+
+// ========= 视频流 / Feed =========
+message FeedRequest {
+  int64 latest_time = 1; // Unix 秒；0 表示当前时间
+  int32 page_size   = 2; // 可选
+}
+
+message FeedReply {
+  api.common.v1.BaseResponse base = 1;
+  repeated Video video_list       = 2;
+  int64 next_time                 = 3;
+}
+
+// ========= 投稿 =========
+message PublishRequest {
+  string title       = 1;
+  string description = 2;
+  bytes data         = 3; // 视频原始数据（multipart/form-data 对应）
+}
+
+message PublishReply {
+  api.common.v1.BaseResponse base = 1;
+}
+
+// ========= 发布列表 =========
+message PublishListRequest {
+  int64 user_id                    = 1;
+  api.common.v1.PageRequest page   = 2;
+}
+
+message PublishListReply {
+  api.common.v1.BaseResponse base = 1;
+  repeated Video video_list       = 2;
+  api.common.v1.PageResponse page = 3;
+}
+
+// ========= 热门排行榜 =========
+message HotRankingRequest {
+  api.common.v1.PageRequest page = 1;
+}
+
+message HotRankingReply {
+  api.common.v1.BaseResponse base = 1;
+  repeated Video video_list       = 2;
+  api.common.v1.PageResponse page = 3;
+}
+
+// ========= 搜索视频 =========
+message SearchRequest {
+  string keywords                 = 1; // 搜索关键字
+  api.common.v1.PageRequest page  = 2;
+}
+
+message SearchReply {
+  api.common.v1.BaseResponse base = 1;
+  repeated Video video_list       = 2;
+  api.common.v1.PageResponse page = 3;
+}
+
+

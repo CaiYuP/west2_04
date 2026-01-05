@@ -1,0 +1,132 @@
+{"level":"INFO","time":"2025-12-26T18:01:32.492+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2025-12-26T18:01:32.516+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"ERROR","time":"2025-12-26T18:01:49.673+0800","caller":"domain/user.go:28","msg":"UserDomain FindUserByUserName FindUserByUserName error","error":"Error 1146 (42S02): Table 'msproject.users' doesn't exist"}
+{"level":"ERROR","time":"2025-12-26T18:01:49.674+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:-888, msg:数据库出错"}
+{"level":"INFO","time":"2025-12-26T18:04:03.580+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2025-12-26T18:04:03.617+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"ERROR","time":"2025-12-26T18:04:10.061+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"ERROR","time":"2025-12-26T18:07:28.162+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"INFO","time":"2025-12-26T18:07:37.810+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2025-12-26T18:07:37.827+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2025-12-26T18:08:03.514+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2025-12-26T18:08:03.531+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"ERROR","time":"2025-12-26T18:08:15.055+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"ERROR","time":"2025-12-26T18:08:52.370+0800","caller":"domain/user.go:42","msg":"UserDomain Register Create error","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2025-12-26T18:08:52.370+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:-888, msg:数据库出错"}
+{"level":"ERROR","time":"2025-12-26T18:09:13.322+0800","caller":"domain/user.go:28","msg":"UserDomain FindUserByUserName FindUserByUserName error","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2025-12-26T18:09:13.322+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:-888, msg:数据库出错"}
+{"level":"ERROR","time":"2025-12-26T18:12:21.011+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"ERROR","time":"2025-12-26T19:13:30.067+0800","caller":"service/userservice.go:32","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"INFO","time":"2025-12-26T19:20:11.603+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2025-12-26T19:20:11.623+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"ERROR","time":"2025-12-26T19:20:23.610+0800","caller":"service/userservice.go:33","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"INFO","time":"2025-12-26T19:24:52.261+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2025-12-26T19:24:52.279+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"ERROR","time":"2025-12-26T19:25:21.215+0800","caller":"service/userservice.go:33","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"INFO","time":"2026-01-03T11:09:13.482+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-03T11:09:13.510+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"ERROR","time":"2026-01-03T11:11:21.362+0800","caller":"service/userservice.go:33","msg":"UserServiceService userDomain Register error","error":"code:101, msg:账号已注册"}
+{"level":"INFO","time":"2026-01-04T15:47:12.482+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-04T15:47:12.529+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-04T16:24:17.375+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-04T16:24:17.401+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-04T16:26:26.113+0800","caller":"jwts/jwts.go:84","msg":"refresh token parse error ","error":"Token is expired"}
+{"level":"ERROR","time":"2026-01-04T16:26:26.113+0800","caller":"domain/user.go:82","msg":"UserDomain RefreshToken error","error":"Token is expired"}
+{"level":"ERROR","time":"2026-01-04T16:26:26.113+0800","caller":"service/userservice.go:65","msg":"UserServiceService RefreshToken error","error":"code:-777, msg:jwt出错"}
+{"level":"INFO","time":"2026-01-04T16:38:45.898+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-04T16:38:45.919+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-04T16:39:10.594+0800","caller":"jwts/jwts.go:88","msg":"refresh token ","parse":{"exp":1768725538,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T16:47:27.312+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-04T16:47:27.338+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-04T17:18:39.596+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-04T17:18:39.621+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-04T17:26:09.000+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-04T17:26:09.028+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-04T17:39:11.153+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"ERROR","time":"2026-01-04T17:39:11.159+0800","caller":"domain/user.go:91","msg":"UserDomain FindUserById error","error":"record not found"}
+{"level":"ERROR","time":"2026-01-04T17:39:11.159+0800","caller":"service/userservice.go:83","msg":"UserServiceService userDomain FindUserById error","error":"code:-888, msg:数据库出错"}
+{"level":"INFO","time":"2026-01-04T17:39:57.892+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-04T17:39:57.910+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-04T17:40:08.833+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T17:42:43.010+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T17:43:45.685+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T17:43:59.879+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T17:45:35.174+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T17:45:38.509+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T17:46:14.940+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T17:46:33.533+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-04T17:46:33.555+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-04T17:46:43.664+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T17:47:11.850+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T17:49:45.522+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-04T17:49:45.541+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-04T18:02:17.319+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-04T18:02:17.348+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-04T18:02:26.149+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T18:11:09.196+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-04T18:11:09.216+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-04T18:11:21.580+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T19:51:47.905+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-04T19:51:47.924+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-04T19:53:42.410+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T19:54:53.188+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T19:55:02.231+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-04T19:55:02.250+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-04T19:55:32.063+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T19:56:12.656+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T19:56:22.819+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T19:56:38.766+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T19:56:38.766+0800","caller":"handler/user_handler.go:188","msg":"上传图片格式为:image/png"}
+{"level":"ERROR","time":"2026-01-04T19:56:38.777+0800","caller":"domain/user.go:100","msg":"UserDomain UpdateAvatar error","error":"WHERE conditions required"}
+{"level":"ERROR","time":"2026-01-04T19:56:38.778+0800","caller":"service/userservice.go:105","msg":"UserServiceService userDomain UpdateAvatar error","error":"code:-888, msg:数据库出错"}
+{"level":"INFO","time":"2026-01-04T20:56:16.603+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-04T20:56:16.637+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-04T20:57:04.608+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T20:57:04.609+0800","caller":"handler/user_handler.go:188","msg":"上传图片格式为:image/png"}
+{"level":"ERROR","time":"2026-01-04T20:57:04.985+0800","caller":"domain/user.go:102","msg":"UserDomain UploadImage error","error":"上传失败，错误码: 400, 消息: 只支持上传图片文件（JPG、PNG、GIF、WEBP）"}
+{"level":"ERROR","time":"2026-01-04T20:57:04.986+0800","caller":"service/userservice.go:105","msg":"UserServiceService userDomain UpdateAvatar error","error":"code:105, msg:头像上次错误"}
+{"level":"INFO","time":"2026-01-04T20:57:49.366+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T20:57:49.366+0800","caller":"handler/user_handler.go:188","msg":"上传图片格式为:image/png"}
+{"level":"ERROR","time":"2026-01-04T21:07:06.989+0800","caller":"domain/user.go:102","msg":"UserDomain UploadImage error","error":"上传失败，错误码: 400, 消息: 只支持上传图片文件（JPG、PNG、GIF、WEBP）"}
+{"level":"ERROR","time":"2026-01-04T21:07:06.989+0800","caller":"service/userservice.go:105","msg":"UserServiceService userDomain UpdateAvatar error","error":"code:105, msg:头像上次错误"}
+{"level":"INFO","time":"2026-01-04T21:18:40.834+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-04T21:18:40.856+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"ERROR","time":"2026-01-04T21:18:56.017+0800","caller":"config/mysql.go:92","msg":"连接MySQL数据库失败, error=dial tcp :0: connectex: The requested address is not valid in its context."}
+{"level":"ERROR","time":"2026-01-04T21:19:01.313+0800","caller":"config/mysql.go:92","msg":"连接MySQL数据库失败, error=dial tcp :0: connectex: The requested address is not valid in its context."}
+{"level":"INFO","time":"2026-01-04T21:29:14.500+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T21:29:14.501+0800","caller":"handler/user_handler.go:189","msg":"上传图片格式为:image/png"}
+{"level":"INFO","time":"2026-01-04T21:48:40.911+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T21:48:40.911+0800","caller":"handler/user_handler.go:189","msg":"上传图片格式为:image/png"}
+{"level":"INFO","time":"2026-01-04T21:51:15.248+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T21:52:02.735+0800","caller":"handler/user_handler.go:189","msg":"上传图片格式为:image/png"}
+{"level":"INFO","time":"2026-01-04T21:52:39.922+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T21:52:45.385+0800","caller":"handler/user_handler.go:189","msg":"上传图片格式为:image/png"}
+{"level":"INFO","time":"2026-01-04T21:53:03.131+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T21:53:03.131+0800","caller":"handler/user_handler.go:189","msg":"上传图片格式为:image/png"}
+{"level":"INFO","time":"2026-01-04T22:07:02.800+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T22:07:02.801+0800","caller":"handler/user_handler.go:189","msg":"上传图片格式为:image/png"}
+{"level":"INFO","time":"2026-01-04T22:07:30.568+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T22:07:30.569+0800","caller":"handler/user_handler.go:189","msg":"上传图片格式为:image/png"}
+{"level":"INFO","time":"2026-01-04T22:11:54.250+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T22:11:54.250+0800","caller":"handler/user_handler.go:189","msg":"上传图片格式为:image/png"}
+{"level":"INFO","time":"2026-01-04T22:18:14.812+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T22:18:14.812+0800","caller":"handler/user_handler.go:189","msg":"上传图片格式为:image/png"}
+{"level":"INFO","time":"2026-01-04T22:30:28.419+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T22:30:28.420+0800","caller":"handler/user_handler.go:190","msg":"上传图片格式为:image/png"}
+{"level":"INFO","time":"2026-01-04T22:30:28.420+0800","caller":"handler/user_handler.go:200","msg":"准备上传文件，原始文件名: Figure_4.png, 文件大小: 49364"}
+{"level":"ERROR","time":"2026-01-04T22:30:28.555+0800","caller":"handler/user_handler.go:203","msg":"上传图片失败: 上传失败，错误码: 400, 消息: 只支持上传图片文件（JPG、PNG、GIF、WEBP）"}
+{"level":"INFO","time":"2026-01-04T23:07:47.919+0800","caller":"jwts/jwts.go:60","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-04T23:07:47.920+0800","caller":"handler/user_handler.go:190","msg":"上传图片格式为:image/png, 文件大小: 49364"}
+{"level":"INFO","time":"2026-01-04T23:07:47.920+0800","caller":"handler/user_handler.go:196","msg":"原始文件名: Figure_4.png"}
+{"level":"INFO","time":"2026-01-05T17:53:48.658+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-05T17:53:48.683+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-05T17:56:16.742+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"ERROR","time":"2026-01-05T17:56:16.743+0800","caller":"domain/user.go:112","msg":"UserDomain CreateMfaQrcode error","error":"AccountName must be set"}
+{"level":"ERROR","time":"2026-01-05T17:56:16.743+0800","caller":"service/userservice.go:118","msg":"UserServiceService CreateMfaQrcode error","error":"code:106, msg:生成 MFA 密钥失败"}
+{"level":"INFO","time":"2026-01-05T17:58:03.800+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"ERROR","time":"2026-01-05T17:58:09.528+0800","caller":"domain/user.go:112","msg":"UserDomain CreateMfaQrcode error","error":"AccountName must be set"}
+{"level":"ERROR","time":"2026-01-05T17:58:09.528+0800","caller":"service/userservice.go:118","msg":"UserServiceService CreateMfaQrcode error","error":"code:106, msg:生成 MFA 密钥失败"}
+{"level":"INFO","time":"2026-01-05T17:58:36.429+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"ERROR","time":"2026-01-05T17:59:06.043+0800","caller":"domain/user.go:112","msg":"UserDomain CreateMfaQrcode error","error":"AccountName must be set"}
+{"level":"ERROR","time":"2026-01-05T17:59:06.043+0800","caller":"service/userservice.go:118","msg":"UserServiceService CreateMfaQrcode error","error":"code:106, msg:生成 MFA 密钥失败"}
+{"level":"INFO","time":"2026-01-05T17:59:21.104+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}

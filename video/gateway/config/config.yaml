@@ -1,0 +1,27 @@
+# Gateway 配置
+server:
+  host: "127.0.0.1"
+  port: 8080
+  mode: "dev"
+
+# gRPC 服务地址
+services:
+  user_service: "127.0.0.1:9991"
+  video_service: "127.0.0.1:9992"
+  interaction_service: "127.0.0.1:9993"
+  social_service: "127.0.0.1:9994"
+
+# JWT 配置
+jwt:
+  accessExp: 604800 #7天
+  refreshExp: 1209600
+  accessSecret: west2
+  refreshSecret: cai
+# logs
+zap:
+  debugFileName: "E:\\west2\\04\\west2_04\\logs\\debug\\user-debug.log"
+  infoFileName: "E:\\west2\\04\\west2_04\\logs\\debug\\user-info.log"
+  warnFileName: "E:\\west2\\04\\west2_04\\logs\\debug\\user-error.log"
+  maxSize: 500,
+  maxAge: 28,
+  MaxBackups: 3

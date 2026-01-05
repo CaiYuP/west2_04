@@ -1,0 +1,3 @@
+upload:
+  api_url: "http://8.134.58.171/api/upload/image"
+  timeout: 30  # 超时时间（秒）

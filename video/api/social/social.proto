@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package api.social.v1;
+
+option go_package = "api/social/v1;v1";
+
+import "api/common/base.proto";
+import "api/user/user.proto";
+
+// ========= 社交对象（文档“社交对象” Schema） =========
+message SocialUser {
+  int64 id                       = 1;
+  string username                = 2;
+  string nickname                = 3;
+  string avatar_url              = 4;
+  string signature               = 5;
+  bool   is_follow               = 6;
+  api.common.v1.Timestamp created_at = 7;
+}
+
+// ========= 聊天消息体（WebSocket 聊天使用） =========
+message ChatMessage {
+  int64 from_user_id             = 1;
+  int64 to_user_id               = 2;
+  string content                 = 3;
+  api.common.v1.Timestamp created_at = 4;
+}
+
+// ========= Service 定义 =========
+service SocialService {
+  // 关注 / 取关 操作
+  rpc FollowAction(FollowActionRequest) returns (FollowActionReply);
+
+  // 关注列表
+  rpc FollowList(FollowListRequest) returns (FollowListReply);
+
+  // 粉丝列表
+  rpc FollowerList(FollowerListRequest) returns (FollowerListReply);
+
+  // 好友列表（互相关注）
+  rpc FriendList(FriendListRequest) returns (FriendListReply);
+}
+
+// ========= 关注操作 =========
+message FollowActionRequest {
+  int64 to_user_id  = 1;
+  // action_type: 1 关注, 2 取关
+  int32 action_type = 2;
+}
+
+message FollowActionReply {
+  api.common.v1.BaseResponse base = 1;
+}
+
+// ========= 关注列表 =========
+message FollowListRequest {
+  int64 user_id                   = 1; // 指定用户
+  api.common.v1.PageRequest page  = 2;
+}
+
+message FollowListReply {
+  api.common.v1.BaseResponse base  = 1;
+  repeated SocialUser users        = 2;
+  api.common.v1.PageResponse page  = 3;
+}
+
+// ========= 粉丝列表 =========
+message FollowerListRequest {
+  int64 user_id                   = 1; // 指定用户
+  api.common.v1.PageRequest page  = 2;
+}
+
+message FollowerListReply {
+  api.common.v1.BaseResponse base  = 1;
+  repeated SocialUser users        = 2;
+  api.common.v1.PageResponse page  = 3;
+}
+
+// ========= 好友列表 =========
+message FriendListRequest {
+  api.common.v1.PageRequest page = 1;
+}
+
+message FriendListReply {
+  api.common.v1.BaseResponse base  = 1;
+  repeated SocialUser users        = 2;
+  api.common.v1.PageResponse page  = 3;
+}
+
+
