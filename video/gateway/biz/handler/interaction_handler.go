@@ -59,13 +59,18 @@ func LikeAction(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.InteractionClient.LikeAction(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbinteraction.LikeActionReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: nil,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // LikeList 点赞列表
@@ -92,13 +97,28 @@ func LikeList(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.InteractionClient.LikeList(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbinteraction.LikeListReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	// LikeListReply 中的 Videos 字段类型是 []*v12.Video (即 west2-video/api/video/v1.Video)
+	// 这里直接使用 interface{} 来避免类型问题
+	data := struct {
+		Videos interface{}           `json:"videos"`
+		Page   *pbcommon.PageResponse `json:"page"`
+	}{
+		Videos: resp.GetVideos(),
+		Page:   resp.GetPage(),
+	}
+
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: data,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // CommentAction 评论
@@ -160,13 +180,18 @@ func CommentAction(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.InteractionClient.CommentAction(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbinteraction.CommentActionReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: resp.GetComment(),
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // CommentList 评论列表
@@ -193,13 +218,26 @@ func CommentList(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.InteractionClient.CommentList(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbinteraction.CommentListReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	data := struct {
+		Comments []*pbinteraction.Comment `json:"comments"`
+		Page     *pbcommon.PageResponse  `json:"page"`
+	}{
+		Comments: resp.GetComments(),
+		Page:     resp.GetPage(),
+	}
+
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: data,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // DeleteComment 删除评论
@@ -231,11 +269,16 @@ func DeleteComment(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.InteractionClient.DeleteComment(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbinteraction.DeleteCommentReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: nil,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }

@@ -2,8 +2,8 @@ package dao
 
 import (
 	"errors"
-	"userService/internal/database"
-	"userService/internal/database/gorms"
+	"videoService/internal/database"
+	"videoService/internal/database/gorms"
 	"west2-video/common/errs"
 )
 

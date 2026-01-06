@@ -2,20 +2,26 @@ syntax = "proto3";
 
 package api.interaction.v1;
 
-option go_package = "api/interaction/v1;v1";
+option go_package = "west2-video/api/interaction/v1;v1";
 
 import "api/common/base.proto";
 import "api/video/video.proto";
 import "api/user/user.proto";
 
-// ========= 评论通用结构（文档“评论” Schema） =========
+// ========= 评论通用结构 (Comment Message) =========
+// Aligned with the 'comments' table in database/init.sql
 message Comment {
   int64 id                          = 1;
   int64 video_id                    = 2;
   int64 user_id                     = 3;
-  api.user.v1.User user             = 4;
-  string content                    = 5;
-  api.common.v1.Timestamp created_at = 6;
+  api.user.v1.User user             = 4; // Populated by the service layer
+  int64 parent_id                   = 5; // Added to match SQL
+  int64 like_count                  = 6; // Added to match SQL
+  int64 child_count                 = 7; // Added to match SQL
+  string content                    = 8;
+  api.common.v1.Timestamp created_at = 9;
+  api.common.v1.Timestamp updated_at = 10; // Added to match SQL
+  optional api.common.v1.Timestamp deleted_at = 11; // Added to match SQL, optional for nullability
 }
 
 // ========= Service 定义 =========
@@ -92,5 +98,3 @@ message DeleteCommentRequest {
 message DeleteCommentReply {
   api.common.v1.BaseResponse base = 1;
 }
-
-

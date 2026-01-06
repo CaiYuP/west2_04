@@ -39,13 +39,18 @@ func Register(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.UserClient.Register(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbuser.RegisterReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: resp.GetUser(),
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 func GetIp(c *app.RequestContext) string {
 	// 获取客户端 IP 地址
@@ -86,13 +91,30 @@ func RefreshToken(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.UserClient.Refresh(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbuser.RefreshReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	data := struct {
+		AccessToken      string `json:"access_token"`
+		RefreshToken     string `json:"refresh_token"`
+		AccessExpiresIn  int64  `json:"access_expires_in"`
+		RefreshExpiresIn int64  `json:"refresh_expires_in"`
+	}{
+		AccessToken:      resp.GetAccessToken(),
+		RefreshToken:     resp.GetRefreshToken(),
+		AccessExpiresIn:  resp.GetAccessExpiresIn(),
+		RefreshExpiresIn: resp.GetRefreshExpiresIn(),
+	}
+
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: data,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // Login 用户登录
@@ -117,13 +139,30 @@ func Login(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.UserClient.Login(ctx, req)
 	if err != nil {
 		code, m := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbuser.LoginReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: m},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	data := struct {
+		AccessToken      string `json:"access_token"`
+		RefreshToken     string `json:"refresh_token"`
+		AccessExpiresIn  int64  `json:"access_expires_in"`
+		RefreshExpiresIn int64  `json:"refresh_expires_in"`
+	}{
+		AccessToken:      resp.GetAccessToken(),
+		RefreshToken:     resp.GetRefreshToken(),
+		AccessExpiresIn:  resp.GetAccessExpiresIn(),
+		RefreshExpiresIn: resp.GetRefreshExpiresIn(),
+	}
+
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: data,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // GetUserInfo 获取用户信息
@@ -143,13 +182,18 @@ func GetUserInfo(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.UserClient.GetUserInfo(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbuser.UserInfoReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: resp.GetUser(),
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // UploadAvatar 上传头像
@@ -212,13 +256,37 @@ func UploadAvatar(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.UserClient.UploadAvatar(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbuser.UploadAvatarReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	// 上传头像成功后，获取完整的用户信息返回（根据 API 文档要求）
+	userInfoReq := &pbuser.UserInfoRequest{UserId: id}
+	userInfoResp, err := clientMgr.UserClient.GetUserInfo(ctx, userInfoReq)
+	if err != nil {
+		// 如果获取用户信息失败，仍然返回上传成功的响应，但只包含 avatar_url
+		data := struct {
+			AvatarUrl string `json:"avatar_url"`
+		}{
+			AvatarUrl: resp.GetAvatarUrl(),
+		}
+		httpResp := &HTTPResponse{
+			Base: resp.GetBase(),
+			Data: data,
+		}
+		c.JSON(http.StatusOK, httpResp)
+		return
+	}
+
+	// 返回完整的用户信息
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: userInfoResp.GetUser(),
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // GetMfaQrcode 获取 MFA 二维码
@@ -231,13 +299,26 @@ func GetMfaQrcode(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.UserClient.GetMfaQrcode(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbuser.GetMfaQrcodeReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	data := struct {
+		Secret string `json:"secret"`
+		Qrcode string `json:"qrcode"`
+	}{
+		Secret: resp.GetSecret(),
+		Qrcode: resp.GetQrcode(),
+	}
+
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: data,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // BindMfa 绑定 MFA
@@ -246,19 +327,25 @@ func BindMfa(ctx context.Context, c *app.RequestContext) {
 	req := &pbuser.BindMfaRequest{
 		Code:   c.PostForm("code"),
 		Secret: c.PostForm("secret"),
+		Id:     c.GetInt64("user_id"),
 	}
 
 	clientMgr := client.GetClientManager()
 	resp, err := clientMgr.UserClient.BindMfa(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbuser.BindMfaReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: nil,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // SearchByImage 以图搜图
@@ -280,42 +367,33 @@ func SearchByImage(ctx context.Context, c *app.RequestContext) {
 	}
 	defer src.Close()
 
-	data := make([]byte, file.Size)
-	_, err = src.Read(data)
+	imageData := make([]byte, file.Size)
+	_, err = src.Read(imageData)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, pbuser.SearchByImageReply{
 			Base: &pbcommon.BaseResponse{Code: model.Failed, Msg: "读取文件失败: " + err.Error()},
 		})
 		return
 	}
-
-	// 解析分页参数（从表单获取）
-	pageNum, _ := strconv.ParseInt(c.PostForm("page_num"), 10, 32)
-	pageSize, _ := strconv.ParseInt(c.PostForm("page_size"), 10, 32)
-	if pageNum == 0 {
-		pageNum = 1
-	}
-	if pageSize == 0 {
-		pageSize = 10
-	}
-
 	req := &pbuser.SearchByImageRequest{
-		Data: data,
-		Page: &pbcommon.PageRequest{
-			PageNum:  int32(pageNum),
-			PageSize: int32(pageSize),
-		},
+		Data: imageData,
+		Id:   c.GetInt64("user_id"),
 	}
 
 	clientMgr := client.GetClientManager()
 	resp, err := clientMgr.UserClient.SearchByImage(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbuser.SearchByImageReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: resp.Url,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }

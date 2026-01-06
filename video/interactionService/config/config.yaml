@@ -25,7 +25,7 @@ mysql:
   username: root
   password: root
   host: 127.0.0.1
-  port: 3306
+  port: 3309
   db: west2_video
 jwt:
   accessExp: 7 #天

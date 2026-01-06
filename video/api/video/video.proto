@@ -2,24 +2,27 @@ syntax = "proto3";
 
 package api.video.v1;
 
-option go_package = "api/video/v1;v1";
+option go_package = "west2-video/api/video/v1;v1";
 
 import "api/common/base.proto";
 import "api/user/user.proto";
 
-// ========= 视频通用结构（文档“视频” Schema） =========
+// ========= 视频通用结构 (Video Message) =========
+// Aligned with the 'videos' table in database/init.sql
 message Video {
-  int64 id                        = 1;
-  int64 author_id                 = 2;
-  api.user.v1.User author         = 3;
-  string play_url                 = 4; // 视频访问地址
+  string id                        = 1;
+  string user_id                   = 2; // Corresponds to user_id in SQL
+  api.user.v1.User author         = 3; // Populated by the service layer
+  string video_url                = 4; // Corresponds to video_url in SQL
   string cover_url                = 5;
   string title                    = 6;
   string description              = 7;
-  int64 favorite_count            = 8;  // 点赞数
+  int64 like_count                = 8;  // Corresponds to like_count in SQL
   int64 comment_count             = 9;
-  int64 visit_count               = 10; // 点击/播放次数（用于热门榜）
-  api.common.v1.Timestamp created_at = 11;
+  int64 visit_count               = 10;
+  string created_at = 11;
+  string updated_at = 12; // Added to match SQL
+  string deleted_at = 13; // Added to match SQL
 }
 
 // ========= Service 定义 =========
@@ -48,8 +51,7 @@ message FeedRequest {
 
 message FeedReply {
   api.common.v1.BaseResponse base = 1;
-  repeated Video video_list       = 2;
-  int64 next_time                 = 3;
+  repeated Video items       = 2;
 }
 
 // ========= 投稿 =========
@@ -57,6 +59,7 @@ message PublishRequest {
   string title       = 1;
   string description = 2;
   bytes data         = 3; // 视频原始数据（multipart/form-data 对应）
+  int64 id =4;
 }
 
 message PublishReply {
@@ -97,5 +100,4 @@ message SearchReply {
   repeated Video video_list       = 2;
   api.common.v1.PageResponse page = 3;
 }
-
 

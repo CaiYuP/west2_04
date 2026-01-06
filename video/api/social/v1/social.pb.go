@@ -13,7 +13,6 @@ import (
 	sync "sync"
 	unsafe "unsafe"
 	v1 "west2-video/api/common/v1"
-	_ "west2-video/api/user/v1"
 )
 
 const (
@@ -23,16 +22,13 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// ========= 社交对象（文档“社交对象” Schema） =========
+// ========= 社交对象 (SocialUser Message) =========
+// Aligned with the simplified OpenAPI specification
 type SocialUser struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
-	Nickname      string                 `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname,omitempty"`
-	AvatarUrl     string                 `protobuf:"bytes,4,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url,omitempty"`
-	Signature     string                 `protobuf:"bytes,5,opt,name=signature,proto3" json:"signature,omitempty"`
-	IsFollow      bool                   `protobuf:"varint,6,opt,name=is_follow,json=isFollow,proto3" json:"is_follow,omitempty"`
-	CreatedAt     *v1.Timestamp          `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	AvatarUrl     string                 `protobuf:"bytes,3,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -81,13 +77,6 @@ func (x *SocialUser) GetUsername() string {
 	return ""
 }
 
-func (x *SocialUser) GetNickname() string {
-	if x != nil {
-		return x.Nickname
-	}
-	return ""
-}
-
 func (x *SocialUser) GetAvatarUrl() string {
 	if x != nil {
 		return x.AvatarUrl
@@ -95,28 +84,8 @@ func (x *SocialUser) GetAvatarUrl() string {
 	return ""
 }
 
-func (x *SocialUser) GetSignature() string {
-	if x != nil {
-		return x.Signature
-	}
-	return ""
-}
-
-func (x *SocialUser) GetIsFollow() bool {
-	if x != nil {
-		return x.IsFollow
-	}
-	return false
-}
-
-func (x *SocialUser) GetCreatedAt() *v1.Timestamp {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return nil
-}
-
 // ========= 聊天消息体（WebSocket 聊天使用） =========
+// This message is kept for potential future use with WebSockets.
 type ChatMessage struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FromUserId    int64                  `protobuf:"varint,1,opt,name=from_user_id,json=fromUserId,proto3" json:"from_user_id,omitempty"`
@@ -338,9 +307,9 @@ func (x *FollowListRequest) GetPage() *v1.PageRequest {
 
 type FollowListReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *v1.BaseResponse       `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	Users         []*SocialUser          `protobuf:"bytes,2,rep,name=users,proto3" json:"users,omitempty"`
-	Page          *v1.PageResponse       `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
+	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	Users         []*SocialUser    `protobuf:"bytes,2,rep,name=users,proto3" json:"users,omitempty"`
+	Page          *v1.PageResponse `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -451,9 +420,9 @@ func (x *FollowerListRequest) GetPage() *v1.PageRequest {
 
 type FollowerListReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *v1.BaseResponse       `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	Users         []*SocialUser          `protobuf:"bytes,2,rep,name=users,proto3" json:"users,omitempty"`
-	Page          *v1.PageResponse       `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
+	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	Users         []*SocialUser    `protobuf:"bytes,2,rep,name=users,proto3" json:"users,omitempty"`
+	Page          *v1.PageResponse `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -556,9 +525,9 @@ func (x *FriendListRequest) GetPage() *v1.PageRequest {
 
 type FriendListReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *v1.BaseResponse       `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	Users         []*SocialUser          `protobuf:"bytes,2,rep,name=users,proto3" json:"users,omitempty"`
-	Page          *v1.PageResponse       `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
+	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	Users         []*SocialUser    `protobuf:"bytes,2,rep,name=users,proto3" json:"users,omitempty"`
+	Page          *v1.PageResponse `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -618,18 +587,13 @@ var File_api_social_social_proto protoreflect.FileDescriptor
 
 const file_api_social_social_proto_rawDesc = "" +
 	"\n" +
-	"\x17api/social/social.proto\x12\rapi.social.v1\x1a\x15api/common/base.proto\x1a\x13api/user/user.proto\"\xe7\x01\n" +
+	"\x17api/social/social.proto\x12\rapi.social.v1\x1a\x15api/common/base.proto\"W\n" +
 	"\n" +
 	"SocialUser\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1a\n" +
-	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
-	"\bnickname\x18\x03 \x01(\tR\bnickname\x12\x1d\n" +
+	"\busername\x18\x02 \x01(\tR\busername\x12\x1d\n" +
 	"\n" +
-	"avatar_url\x18\x04 \x01(\tR\tavatarUrl\x12\x1c\n" +
-	"\tsignature\x18\x05 \x01(\tR\tsignature\x12\x1b\n" +
-	"\tis_follow\x18\x06 \x01(\bR\bisFollow\x127\n" +
-	"\n" +
-	"created_at\x18\a \x01(\v2\x18.api.common.v1.TimestampR\tcreatedAt\"\xa0\x01\n" +
+	"avatar_url\x18\x03 \x01(\tR\tavatarUrl\"\xa0\x01\n" +
 	"\vChatMessage\x12 \n" +
 	"\ffrom_user_id\x18\x01 \x01(\x03R\n" +
 	"fromUserId\x12\x1c\n" +
@@ -703,34 +667,33 @@ var file_api_social_social_proto_goTypes = []any{
 	(*v1.PageResponse)(nil),     // 13: api.common.v1.PageResponse
 }
 var file_api_social_social_proto_depIdxs = []int32{
-	10, // 0: api.social.v1.SocialUser.created_at:type_name -> api.common.v1.Timestamp
-	10, // 1: api.social.v1.ChatMessage.created_at:type_name -> api.common.v1.Timestamp
-	11, // 2: api.social.v1.FollowActionReply.base:type_name -> api.common.v1.BaseResponse
-	12, // 3: api.social.v1.FollowListRequest.page:type_name -> api.common.v1.PageRequest
-	11, // 4: api.social.v1.FollowListReply.base:type_name -> api.common.v1.BaseResponse
-	0,  // 5: api.social.v1.FollowListReply.users:type_name -> api.social.v1.SocialUser
-	13, // 6: api.social.v1.FollowListReply.page:type_name -> api.common.v1.PageResponse
-	12, // 7: api.social.v1.FollowerListRequest.page:type_name -> api.common.v1.PageRequest
-	11, // 8: api.social.v1.FollowerListReply.base:type_name -> api.common.v1.BaseResponse
-	0,  // 9: api.social.v1.FollowerListReply.users:type_name -> api.social.v1.SocialUser
-	13, // 10: api.social.v1.FollowerListReply.page:type_name -> api.common.v1.PageResponse
-	12, // 11: api.social.v1.FriendListRequest.page:type_name -> api.common.v1.PageRequest
-	11, // 12: api.social.v1.FriendListReply.base:type_name -> api.common.v1.BaseResponse
-	0,  // 13: api.social.v1.FriendListReply.users:type_name -> api.social.v1.SocialUser
-	13, // 14: api.social.v1.FriendListReply.page:type_name -> api.common.v1.PageResponse
-	2,  // 15: api.social.v1.SocialService.FollowAction:input_type -> api.social.v1.FollowActionRequest
-	4,  // 16: api.social.v1.SocialService.FollowList:input_type -> api.social.v1.FollowListRequest
-	6,  // 17: api.social.v1.SocialService.FollowerList:input_type -> api.social.v1.FollowerListRequest
-	8,  // 18: api.social.v1.SocialService.FriendList:input_type -> api.social.v1.FriendListRequest
-	3,  // 19: api.social.v1.SocialService.FollowAction:output_type -> api.social.v1.FollowActionReply
-	5,  // 20: api.social.v1.SocialService.FollowList:output_type -> api.social.v1.FollowListReply
-	7,  // 21: api.social.v1.SocialService.FollowerList:output_type -> api.social.v1.FollowerListReply
-	9,  // 22: api.social.v1.SocialService.FriendList:output_type -> api.social.v1.FriendListReply
-	19, // [19:23] is the sub-list for method output_type
-	15, // [15:19] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	10, // 0: api.social.v1.ChatMessage.created_at:type_name -> api.common.v1.Timestamp
+	11, // 1: api.social.v1.FollowActionReply.base:type_name -> api.common.v1.BaseResponse
+	12, // 2: api.social.v1.FollowListRequest.page:type_name -> api.common.v1.PageRequest
+	11, // 3: api.social.v1.FollowListReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 4: api.social.v1.FollowListReply.users:type_name -> api.social.v1.SocialUser
+	13, // 5: api.social.v1.FollowListReply.page:type_name -> api.common.v1.PageResponse
+	12, // 6: api.social.v1.FollowerListRequest.page:type_name -> api.common.v1.PageRequest
+	11, // 7: api.social.v1.FollowerListReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 8: api.social.v1.FollowerListReply.users:type_name -> api.social.v1.SocialUser
+	13, // 9: api.social.v1.FollowerListReply.page:type_name -> api.common.v1.PageResponse
+	12, // 10: api.social.v1.FriendListRequest.page:type_name -> api.common.v1.PageRequest
+	11, // 11: api.social.v1.FriendListReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 12: api.social.v1.FriendListReply.users:type_name -> api.social.v1.SocialUser
+	13, // 13: api.social.v1.FriendListReply.page:type_name -> api.common.v1.PageResponse
+	2,  // 14: api.social.v1.SocialService.FollowAction:input_type -> api.social.v1.FollowActionRequest
+	4,  // 15: api.social.v1.SocialService.FollowList:input_type -> api.social.v1.FollowListRequest
+	6,  // 16: api.social.v1.SocialService.FollowerList:input_type -> api.social.v1.FollowerListRequest
+	8,  // 17: api.social.v1.SocialService.FriendList:input_type -> api.social.v1.FriendListRequest
+	3,  // 18: api.social.v1.SocialService.FollowAction:output_type -> api.social.v1.FollowActionReply
+	5,  // 19: api.social.v1.SocialService.FollowList:output_type -> api.social.v1.FollowListReply
+	7,  // 20: api.social.v1.SocialService.FollowerList:output_type -> api.social.v1.FollowerListReply
+	9,  // 21: api.social.v1.SocialService.FriendList:output_type -> api.social.v1.FriendListReply
+	18, // [18:22] is the sub-list for method output_type
+	14, // [14:18] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_api_social_social_proto_init() }

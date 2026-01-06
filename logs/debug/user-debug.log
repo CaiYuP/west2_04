@@ -130,3 +130,54 @@
 {"level":"ERROR","time":"2026-01-05T17:59:06.043+0800","caller":"domain/user.go:112","msg":"UserDomain CreateMfaQrcode error","error":"AccountName must be set"}
 {"level":"ERROR","time":"2026-01-05T17:59:06.043+0800","caller":"service/userservice.go:118","msg":"UserServiceService CreateMfaQrcode error","error":"code:106, msg:生成 MFA 密钥失败"}
 {"level":"INFO","time":"2026-01-05T17:59:21.104+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-05T18:01:04.153+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-05T18:01:04.174+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-05T18:01:09.322+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-05T18:01:52.522+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-05T18:09:20.971+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-05T18:09:20.971+0800","caller":"handler/user_handler.go:190","msg":"上传图片格式为:image/png, 文件大小: 49364"}
+{"level":"INFO","time":"2026-01-05T18:09:20.971+0800","caller":"handler/user_handler.go:196","msg":"原始文件名: Figure_4.png"}
+{"level":"INFO","time":"2026-01-05T18:09:28.264+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-05T18:28:01.620+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-05T18:28:01.647+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-05T18:28:10.644+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-05T18:30:52.725+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-05T18:30:52.744+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-05T18:31:17.649+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-05T18:32:35.515+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-05T18:32:35.516+0800","caller":"handler/user_handler.go:234","msg":"上传图片格式为:image/png, 文件大小: 49364"}
+{"level":"INFO","time":"2026-01-05T18:32:35.516+0800","caller":"handler/user_handler.go:240","msg":"原始文件名: Figure_4.png"}
+{"level":"INFO","time":"2026-01-05T18:32:49.127+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-05T18:32:49.127+0800","caller":"handler/user_handler.go:234","msg":"上传图片格式为:image/png, 文件大小: 49364"}
+{"level":"INFO","time":"2026-01-05T18:32:49.127+0800","caller":"handler/user_handler.go:240","msg":"原始文件名: Figure_4.png"}
+{"level":"INFO","time":"2026-01-05T18:33:14.305+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-05T20:43:37.926+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-05T20:43:37.948+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-05T20:44:00.276+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-05T21:26:00.929+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768123580,"ip":"127.0.0.1","token":"10"}}
+{"level":"INFO","time":"2026-01-05T21:27:15.367+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"ERROR","time":"2026-01-05T21:27:15.383+0800","caller":"domain/user.go:168","msg":"UserDomain UpdateIsSecretEnabled error","error":"Error 1054 (42S22): Unknown column 'is_secret_enabled' in 'field list'"}
+{"level":"ERROR","time":"2026-01-05T21:27:15.383+0800","caller":"service/userservice.go:148","msg":"UserServiceService UpdateIsSecretEnabled error","error":"code:-888, msg:数据库出错"}
+{"level":"INFO","time":"2026-01-05T21:28:03.082+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-05T21:28:03.101+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-05T21:28:35.357+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"ERROR","time":"2026-01-05T21:28:35.364+0800","caller":"service/userservice.go:143","msg":"UserServiceService VerifySecret error","error":"code:110, msg:mfa密钥不正确"}
+{"level":"INFO","time":"2026-01-05T21:29:11.574+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-05T21:43:34.824+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-05T21:43:34.844+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-05T21:44:49.394+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"ERROR","time":"2026-01-05T21:44:49.415+0800","caller":"service/userservice.go:143","msg":"UserServiceService VerifySecret error","error":"code:110, msg:mfa密钥不正确"}
+{"level":"INFO","time":"2026-01-05T21:44:57.960+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-05T22:59:27.383+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-05T22:59:27.410+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-06T15:00:50.837+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-06T15:00:50.857+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-06T15:02:12.403+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-06T15:02:12.404+0800","caller":"handler/user_handler.go:234","msg":"上传图片格式为:image/png, 文件大小: 49364"}
+{"level":"INFO","time":"2026-01-06T15:02:12.404+0800","caller":"handler/user_handler.go:240","msg":"原始文件名: Figure_4.png"}
+{"level":"INFO","time":"2026-01-06T15:02:18.346+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-06T15:02:24.866+0800","caller":"jwts/jwts.go:62","msg":"token ","parse":{"exp":1768211637,"ip":"127.0.0.1","token":"10","username":"ozline1"}}
+{"level":"INFO","time":"2026-01-06T15:05:56.870+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-06T15:05:56.893+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-06T16:13:36.237+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-06T16:13:36.273+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}

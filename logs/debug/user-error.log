@@ -31,3 +31,7 @@
 {"level":"ERROR","time":"2026-01-05T17:58:09.528+0800","caller":"service/userservice.go:118","msg":"UserServiceService CreateMfaQrcode error","error":"code:106, msg:生成 MFA 密钥失败"}
 {"level":"ERROR","time":"2026-01-05T17:59:06.043+0800","caller":"domain/user.go:112","msg":"UserDomain CreateMfaQrcode error","error":"AccountName must be set"}
 {"level":"ERROR","time":"2026-01-05T17:59:06.043+0800","caller":"service/userservice.go:118","msg":"UserServiceService CreateMfaQrcode error","error":"code:106, msg:生成 MFA 密钥失败"}
+{"level":"ERROR","time":"2026-01-05T21:27:15.383+0800","caller":"domain/user.go:168","msg":"UserDomain UpdateIsSecretEnabled error","error":"Error 1054 (42S22): Unknown column 'is_secret_enabled' in 'field list'"}
+{"level":"ERROR","time":"2026-01-05T21:27:15.383+0800","caller":"service/userservice.go:148","msg":"UserServiceService UpdateIsSecretEnabled error","error":"code:-888, msg:数据库出错"}
+{"level":"ERROR","time":"2026-01-05T21:28:35.364+0800","caller":"service/userservice.go:143","msg":"UserServiceService VerifySecret error","error":"code:110, msg:mfa密钥不正确"}
+{"level":"ERROR","time":"2026-01-05T21:44:49.415+0800","caller":"service/userservice.go:143","msg":"UserServiceService VerifySecret error","error":"code:110, msg:mfa密钥不正确"}

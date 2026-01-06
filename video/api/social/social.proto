@@ -2,23 +2,20 @@ syntax = "proto3";
 
 package api.social.v1;
 
-option go_package = "api/social/v1;v1";
+option go_package = "west2-video/api/social/v1;v1";
 
 import "api/common/base.proto";
-import "api/user/user.proto";
 
-// ========= 社交对象（文档“社交对象” Schema） =========
+// ========= 社交对象 (SocialUser Message) =========
+// Aligned with the simplified OpenAPI specification
 message SocialUser {
   int64 id                       = 1;
   string username                = 2;
-  string nickname                = 3;
-  string avatar_url              = 4;
-  string signature               = 5;
-  bool   is_follow               = 6;
-  api.common.v1.Timestamp created_at = 7;
+  string avatar_url              = 3;
 }
 
 // ========= 聊天消息体（WebSocket 聊天使用） =========
+// This message is kept for potential future use with WebSockets.
 message ChatMessage {
   int64 from_user_id             = 1;
   int64 to_user_id               = 2;
@@ -86,5 +83,3 @@ message FriendListReply {
   repeated SocialUser users        = 2;
   api.common.v1.PageResponse page  = 3;
 }
-
-

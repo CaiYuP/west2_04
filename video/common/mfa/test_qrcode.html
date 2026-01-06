@@ -1,0 +1,116 @@
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MFA 二维码扫描</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .qrcode-container {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        #qrcode-img {
+            max-width: 300px;
+            height: auto;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .tip {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 4px;
+            color: #1976d2;
+        }
+        .input-group {
+            margin: 20px 0;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <h1>MFA 二维码扫描</h1>
+    
+    <div class="input-group">
+        <label>粘贴 data URL（从 API 响应的 qrcode 字段）:</label>
+        <textarea id="dataUrlInput" rows="3" placeholder="data:image/png;base64,..."></textarea>
+    </div>
+    
+    <button onclick="displayQRCode()">显示二维码</button>
+    
+    <div class="qrcode-container" id="qrcodeContainer" style="display: none;">
+        <h3>请使用 MFA 应用扫描下方二维码</h3>
+        <img id="qrcode-img" alt="MFA QR Code">
+        <div class="tip">
+            <strong>推荐应用：</strong><br>
+            • Google Authenticator<br>
+            • Microsoft Authenticator<br>
+            • Authy<br>
+            • 其他支持 TOTP 的应用
+        </div>
+    </div>
+
+    <script>
+        function displayQRCode() {
+            const dataURL = document.getElementById('dataUrlInput').value.trim();
+            
+            if (!dataURL) {
+                alert('请输入 data URL');
+                return;
+            }
+            
+            if (!dataURL.startsWith('data:image/')) {
+                alert('无效的 data URL 格式');
+                return;
+            }
+            
+            const img = document.getElementById('qrcode-img');
+            img.src = dataURL;
+            
+            const container = document.getElementById('qrcodeContainer');
+            container.style.display = 'block';
+            
+            // 滚动到二维码位置
+            container.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // 如果 URL 中有 qrcode 参数，自动显示
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const qrcode = urlParams.get('qrcode');
+            if (qrcode) {
+                document.getElementById('dataUrlInput').value = qrcode;
+                displayQRCode();
+            }
+        }
+    </script>
+</body>
+</html>
+

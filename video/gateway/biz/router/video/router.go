@@ -19,13 +19,13 @@ type VideoRouter struct{
 func (rr *VideoRouter)Router(r *server.Hertz) {
 	//INSERT_POINT: DO NOT DELETE THIS LINE!
 	// 视频相关路由
-	video := r.Group("/video").Use(midd.AuthMiddleware())
+	video := r.Group("/video")
 	{
 		video.GET("/feed", handler.Feed)                               // 视频流
-		video.POST("/publish", handler.Publish) // 投稿
-		video.GET("/publish/list", handler.PublishList)                // 发布列表
-		video.GET("/hot/ranking", handler.HotRanking)                  // 热门排行榜
-		video.GET("/search", handler.SearchVideo)                      // 搜索视频
+		video.POST("/publish",midd.AuthMiddleware(), handler.Publish) // 投稿
+		video.GET("/publish/list",midd.AuthMiddleware(), handler.PublishList)                // 发布列表
+		video.GET("/hot/ranking",midd.AuthMiddleware(), handler.HotRanking)                  // 热门排行榜
+		video.GET("/search",midd.AuthMiddleware(), handler.SearchVideo)                      // 搜索视频
 	}
 
 }

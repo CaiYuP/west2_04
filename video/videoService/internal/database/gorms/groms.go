@@ -7,63 +7,6 @@ import (
 
 var _db *gorm.DB
 
-//func init() {
-//	if config.C.Dbc.Separation {
-//		username := config.C.Dbc.Master.Username
-//		password := config.C.Dbc.Master.Password
-//		host := config.C.Dbc.Master.Host
-//		port := config.C.Dbc.Master.Port
-//		dbName := config.C.Dbc.Master.Db
-//		dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, dbName)
-//		var err error
-//		_db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
-//			Logger: logger.Default.LogMode(logger.Info),
-//		})
-//		if err != nil {
-//			panic("数据库连接失败:" + err.Error())
-//		}
-//		replicas := []gorm.Dialector{}
-//		for _, v := range config.C.Dbc.Slave {
-//			username := v.Username //账号
-//			password := v.Password //密码
-//			host := v.Host         //数据库地址，可以是Ip或者域名
-//			port := v.Port         //数据库端口
-//			Dbname := v.Db         //数据库名
-//			dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, Dbname)
-//			cfg := mysql.Config{
-//				DSN: dsn,
-//			}
-//			replicas = append(replicas, mysql.New(cfg))
-//		}
-//		_db.Use(dbresolver.Register(dbresolver.Config{
-//			//主库
-//			Sources: []gorm.Dialector{mysql.New(mysql.Config{
-//				DSN: dsn,
-//			})},
-//			//从库
-//			Replicas: replicas,
-//			Policy:   dbresolver.RandomPolicy{},
-//		}).
-//			SetMaxIdleConns(10).
-//			SetMaxOpenConns(200))
-//	} else {
-//		username := config.C.Mc.Username
-//		password := config.C.Mc.Password
-//		host := config.C.Mc.Host
-//		port := config.C.Mc.Port
-//		dbName := config.C.Mc.Db
-//		dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, dbName)
-//		var err error
-//		_db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
-//			Logger: logger.Default.LogMode(logger.Info),
-//		})
-//		if err != nil {
-//			panic("数据库连接失败:" + err.Error())
-//		}
-//
-//	}
-//
-//}
 func GetDB() *gorm.DB {
 	return _db
 }

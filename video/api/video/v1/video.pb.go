@@ -23,20 +23,23 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// ========= 视频通用结构（文档“视频” Schema） =========
+// ========= 视频通用结构 (Video Message) =========
+// Aligned with the 'videos' table in database/init.sql
 type Video struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	AuthorId      int64                  `protobuf:"varint,2,opt,name=author_id,json=authorId,proto3" json:"author_id,omitempty"`
-	Author        *v1.User               `protobuf:"bytes,3,opt,name=author,proto3" json:"author,omitempty"`
-	PlayUrl       string                 `protobuf:"bytes,4,opt,name=play_url,json=playUrl,proto3" json:"play_url,omitempty"` // 视频访问地址
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`       // Corresponds to user_id in SQL
+	Author        *v1.User               `protobuf:"bytes,3,opt,name=author,proto3" json:"author,omitempty"`                     // Populated by the service layer
+	VideoUrl      string                 `protobuf:"bytes,4,opt,name=video_url,json=videoUrl,proto3" json:"video_url,omitempty"` // Corresponds to video_url in SQL
 	CoverUrl      string                 `protobuf:"bytes,5,opt,name=cover_url,json=coverUrl,proto3" json:"cover_url,omitempty"`
 	Title         string                 `protobuf:"bytes,6,opt,name=title,proto3" json:"title,omitempty"`
 	Description   string                 `protobuf:"bytes,7,opt,name=description,proto3" json:"description,omitempty"`
-	FavoriteCount int64                  `protobuf:"varint,8,opt,name=favorite_count,json=favoriteCount,proto3" json:"favorite_count,omitempty"` // 点赞数
+	LikeCount     int64                  `protobuf:"varint,8,opt,name=like_count,json=likeCount,proto3" json:"like_count,omitempty"` // Corresponds to like_count in SQL
 	CommentCount  int64                  `protobuf:"varint,9,opt,name=comment_count,json=commentCount,proto3" json:"comment_count,omitempty"`
-	VisitCount    int64                  `protobuf:"varint,10,opt,name=visit_count,json=visitCount,proto3" json:"visit_count,omitempty"` // 点击/播放次数（用于热门榜）
-	CreatedAt     *v11.Timestamp         `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	VisitCount    int64                  `protobuf:"varint,10,opt,name=visit_count,json=visitCount,proto3" json:"visit_count,omitempty"`
+	CreatedAt     string                 `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     string                 `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"` // Added to match SQL
+	DeletedAt     string                 `protobuf:"bytes,13,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"` // Added to match SQL
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -71,18 +74,18 @@ func (*Video) Descriptor() ([]byte, []int) {
 	return file_api_video_video_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Video) GetId() int64 {
+func (x *Video) GetId() string {
 	if x != nil {
 		return x.Id
 	}
-	return 0
+	return ""
 }
 
-func (x *Video) GetAuthorId() int64 {
+func (x *Video) GetUserId() string {
 	if x != nil {
-		return x.AuthorId
+		return x.UserId
 	}
-	return 0
+	return ""
 }
 
 func (x *Video) GetAuthor() *v1.User {
@@ -92,9 +95,9 @@ func (x *Video) GetAuthor() *v1.User {
 	return nil
 }
 
-func (x *Video) GetPlayUrl() string {
+func (x *Video) GetVideoUrl() string {
 	if x != nil {
-		return x.PlayUrl
+		return x.VideoUrl
 	}
 	return ""
 }
@@ -120,9 +123,9 @@ func (x *Video) GetDescription() string {
 	return ""
 }
 
-func (x *Video) GetFavoriteCount() int64 {
+func (x *Video) GetLikeCount() int64 {
 	if x != nil {
-		return x.FavoriteCount
+		return x.LikeCount
 	}
 	return 0
 }
@@ -141,11 +144,25 @@ func (x *Video) GetVisitCount() int64 {
 	return 0
 }
 
-func (x *Video) GetCreatedAt() *v11.Timestamp {
+func (x *Video) GetCreatedAt() string {
 	if x != nil {
 		return x.CreatedAt
 	}
-	return nil
+	return ""
+}
+
+func (x *Video) GetUpdatedAt() string {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return ""
+}
+
+func (x *Video) GetDeletedAt() string {
+	if x != nil {
+		return x.DeletedAt
+	}
+	return ""
 }
 
 // ========= 视频流 / Feed =========
@@ -203,9 +220,8 @@ func (x *FeedRequest) GetPageSize() int32 {
 
 type FeedReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *v11.BaseResponse      `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	VideoList     []*Video               `protobuf:"bytes,2,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
-	NextTime      int64                  `protobuf:"varint,3,opt,name=next_time,json=nextTime,proto3" json:"next_time,omitempty"`
+	Base          *v11.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	Items         []*Video          `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -247,18 +263,11 @@ func (x *FeedReply) GetBase() *v11.BaseResponse {
 	return nil
 }
 
-func (x *FeedReply) GetVideoList() []*Video {
+func (x *FeedReply) GetItems() []*Video {
 	if x != nil {
-		return x.VideoList
+		return x.Items
 	}
 	return nil
-}
-
-func (x *FeedReply) GetNextTime() int64 {
-	if x != nil {
-		return x.NextTime
-	}
-	return 0
 }
 
 // ========= 投稿 =========
@@ -267,6 +276,7 @@ type PublishRequest struct {
 	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
 	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
 	Data          []byte                 `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"` // 视频原始数据（multipart/form-data 对应）
+	Id            int64                  `protobuf:"varint,4,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -320,6 +330,13 @@ func (x *PublishRequest) GetData() []byte {
 		return x.Data
 	}
 	return nil
+}
+
+func (x *PublishRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
 }
 
 type PublishReply struct {
@@ -421,9 +438,9 @@ func (x *PublishListRequest) GetPage() *v11.PageRequest {
 
 type PublishListReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *v11.BaseResponse      `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	VideoList     []*Video               `protobuf:"bytes,2,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
-	Page          *v11.PageResponse      `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
+	Base          *v11.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	VideoList     []*Video          `protobuf:"bytes,2,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
+	Page          *v11.PageResponse `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -526,9 +543,9 @@ func (x *HotRankingRequest) GetPage() *v11.PageRequest {
 
 type HotRankingReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *v11.BaseResponse      `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	VideoList     []*Video               `protobuf:"bytes,2,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
-	Page          *v11.PageResponse      `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
+	Base          *v11.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	VideoList     []*Video          `protobuf:"bytes,2,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
+	Page          *v11.PageResponse `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -639,9 +656,9 @@ func (x *SearchRequest) GetPage() *v11.PageRequest {
 
 type SearchReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *v11.BaseResponse      `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	VideoList     []*Video               `protobuf:"bytes,2,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
-	Page          *v11.PageResponse      `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
+	Base          *v11.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	VideoList     []*Video          `protobuf:"bytes,2,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
+	Page          *v11.PageResponse `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -701,35 +718,39 @@ var File_api_video_video_proto protoreflect.FileDescriptor
 
 const file_api_video_video_proto_rawDesc = "" +
 	"\n" +
-	"\x15api/video/video.proto\x12\fapi.video.v1\x1a\x15api/common/base.proto\x1a\x13api/user/user.proto\"\xf5\x02\n" +
+	"\x15api/video/video.proto\x12\fapi.video.v1\x1a\x15api/common/base.proto\x1a\x13api/user/user.proto\"\x8f\x03\n" +
 	"\x05Video\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1b\n" +
-	"\tauthor_id\x18\x02 \x01(\x03R\bauthorId\x12)\n" +
-	"\x06author\x18\x03 \x01(\v2\x11.api.user.v1.UserR\x06author\x12\x19\n" +
-	"\bplay_url\x18\x04 \x01(\tR\aplayUrl\x12\x1b\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12)\n" +
+	"\x06author\x18\x03 \x01(\v2\x11.api.user.v1.UserR\x06author\x12\x1b\n" +
+	"\tvideo_url\x18\x04 \x01(\tR\bvideoUrl\x12\x1b\n" +
 	"\tcover_url\x18\x05 \x01(\tR\bcoverUrl\x12\x14\n" +
 	"\x05title\x18\x06 \x01(\tR\x05title\x12 \n" +
-	"\vdescription\x18\a \x01(\tR\vdescription\x12%\n" +
-	"\x0efavorite_count\x18\b \x01(\x03R\rfavoriteCount\x12#\n" +
+	"\vdescription\x18\a \x01(\tR\vdescription\x12\x1d\n" +
+	"\n" +
+	"like_count\x18\b \x01(\x03R\tlikeCount\x12#\n" +
 	"\rcomment_count\x18\t \x01(\x03R\fcommentCount\x12\x1f\n" +
 	"\vvisit_count\x18\n" +
 	" \x01(\x03R\n" +
-	"visitCount\x127\n" +
+	"visitCount\x12\x1d\n" +
 	"\n" +
-	"created_at\x18\v \x01(\v2\x18.api.common.v1.TimestampR\tcreatedAt\"K\n" +
+	"created_at\x18\v \x01(\tR\tcreatedAt\x12\x1d\n" +
+	"\n" +
+	"updated_at\x18\f \x01(\tR\tupdatedAt\x12\x1d\n" +
+	"\n" +
+	"deleted_at\x18\r \x01(\tR\tdeletedAt\"K\n" +
 	"\vFeedRequest\x12\x1f\n" +
 	"\vlatest_time\x18\x01 \x01(\x03R\n" +
 	"latestTime\x12\x1b\n" +
-	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\"\x8d\x01\n" +
+	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\"g\n" +
 	"\tFeedReply\x12/\n" +
-	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x122\n" +
-	"\n" +
-	"video_list\x18\x02 \x03(\v2\x13.api.video.v1.VideoR\tvideoList\x12\x1b\n" +
-	"\tnext_time\x18\x03 \x01(\x03R\bnextTime\"\\\n" +
+	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x12)\n" +
+	"\x05items\x18\x02 \x03(\v2\x13.api.video.v1.VideoR\x05items\"l\n" +
 	"\x0ePublishRequest\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x12\n" +
-	"\x04data\x18\x03 \x01(\fR\x04data\"?\n" +
+	"\x04data\x18\x03 \x01(\fR\x04data\x12\x0e\n" +
+	"\x02id\x18\x04 \x01(\x03R\x02id\"?\n" +
 	"\fPublishReply\x12/\n" +
 	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\"]\n" +
 	"\x12PublishListRequest\x12\x17\n" +
@@ -789,44 +810,42 @@ var file_api_video_video_proto_goTypes = []any{
 	(*SearchRequest)(nil),      // 9: api.video.v1.SearchRequest
 	(*SearchReply)(nil),        // 10: api.video.v1.SearchReply
 	(*v1.User)(nil),            // 11: api.user.v1.User
-	(*v11.Timestamp)(nil),      // 12: api.common.v1.Timestamp
-	(*v11.BaseResponse)(nil),   // 13: api.common.v1.BaseResponse
-	(*v11.PageRequest)(nil),    // 14: api.common.v1.PageRequest
-	(*v11.PageResponse)(nil),   // 15: api.common.v1.PageResponse
+	(*v11.BaseResponse)(nil),   // 12: api.common.v1.BaseResponse
+	(*v11.PageRequest)(nil),    // 13: api.common.v1.PageRequest
+	(*v11.PageResponse)(nil),   // 14: api.common.v1.PageResponse
 }
 var file_api_video_video_proto_depIdxs = []int32{
 	11, // 0: api.video.v1.Video.author:type_name -> api.user.v1.User
-	12, // 1: api.video.v1.Video.created_at:type_name -> api.common.v1.Timestamp
-	13, // 2: api.video.v1.FeedReply.base:type_name -> api.common.v1.BaseResponse
-	0,  // 3: api.video.v1.FeedReply.video_list:type_name -> api.video.v1.Video
-	13, // 4: api.video.v1.PublishReply.base:type_name -> api.common.v1.BaseResponse
-	14, // 5: api.video.v1.PublishListRequest.page:type_name -> api.common.v1.PageRequest
-	13, // 6: api.video.v1.PublishListReply.base:type_name -> api.common.v1.BaseResponse
-	0,  // 7: api.video.v1.PublishListReply.video_list:type_name -> api.video.v1.Video
-	15, // 8: api.video.v1.PublishListReply.page:type_name -> api.common.v1.PageResponse
-	14, // 9: api.video.v1.HotRankingRequest.page:type_name -> api.common.v1.PageRequest
-	13, // 10: api.video.v1.HotRankingReply.base:type_name -> api.common.v1.BaseResponse
-	0,  // 11: api.video.v1.HotRankingReply.video_list:type_name -> api.video.v1.Video
-	15, // 12: api.video.v1.HotRankingReply.page:type_name -> api.common.v1.PageResponse
-	14, // 13: api.video.v1.SearchRequest.page:type_name -> api.common.v1.PageRequest
-	13, // 14: api.video.v1.SearchReply.base:type_name -> api.common.v1.BaseResponse
-	0,  // 15: api.video.v1.SearchReply.video_list:type_name -> api.video.v1.Video
-	15, // 16: api.video.v1.SearchReply.page:type_name -> api.common.v1.PageResponse
-	1,  // 17: api.video.v1.VideoService.Feed:input_type -> api.video.v1.FeedRequest
-	3,  // 18: api.video.v1.VideoService.Publish:input_type -> api.video.v1.PublishRequest
-	5,  // 19: api.video.v1.VideoService.PublishList:input_type -> api.video.v1.PublishListRequest
-	7,  // 20: api.video.v1.VideoService.HotRanking:input_type -> api.video.v1.HotRankingRequest
-	9,  // 21: api.video.v1.VideoService.Search:input_type -> api.video.v1.SearchRequest
-	2,  // 22: api.video.v1.VideoService.Feed:output_type -> api.video.v1.FeedReply
-	4,  // 23: api.video.v1.VideoService.Publish:output_type -> api.video.v1.PublishReply
-	6,  // 24: api.video.v1.VideoService.PublishList:output_type -> api.video.v1.PublishListReply
-	8,  // 25: api.video.v1.VideoService.HotRanking:output_type -> api.video.v1.HotRankingReply
-	10, // 26: api.video.v1.VideoService.Search:output_type -> api.video.v1.SearchReply
-	22, // [22:27] is the sub-list for method output_type
-	17, // [17:22] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	12, // 1: api.video.v1.FeedReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 2: api.video.v1.FeedReply.items:type_name -> api.video.v1.Video
+	12, // 3: api.video.v1.PublishReply.base:type_name -> api.common.v1.BaseResponse
+	13, // 4: api.video.v1.PublishListRequest.page:type_name -> api.common.v1.PageRequest
+	12, // 5: api.video.v1.PublishListReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 6: api.video.v1.PublishListReply.video_list:type_name -> api.video.v1.Video
+	14, // 7: api.video.v1.PublishListReply.page:type_name -> api.common.v1.PageResponse
+	13, // 8: api.video.v1.HotRankingRequest.page:type_name -> api.common.v1.PageRequest
+	12, // 9: api.video.v1.HotRankingReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 10: api.video.v1.HotRankingReply.video_list:type_name -> api.video.v1.Video
+	14, // 11: api.video.v1.HotRankingReply.page:type_name -> api.common.v1.PageResponse
+	13, // 12: api.video.v1.SearchRequest.page:type_name -> api.common.v1.PageRequest
+	12, // 13: api.video.v1.SearchReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 14: api.video.v1.SearchReply.video_list:type_name -> api.video.v1.Video
+	14, // 15: api.video.v1.SearchReply.page:type_name -> api.common.v1.PageResponse
+	1,  // 16: api.video.v1.VideoService.Feed:input_type -> api.video.v1.FeedRequest
+	3,  // 17: api.video.v1.VideoService.Publish:input_type -> api.video.v1.PublishRequest
+	5,  // 18: api.video.v1.VideoService.PublishList:input_type -> api.video.v1.PublishListRequest
+	7,  // 19: api.video.v1.VideoService.HotRanking:input_type -> api.video.v1.HotRankingRequest
+	9,  // 20: api.video.v1.VideoService.Search:input_type -> api.video.v1.SearchRequest
+	2,  // 21: api.video.v1.VideoService.Feed:output_type -> api.video.v1.FeedReply
+	4,  // 22: api.video.v1.VideoService.Publish:output_type -> api.video.v1.PublishReply
+	6,  // 23: api.video.v1.VideoService.PublishList:output_type -> api.video.v1.PublishListReply
+	8,  // 24: api.video.v1.VideoService.HotRanking:output_type -> api.video.v1.HotRankingReply
+	10, // 25: api.video.v1.VideoService.Search:output_type -> api.video.v1.SearchReply
+	21, // [21:26] is the sub-list for method output_type
+	16, // [16:21] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_api_video_video_proto_init() }

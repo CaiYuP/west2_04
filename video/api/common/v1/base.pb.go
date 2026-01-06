@@ -258,7 +258,7 @@ const file_api_common_base_proto_rawDesc = "" +
 	"\fPageResponse\x12\x19\n" +
 	"\bpage_num\x18\x01 \x01(\x05R\apageNum\x12\x1b\n" +
 	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\x12\x14\n" +
-	"\x05total\x18\x03 \x01(\x03R\x05totalB\x1eZ\x1cwest2-video/api/common/v1;v1b\x06proto3"
+	"\x05total\x18\x03 \x01(\x03R\x05totalB\x12Z\x10api/common/v1;v1b\x06proto3"
 
 var (
 	file_api_common_base_proto_rawDescOnce sync.Once

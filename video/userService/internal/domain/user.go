@@ -2,6 +2,7 @@ package domain
 
 import (
 	"context"
+	"github.com/pquerna/otp/totp"
 	"go.uber.org/zap"
 	"strconv"
 	"time"
@@ -14,6 +15,7 @@ import (
 	"west2-video/common/jwts"
 	"west2-video/common/logs"
 	"west2-video/common/mfa"
+	"west2-video/common/upload"
 	"west2-video/gateway/biz/model"
 )
 
@@ -136,4 +138,45 @@ func (d *UserDomain) SaveMFASecret(ctx context.Context, id int64, qcode string) 
 		return model.DBError
 	}
 	return nil
+}
+
+func (d *UserDomain) FindSecretById(ctx context.Context, id int64) (string, *errs.BError) {
+	secret, err := d.userRepo.FindSecretById(ctx, id)
+	if err != nil {
+		logs.LG.Error("UserDomain FindSecretById error", zap.Error(err))
+		return "", model.DBError
+	}
+	if secret == "" {
+		return "", model.NotSetSecret
+	}
+	return secret, nil
+}
+
+func (d *UserDomain) VerifySecret(ctx context.Context, secret string, newSecret, code string) *errs.BError {
+	if secret != newSecret {
+		return model.SecretError
+	}
+	valid := totp.Validate(code, secret)
+	if !valid {
+		return model.MFACodeInvalid
+	}
+	return nil
+}
+
+func (d *UserDomain) UpdateIsSecretEnabled(ctx context.Context, id int64) *errs.BError {
+	err := d.userRepo.SetIsSecretEnabled(ctx, id)
+	if err != nil {
+		logs.LG.Error("UserDomain UpdateIsSecretEnabled error", zap.Error(err))
+		return model.DBError
+	}
+	return nil
+}
+
+func (d *UserDomain) CreatePngUrl(ctx context.Context, data []byte, idStr string) (string, *errs.BError) {
+	image, err := upload.Uploader.UploadImage(data, idStr)
+	if err != nil {
+		logs.LG.Error("UserDomain CreatePngUrl error", zap.Error(err))
+		return "", model.UploadImgError
+	}
+	return image, nil
 }

@@ -25,7 +25,7 @@ const (
 // ========= 用户通用结构（文档“用户” Schema） =========
 type User struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
 	Nickname      string                 `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname,omitempty"`
 	AvatarUrl     string                 `protobuf:"bytes,4,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url,omitempty"`
@@ -68,11 +68,11 @@ func (*User) Descriptor() ([]byte, []int) {
 	return file_api_user_user_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *User) GetId() int64 {
+func (x *User) GetId() string {
 	if x != nil {
 		return x.Id
 	}
-	return 0
+	return ""
 }
 
 func (x *User) GetUsername() string {
@@ -829,8 +829,9 @@ func (x *GetMfaQrcodeReply) GetQrcode() string {
 // ========= 绑定 MFA =========
 type BindMfaRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Code          string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`     // 动态验证码
-	Secret        string                 `protobuf:"bytes,2,opt,name=secret,proto3" json:"secret,omitempty"` // 可选：客户端不一定传，服务端可从缓存获取
+	Code          string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"` // 动态验证码
+	Secret        string                 `protobuf:"bytes,2,opt,name=secret,proto3" json:"secret,omitempty"`
+	Id            int64                  `protobuf:"varint,3,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -877,6 +878,13 @@ func (x *BindMfaRequest) GetSecret() string {
 		return x.Secret
 	}
 	return ""
+}
+
+func (x *BindMfaRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
 }
 
 type BindMfaReply struct {
@@ -927,7 +935,7 @@ func (x *BindMfaReply) GetBase() *v1.BaseResponse {
 type SearchByImageRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Data          []byte                 `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"` // 上传图片原始数据
-	Page          *v1.PageRequest        `protobuf:"bytes,2,opt,name=page,proto3" json:"page,omitempty"`
+	Id            int64                  `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -969,18 +977,17 @@ func (x *SearchByImageRequest) GetData() []byte {
 	return nil
 }
 
-func (x *SearchByImageRequest) GetPage() *v1.PageRequest {
+func (x *SearchByImageRequest) GetId() int64 {
 	if x != nil {
-		return x.Page
+		return x.Id
 	}
-	return nil
+	return 0
 }
 
 type SearchByImageReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Base          *v1.BaseResponse       `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	VideoIds      []int64                `protobuf:"varint,2,rep,packed,name=video_ids,json=videoIds,proto3" json:"video_ids,omitempty"` // 返回匹配的视频 ID 列表
-	Page          *v1.PageResponse       `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
+	Url           string                 `protobuf:"bytes,2,opt,name=url,proto3" json:"url,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1022,18 +1029,11 @@ func (x *SearchByImageReply) GetBase() *v1.BaseResponse {
 	return nil
 }
 
-func (x *SearchByImageReply) GetVideoIds() []int64 {
+func (x *SearchByImageReply) GetUrl() string {
 	if x != nil {
-		return x.VideoIds
+		return x.Url
 	}
-	return nil
-}
-
-func (x *SearchByImageReply) GetPage() *v1.PageResponse {
-	if x != nil {
-		return x.Page
-	}
-	return nil
+	return ""
 }
 
 var File_api_user_user_proto protoreflect.FileDescriptor
@@ -1042,7 +1042,7 @@ const file_api_user_user_proto_rawDesc = "" +
 	"\n" +
 	"\x13api/user/user.proto\x12\vapi.user.v1\x1a\x15api/common/base.proto\"\x89\x02\n" +
 	"\x04User\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1a\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
 	"\bnickname\x18\x03 \x01(\tR\bnickname\x12\x1d\n" +
 	"\n" +
@@ -1100,19 +1100,19 @@ const file_api_user_user_proto_rawDesc = "" +
 	"\x11GetMfaQrcodeReply\x12/\n" +
 	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x12\x16\n" +
 	"\x06secret\x18\x02 \x01(\tR\x06secret\x12\x16\n" +
-	"\x06qrcode\x18\x03 \x01(\tR\x06qrcode\"<\n" +
+	"\x06qrcode\x18\x03 \x01(\tR\x06qrcode\"L\n" +
 	"\x0eBindMfaRequest\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\tR\x04code\x12\x16\n" +
-	"\x06secret\x18\x02 \x01(\tR\x06secret\"?\n" +
+	"\x06secret\x18\x02 \x01(\tR\x06secret\x12\x0e\n" +
+	"\x02id\x18\x03 \x01(\x03R\x02id\"?\n" +
 	"\fBindMfaReply\x12/\n" +
-	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\"Z\n" +
+	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\":\n" +
 	"\x14SearchByImageRequest\x12\x12\n" +
-	"\x04data\x18\x01 \x01(\fR\x04data\x12.\n" +
-	"\x04page\x18\x02 \x01(\v2\x1a.api.common.v1.PageRequestR\x04page\"\x93\x01\n" +
+	"\x04data\x18\x01 \x01(\fR\x04data\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\x03R\x02id\"W\n" +
 	"\x12SearchByImageReply\x12/\n" +
-	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x12\x1b\n" +
-	"\tvideo_ids\x18\x02 \x03(\x03R\bvideoIds\x12/\n" +
-	"\x04page\x18\x03 \x01(\v2\x1b.api.common.v1.PageResponseR\x04page2\xd8\x04\n" +
+	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x12\x10\n" +
+	"\x03url\x18\x02 \x01(\tR\x03url2\xd8\x04\n" +
 	"\vUserService\x12D\n" +
 	"\bRegister\x12\x1c.api.user.v1.RegisterRequest\x1a\x1a.api.user.v1.RegisterReply\x12;\n" +
 	"\x05Login\x12\x19.api.user.v1.LoginRequest\x1a\x17.api.user.v1.LoginReply\x12A\n" +
@@ -1155,8 +1155,6 @@ var file_api_user_user_proto_goTypes = []any{
 	(*SearchByImageRequest)(nil), // 15: api.user.v1.SearchByImageRequest
 	(*SearchByImageReply)(nil),   // 16: api.user.v1.SearchByImageReply
 	(*v1.BaseResponse)(nil),      // 17: api.common.v1.BaseResponse
-	(*v1.PageRequest)(nil),       // 18: api.common.v1.PageRequest
-	(*v1.PageResponse)(nil),      // 19: api.common.v1.PageResponse
 }
 var file_api_user_user_proto_depIdxs = []int32{
 	17, // 0: api.user.v1.RefreshReply.base:type_name -> api.common.v1.BaseResponse
@@ -1168,30 +1166,28 @@ var file_api_user_user_proto_depIdxs = []int32{
 	17, // 6: api.user.v1.UploadAvatarReply.base:type_name -> api.common.v1.BaseResponse
 	17, // 7: api.user.v1.GetMfaQrcodeReply.base:type_name -> api.common.v1.BaseResponse
 	17, // 8: api.user.v1.BindMfaReply.base:type_name -> api.common.v1.BaseResponse
-	18, // 9: api.user.v1.SearchByImageRequest.page:type_name -> api.common.v1.PageRequest
-	17, // 10: api.user.v1.SearchByImageReply.base:type_name -> api.common.v1.BaseResponse
-	19, // 11: api.user.v1.SearchByImageReply.page:type_name -> api.common.v1.PageResponse
-	3,  // 12: api.user.v1.UserService.Register:input_type -> api.user.v1.RegisterRequest
-	5,  // 13: api.user.v1.UserService.Login:input_type -> api.user.v1.LoginRequest
-	1,  // 14: api.user.v1.UserService.Refresh:input_type -> api.user.v1.RefreshRequest
-	7,  // 15: api.user.v1.UserService.GetUserInfo:input_type -> api.user.v1.UserInfoRequest
-	9,  // 16: api.user.v1.UserService.UploadAvatar:input_type -> api.user.v1.UploadAvatarRequest
-	11, // 17: api.user.v1.UserService.GetMfaQrcode:input_type -> api.user.v1.GetMfaQrcodeRequest
-	13, // 18: api.user.v1.UserService.BindMfa:input_type -> api.user.v1.BindMfaRequest
-	15, // 19: api.user.v1.UserService.SearchByImage:input_type -> api.user.v1.SearchByImageRequest
-	4,  // 20: api.user.v1.UserService.Register:output_type -> api.user.v1.RegisterReply
-	6,  // 21: api.user.v1.UserService.Login:output_type -> api.user.v1.LoginReply
-	2,  // 22: api.user.v1.UserService.Refresh:output_type -> api.user.v1.RefreshReply
-	8,  // 23: api.user.v1.UserService.GetUserInfo:output_type -> api.user.v1.UserInfoReply
-	10, // 24: api.user.v1.UserService.UploadAvatar:output_type -> api.user.v1.UploadAvatarReply
-	12, // 25: api.user.v1.UserService.GetMfaQrcode:output_type -> api.user.v1.GetMfaQrcodeReply
-	14, // 26: api.user.v1.UserService.BindMfa:output_type -> api.user.v1.BindMfaReply
-	16, // 27: api.user.v1.UserService.SearchByImage:output_type -> api.user.v1.SearchByImageReply
-	20, // [20:28] is the sub-list for method output_type
-	12, // [12:20] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	17, // 9: api.user.v1.SearchByImageReply.base:type_name -> api.common.v1.BaseResponse
+	3,  // 10: api.user.v1.UserService.Register:input_type -> api.user.v1.RegisterRequest
+	5,  // 11: api.user.v1.UserService.Login:input_type -> api.user.v1.LoginRequest
+	1,  // 12: api.user.v1.UserService.Refresh:input_type -> api.user.v1.RefreshRequest
+	7,  // 13: api.user.v1.UserService.GetUserInfo:input_type -> api.user.v1.UserInfoRequest
+	9,  // 14: api.user.v1.UserService.UploadAvatar:input_type -> api.user.v1.UploadAvatarRequest
+	11, // 15: api.user.v1.UserService.GetMfaQrcode:input_type -> api.user.v1.GetMfaQrcodeRequest
+	13, // 16: api.user.v1.UserService.BindMfa:input_type -> api.user.v1.BindMfaRequest
+	15, // 17: api.user.v1.UserService.SearchByImage:input_type -> api.user.v1.SearchByImageRequest
+	4,  // 18: api.user.v1.UserService.Register:output_type -> api.user.v1.RegisterReply
+	6,  // 19: api.user.v1.UserService.Login:output_type -> api.user.v1.LoginReply
+	2,  // 20: api.user.v1.UserService.Refresh:output_type -> api.user.v1.RefreshReply
+	8,  // 21: api.user.v1.UserService.GetUserInfo:output_type -> api.user.v1.UserInfoReply
+	10, // 22: api.user.v1.UserService.UploadAvatar:output_type -> api.user.v1.UploadAvatarReply
+	12, // 23: api.user.v1.UserService.GetMfaQrcode:output_type -> api.user.v1.GetMfaQrcodeReply
+	14, // 24: api.user.v1.UserService.BindMfa:output_type -> api.user.v1.BindMfaReply
+	16, // 25: api.user.v1.UserService.SearchByImage:output_type -> api.user.v1.SearchByImageReply
+	18, // [18:26] is the sub-list for method output_type
+	10, // [10:18] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_api_user_user_proto_init() }

@@ -207,11 +207,3 @@ func (c *Config) ReadGrpcConfig() {
 	}
 	c.Gc = gc
 }
-
-func (c *Config) ReConnMysql() {
-	// TODO: 实现数据库连接（如果需要，可以创建 mysql.go 文件）
-}
-
-func (c *Config) ReConnRedis() *redis.Client {
-	return redis.NewClient(c.InitRedisOptions())
-}

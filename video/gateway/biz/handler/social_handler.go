@@ -66,13 +66,18 @@ func FollowAction(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.SocialClient.FollowAction(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbsocial.FollowActionReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: nil,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // FollowList 关注列表
@@ -99,13 +104,26 @@ func FollowList(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.SocialClient.FollowList(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbsocial.FollowListReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	data := struct {
+		Users []*pbsocial.SocialUser   `json:"users"`
+		Page  *pbcommon.PageResponse `json:"page"`
+	}{
+		Users: resp.GetUsers(),
+		Page:  resp.GetPage(),
+	}
+
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: data,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // FollowerList 粉丝列表
@@ -132,13 +150,26 @@ func FollowerList(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.SocialClient.FollowerList(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbsocial.FollowerListReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	data := struct {
+		Users []*pbsocial.SocialUser   `json:"users"`
+		Page  *pbcommon.PageResponse `json:"page"`
+	}{
+		Users: resp.GetUsers(),
+		Page:  resp.GetPage(),
+	}
+
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: data,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // FriendList 好友列表
@@ -163,12 +194,25 @@ func FriendList(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.SocialClient.FriendList(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbsocial.FriendListReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	data := struct {
+		Users []*pbsocial.SocialUser   `json:"users"`
+		Page  *pbcommon.PageResponse `json:"page"`
+	}{
+		Users: resp.GetUsers(),
+		Page:  resp.GetPage(),
+	}
+
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: data,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 

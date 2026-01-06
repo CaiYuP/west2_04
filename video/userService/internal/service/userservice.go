@@ -2,16 +2,14 @@ package service
 
 import (
 	"context"
-	"github.com/jinzhu/copier"
 	"go.uber.org/zap"
+	"strconv"
 	"time"
 	userData "userService/internal/data"
 	"userService/internal/domain"
 	v1 "west2-video/api/common/v1"
 	"west2-video/common/errs"
 	"west2-video/common/logs"
-	"west2-video/common/tms"
-
 	userpb "west2-video/api/user/v1"
 )
 
@@ -81,21 +79,14 @@ func (s *UserServiceService) GetUserInfo(ctx context.Context, req *userpb.UserIn
 		logs.LG.Error("UserServiceService userDomain FindUserById error", zap.Error(err))
 		return nil, errs.GrpcError(err)
 	}
-	u := UserFormat(userById)
+	u := userData.UserFormat(userById)
 	rsp := &userpb.UserInfoReply{
 		User: u,
 	}
 	rsp.Base = v1.Success()
 	return rsp, nil
 }
-func UserFormat(user *userData.User) *userpb.User {
-	u := &userpb.User{}
-	copier.Copy(u, user)
-	u.CreatedAt = tms.Format(user.CreatedAt)
-	u.UpdatedAt = tms.Format(user.UpdatedAt)
-	u.DeletedAt = tms.Format(user.DeletedAt)
-	return u
-}
+
 func (s *UserServiceService) UploadAvatar(ctx context.Context, req *userpb.UploadAvatarRequest) (*userpb.UploadAvatarReply, error) {
 	c, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
@@ -129,8 +120,39 @@ func (s *UserServiceService) GetMfaQrcode(ctx context.Context, req *userpb.GetMf
 	return rsp, nil
 }
 func (s *UserServiceService) BindMfa(ctx context.Context, req *userpb.BindMfaRequest) (*userpb.BindMfaReply, error) {
-	return &userpb.BindMfaReply{}, nil
+	c, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+	secret, err := s.userDomain.FindSecretById(c, req.Id)
+	if err != nil {
+		logs.LG.Error("UserServiceService FindSecretById error", zap.Error(err))
+		return nil, errs.GrpcError(err)
+	}
+	err = s.userDomain.VerifySecret(c, secret, req.Secret, req.Code)
+	if err != nil {
+		logs.LG.Error("UserServiceService VerifySecret error", zap.Error(err))
+		return nil, errs.GrpcError(err)
+	}
+	err = s.userDomain.UpdateIsSecretEnabled(c, req.Id)
+	if err != nil {
+		logs.LG.Error("UserServiceService UpdateIsSecretEnabled error", zap.Error(err))
+		return nil, errs.GrpcError(err)
+	}
+	rsp := &userpb.BindMfaReply{}
+	rsp.Base = v1.Success()
+	return rsp, nil
 }
 func (s *UserServiceService) SearchByImage(ctx context.Context, req *userpb.SearchByImageRequest) (*userpb.SearchByImageReply, error) {
-	return &userpb.SearchByImageReply{}, nil
+	c, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+	idStr := strconv.FormatInt(req.Id, 10)
+	url, err := s.userDomain.CreatePngUrl(c, req.Data, idStr)
+	if err != nil {
+		logs.LG.Error("UserServiceService CreatePngUrl error", zap.Error(err))
+		return nil, errs.GrpcError(err)
+	}
+	rsp := &userpb.SearchByImageReply{
+		Url: url,
+	}
+	rsp.Base = v1.Success()
+	return rsp, nil
 }

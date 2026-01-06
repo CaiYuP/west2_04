@@ -1,0 +1,13 @@
+{"level":"ERROR","time":"2026-01-06T15:38:03.853+0800","caller":"config/mysql.go:92","msg":"连接MySQL数据库失败, error=Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)"}
+{"level":"ERROR","time":"2026-01-06T15:39:38.878+0800","caller":"config/mysql.go:92","msg":"连接MySQL数据库失败, error=Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)"}
+{"level":"ERROR","time":"2026-01-06T15:39:49.362+0800","caller":"config/mysql.go:92","msg":"连接MySQL数据库失败, error=Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)"}
+{"level":"ERROR","time":"2026-01-06T15:41:14.402+0800","caller":"config/mysql.go:92","msg":"连接MySQL数据库失败, error=Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)"}
+{"level":"ERROR","time":"2026-01-06T15:42:29.419+0800","caller":"config/mysql.go:92","msg":"连接MySQL数据库失败, error=Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)"}
+{"level":"ERROR","time":"2026-01-06T15:44:43.655+0800","caller":"config/mysql.go:92","msg":"连接MySQL数据库失败, error=Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)"}
+{"level":"ERROR","time":"2026-01-06T15:47:02.416+0800","caller":"config/mysql.go:92","msg":"连接MySQL数据库失败, error=Error 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)"}
+{"level":"INFO","time":"2026-01-06T15:47:08.033+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-06T15:47:09.007+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-06T16:13:43.875+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-06T16:13:43.890+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}
+{"level":"INFO","time":"2026-01-06T16:14:20.904+0800","caller":"config/mysql.go:107","msg":"MySQL单机模式连接成功"}
+{"level":"INFO","time":"2026-01-06T16:14:20.925+0800","caller":"config/mysql.go:135","msg":"数据库连接测试成功"}

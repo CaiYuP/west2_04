@@ -16,27 +16,34 @@ import (
 // Feed 视频流
 func Feed(ctx context.Context, c *app.RequestContext) {
 	latestTime, _ := strconv.ParseInt(c.Query("latest_time"), 10, 64)
-	pageSize, _ := strconv.ParseInt(c.Query("page_size"), 10, 32)
-	if pageSize == 0 {
-		pageSize = 10
-	}
+	//pageSize, _ := strconv.ParseInt(c.Query("page_size"), 10, 32)
+	//if pageSize == 0 {
+	//	pageSize = 10
+	//}
 
 	req := &pbvideo.FeedRequest{
 		LatestTime: latestTime,
-		PageSize:   int32(pageSize),
+		//PageSize:   int32(pageSize),
 	}
 
 	clientMgr := client.GetClientManager()
 	resp, err := clientMgr.VideoClient.Feed(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbvideo.FeedReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
-
-	c.JSON(http.StatusOK, resp)
+	items := &videoListResp{
+		Items: resp.Items,
+	}
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: items,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // Publish 投稿
@@ -74,19 +81,25 @@ func Publish(ctx context.Context, c *app.RequestContext) {
 		Title:       title,
 		Description: description,
 		Data:        data,
+		Id:          c.GetInt64("user_id"),
 	}
 
 	clientMgr := client.GetClientManager()
 	resp, err := clientMgr.VideoClient.Publish(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbvideo.PublishReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: nil,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // PublishList 发布列表
@@ -113,13 +126,26 @@ func PublishList(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.VideoClient.PublishList(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbvideo.PublishListReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	data := struct {
+		VideoList []*pbvideo.Video       `json:"video_list"`
+		Page      *pbcommon.PageResponse `json:"page"`
+	}{
+		VideoList: resp.GetVideoList(),
+		Page:      resp.GetPage(),
+	}
+
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: data,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // HotRanking 热门排行榜
@@ -144,13 +170,26 @@ func HotRanking(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.VideoClient.HotRanking(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbvideo.HotRankingReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
+	data := struct {
+		VideoList []*pbvideo.Video       `json:"video_list"`
+		Page      *pbcommon.PageResponse `json:"page"`
+	}{
+		VideoList: resp.GetVideoList(),
+		Page:      resp.GetPage(),
+	}
+
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: data,
+	}
+	c.JSON(http.StatusOK, httpResp)
 }
 
 // SearchVideo 搜索视频
@@ -206,12 +245,24 @@ func SearchVideo(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.VideoClient.Search(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, pbvideo.SearchReply{
+		c.JSON(http.StatusInternalServerError, HTTPResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+			Data: nil,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, resp)
-}
+	data := struct {
+		VideoList []*pbvideo.Video       `json:"video_list"`
+		Page      *pbcommon.PageResponse `json:"page"`
+	}{
+		VideoList: resp.GetVideoList(),
+		Page:      resp.GetPage(),
+	}
 
+	httpResp := &HTTPResponse{
+		Base: resp.GetBase(),
+		Data: data,
+	}
+	c.JSON(http.StatusOK, httpResp)
+}

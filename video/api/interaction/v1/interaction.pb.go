@@ -24,15 +24,21 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// ========= 评论通用结构（文档“评论” Schema） =========
+// ========= 评论通用结构 (Comment Message) =========
+// Aligned with the 'comments' table in database/init.sql
 type Comment struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	VideoId       int64                  `protobuf:"varint,2,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty"`
 	UserId        int64                  `protobuf:"varint,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	User          *v1.User               `protobuf:"bytes,4,opt,name=user,proto3" json:"user,omitempty"`
-	Content       string                 `protobuf:"bytes,5,opt,name=content,proto3" json:"content,omitempty"`
-	CreatedAt     *v11.Timestamp         `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	User          *v1.User               `protobuf:"bytes,4,opt,name=user,proto3" json:"user,omitempty"`                                // Populated by the service layer
+	ParentId      int64                  `protobuf:"varint,5,opt,name=parent_id,json=parentId,proto3" json:"parent_id,omitempty"`       // Added to match SQL
+	LikeCount     int64                  `protobuf:"varint,6,opt,name=like_count,json=likeCount,proto3" json:"like_count,omitempty"`    // Added to match SQL
+	ChildCount    int64                  `protobuf:"varint,7,opt,name=child_count,json=childCount,proto3" json:"child_count,omitempty"` // Added to match SQL
+	Content       string                 `protobuf:"bytes,8,opt,name=content,proto3" json:"content,omitempty"`
+	CreatedAt     *v11.Timestamp         `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     *v11.Timestamp         `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`       // Added to match SQL
+	DeletedAt     *v11.Timestamp         `protobuf:"bytes,11,opt,name=deleted_at,json=deletedAt,proto3,oneof" json:"deleted_at,omitempty"` // Added to match SQL, optional for nullability
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -95,6 +101,27 @@ func (x *Comment) GetUser() *v1.User {
 	return nil
 }
 
+func (x *Comment) GetParentId() int64 {
+	if x != nil {
+		return x.ParentId
+	}
+	return 0
+}
+
+func (x *Comment) GetLikeCount() int64 {
+	if x != nil {
+		return x.LikeCount
+	}
+	return 0
+}
+
+func (x *Comment) GetChildCount() int64 {
+	if x != nil {
+		return x.ChildCount
+	}
+	return 0
+}
+
 func (x *Comment) GetContent() string {
 	if x != nil {
 		return x.Content
@@ -105,6 +132,20 @@ func (x *Comment) GetContent() string {
 func (x *Comment) GetCreatedAt() *v11.Timestamp {
 	if x != nil {
 		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *Comment) GetUpdatedAt() *v11.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+func (x *Comment) GetDeletedAt() *v11.Timestamp {
+	if x != nil {
+		return x.DeletedAt
 	}
 	return nil
 }
@@ -640,15 +681,26 @@ var File_api_interaction_interaction_proto protoreflect.FileDescriptor
 
 const file_api_interaction_interaction_proto_rawDesc = "" +
 	"\n" +
-	"!api/interaction/interaction.proto\x12\x12api.interaction.v1\x1a\x15api/common/base.proto\x1a\x15api/video/video.proto\x1a\x13api/user/user.proto\"\xc7\x01\n" +
+	"!api/interaction/interaction.proto\x12\x12api.interaction.v1\x1a\x15api/common/base.proto\x1a\x15api/video/video.proto\x1a\x13api/user/user.proto\"\xaa\x03\n" +
 	"\aComment\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x19\n" +
 	"\bvideo_id\x18\x02 \x01(\x03R\avideoId\x12\x17\n" +
 	"\auser_id\x18\x03 \x01(\x03R\x06userId\x12%\n" +
-	"\x04user\x18\x04 \x01(\v2\x11.api.user.v1.UserR\x04user\x12\x18\n" +
-	"\acontent\x18\x05 \x01(\tR\acontent\x127\n" +
+	"\x04user\x18\x04 \x01(\v2\x11.api.user.v1.UserR\x04user\x12\x1b\n" +
+	"\tparent_id\x18\x05 \x01(\x03R\bparentId\x12\x1d\n" +
 	"\n" +
-	"created_at\x18\x06 \x01(\v2\x18.api.common.v1.TimestampR\tcreatedAt\"O\n" +
+	"like_count\x18\x06 \x01(\x03R\tlikeCount\x12\x1f\n" +
+	"\vchild_count\x18\a \x01(\x03R\n" +
+	"childCount\x12\x18\n" +
+	"\acontent\x18\b \x01(\tR\acontent\x127\n" +
+	"\n" +
+	"created_at\x18\t \x01(\v2\x18.api.common.v1.TimestampR\tcreatedAt\x127\n" +
+	"\n" +
+	"updated_at\x18\n" +
+	" \x01(\v2\x18.api.common.v1.TimestampR\tupdatedAt\x12<\n" +
+	"\n" +
+	"deleted_at\x18\v \x01(\v2\x18.api.common.v1.TimestampH\x00R\tdeletedAt\x88\x01\x01B\r\n" +
+	"\v_deleted_at\"O\n" +
 	"\x11LikeActionRequest\x12\x19\n" +
 	"\bvideo_id\x18\x01 \x01(\x03R\avideoId\x12\x1f\n" +
 	"\vaction_type\x18\x02 \x01(\x05R\n" +
@@ -688,7 +740,7 @@ const file_api_interaction_interaction_proto_rawDesc = "" +
 	"\bLikeList\x12#.api.interaction.v1.LikeListRequest\x1a!.api.interaction.v1.LikeListReply\x12a\n" +
 	"\rCommentAction\x12(.api.interaction.v1.CommentActionRequest\x1a&.api.interaction.v1.CommentActionReply\x12[\n" +
 	"\vCommentList\x12&.api.interaction.v1.CommentListRequest\x1a$.api.interaction.v1.CommentListReply\x12a\n" +
-	"\rDeleteComment\x12(.api.interaction.v1.DeleteCommentRequest\x1a&.api.interaction.v1.DeleteCommentReplyB#Z!west2-video/api/interaction/v1;v1b\x06proto3"
+	"\rDeleteComment\x12(.api.interaction.v1.DeleteCommentRequest\x1a&.api.interaction.v1.DeleteCommentReplyB\x17Z\x15api/interaction/v1;v1b\x06proto3"
 
 var (
 	file_api_interaction_interaction_proto_rawDescOnce sync.Once
@@ -725,33 +777,35 @@ var file_api_interaction_interaction_proto_goTypes = []any{
 var file_api_interaction_interaction_proto_depIdxs = []int32{
 	11, // 0: api.interaction.v1.Comment.user:type_name -> api.user.v1.User
 	12, // 1: api.interaction.v1.Comment.created_at:type_name -> api.common.v1.Timestamp
-	13, // 2: api.interaction.v1.LikeActionReply.base:type_name -> api.common.v1.BaseResponse
-	14, // 3: api.interaction.v1.LikeListRequest.page:type_name -> api.common.v1.PageRequest
-	13, // 4: api.interaction.v1.LikeListReply.base:type_name -> api.common.v1.BaseResponse
-	15, // 5: api.interaction.v1.LikeListReply.videos:type_name -> api.video.v1.Video
-	16, // 6: api.interaction.v1.LikeListReply.page:type_name -> api.common.v1.PageResponse
-	13, // 7: api.interaction.v1.CommentActionReply.base:type_name -> api.common.v1.BaseResponse
-	0,  // 8: api.interaction.v1.CommentActionReply.comment:type_name -> api.interaction.v1.Comment
-	14, // 9: api.interaction.v1.CommentListRequest.page:type_name -> api.common.v1.PageRequest
-	13, // 10: api.interaction.v1.CommentListReply.base:type_name -> api.common.v1.BaseResponse
-	0,  // 11: api.interaction.v1.CommentListReply.comments:type_name -> api.interaction.v1.Comment
-	16, // 12: api.interaction.v1.CommentListReply.page:type_name -> api.common.v1.PageResponse
-	13, // 13: api.interaction.v1.DeleteCommentReply.base:type_name -> api.common.v1.BaseResponse
-	1,  // 14: api.interaction.v1.InteractionService.LikeAction:input_type -> api.interaction.v1.LikeActionRequest
-	3,  // 15: api.interaction.v1.InteractionService.LikeList:input_type -> api.interaction.v1.LikeListRequest
-	5,  // 16: api.interaction.v1.InteractionService.CommentAction:input_type -> api.interaction.v1.CommentActionRequest
-	7,  // 17: api.interaction.v1.InteractionService.CommentList:input_type -> api.interaction.v1.CommentListRequest
-	9,  // 18: api.interaction.v1.InteractionService.DeleteComment:input_type -> api.interaction.v1.DeleteCommentRequest
-	2,  // 19: api.interaction.v1.InteractionService.LikeAction:output_type -> api.interaction.v1.LikeActionReply
-	4,  // 20: api.interaction.v1.InteractionService.LikeList:output_type -> api.interaction.v1.LikeListReply
-	6,  // 21: api.interaction.v1.InteractionService.CommentAction:output_type -> api.interaction.v1.CommentActionReply
-	8,  // 22: api.interaction.v1.InteractionService.CommentList:output_type -> api.interaction.v1.CommentListReply
-	10, // 23: api.interaction.v1.InteractionService.DeleteComment:output_type -> api.interaction.v1.DeleteCommentReply
-	19, // [19:24] is the sub-list for method output_type
-	14, // [14:19] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	12, // 2: api.interaction.v1.Comment.updated_at:type_name -> api.common.v1.Timestamp
+	12, // 3: api.interaction.v1.Comment.deleted_at:type_name -> api.common.v1.Timestamp
+	13, // 4: api.interaction.v1.LikeActionReply.base:type_name -> api.common.v1.BaseResponse
+	14, // 5: api.interaction.v1.LikeListRequest.page:type_name -> api.common.v1.PageRequest
+	13, // 6: api.interaction.v1.LikeListReply.base:type_name -> api.common.v1.BaseResponse
+	15, // 7: api.interaction.v1.LikeListReply.videos:type_name -> api.video.v1.Video
+	16, // 8: api.interaction.v1.LikeListReply.page:type_name -> api.common.v1.PageResponse
+	13, // 9: api.interaction.v1.CommentActionReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 10: api.interaction.v1.CommentActionReply.comment:type_name -> api.interaction.v1.Comment
+	14, // 11: api.interaction.v1.CommentListRequest.page:type_name -> api.common.v1.PageRequest
+	13, // 12: api.interaction.v1.CommentListReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 13: api.interaction.v1.CommentListReply.comments:type_name -> api.interaction.v1.Comment
+	16, // 14: api.interaction.v1.CommentListReply.page:type_name -> api.common.v1.PageResponse
+	13, // 15: api.interaction.v1.DeleteCommentReply.base:type_name -> api.common.v1.BaseResponse
+	1,  // 16: api.interaction.v1.InteractionService.LikeAction:input_type -> api.interaction.v1.LikeActionRequest
+	3,  // 17: api.interaction.v1.InteractionService.LikeList:input_type -> api.interaction.v1.LikeListRequest
+	5,  // 18: api.interaction.v1.InteractionService.CommentAction:input_type -> api.interaction.v1.CommentActionRequest
+	7,  // 19: api.interaction.v1.InteractionService.CommentList:input_type -> api.interaction.v1.CommentListRequest
+	9,  // 20: api.interaction.v1.InteractionService.DeleteComment:input_type -> api.interaction.v1.DeleteCommentRequest
+	2,  // 21: api.interaction.v1.InteractionService.LikeAction:output_type -> api.interaction.v1.LikeActionReply
+	4,  // 22: api.interaction.v1.InteractionService.LikeList:output_type -> api.interaction.v1.LikeListReply
+	6,  // 23: api.interaction.v1.InteractionService.CommentAction:output_type -> api.interaction.v1.CommentActionReply
+	8,  // 24: api.interaction.v1.InteractionService.CommentList:output_type -> api.interaction.v1.CommentListReply
+	10, // 25: api.interaction.v1.InteractionService.DeleteComment:output_type -> api.interaction.v1.DeleteCommentReply
+	21, // [21:26] is the sub-list for method output_type
+	16, // [16:21] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_api_interaction_interaction_proto_init() }
@@ -759,6 +813,7 @@ func file_api_interaction_interaction_proto_init() {
 	if File_api_interaction_interaction_proto != nil {
 		return
 	}
+	file_api_interaction_interaction_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

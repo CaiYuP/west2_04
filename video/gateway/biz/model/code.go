@@ -14,7 +14,12 @@ var (
 	UserUnExist        = errs.NewError(104, "账号不存在错误")
 	AvatarUploadError  = errs.NewError(105, "头像上传错误")
 	CreateMfaError     = errs.NewError(106, "生成 MFA 密钥失败")
-	CreateMfaCodeError = errs.NewError(106, "生成 MFA 二维码失败")
+	CreateMfaCodeError = errs.NewError(107, "生成 MFA 二维码失败")
+	NotSetSecret       = errs.NewError(108, "mfa密钥未设置")
+	SecretError        = errs.NewError(109, "mfa密钥与数据库不符")
+	MFACodeInvalid     = errs.NewError(110, "mfa密钥不正确")
+	UploadImgError     = errs.NewError(110, "上传图片至图床失败")
+	SeedError          = errs.NewError(201, "时间戳超过当前时间")
 )
 
 const (

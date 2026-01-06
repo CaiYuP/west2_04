@@ -28,10 +28,10 @@ func (rr *UserRouter) Router(r *server.Hertz) {
 		user.GET("/refresh",  handler.RefreshToken) // 刷新token
 		user.GET("/info", midd.AuthMiddleware(), handler.GetUserInfo) // 用户信息
 		user.PUT("/avatar/upload", midd.AuthMiddleware(), handler.UploadAvatar) // 上传头像
-		user.POST("/search/image", midd.AuthMiddleware(), handler.SearchByImage) // 以图搜图
+		user.POST("/image/search",  handler.SearchByImage) // 以图搜图
 	}
 	r.GET("/auth/mfa/qrcode", midd.AuthMiddleware(), handler.GetMfaQrcode) // 获取 MFA qrcode
-	r.POST("/mfa/bind", midd.AuthMiddleware(), handler.BindMfa) // 绑定 MFA
+	r.POST("/auth/mfa/bind", midd.AuthMiddleware(), handler.BindMfa) // 绑定 MFA
 }
 func init() {
 	router := NewUserRouter()

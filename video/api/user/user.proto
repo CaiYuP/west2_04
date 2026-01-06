@@ -2,13 +2,13 @@ syntax = "proto3";
 
 package api.user.v1;
 
-option go_package = "api/user/v1;v1";
+option go_package = "west2-video/api/user/v1;v1";
 
 import "api/common/base.proto";
 
 // ========= 用户通用结构（文档“用户” Schema） =========
 message User {
-  int64 id                    = 1;
+  string id                    = 1;
   string username             = 2;
   string nickname             = 3;
   string avatar_url           = 4;
@@ -121,7 +121,8 @@ message GetMfaQrcodeReply {
 // ========= 绑定 MFA =========
 message BindMfaRequest {
   string code   = 1; // 动态验证码
-  string secret = 2; // 可选：客户端不一定传，服务端可从缓存获取
+  string secret = 2;
+  int64 id=3;
 }
 
 message BindMfaReply {
@@ -131,11 +132,10 @@ message BindMfaReply {
 // ========= 以图搜图 =========
 message SearchByImageRequest {
   bytes data                = 1; // 上传图片原始数据
-  api.common.v1.PageRequest page = 2;
+  int64 id=2;
 }
 
 message SearchByImageReply {
   api.common.v1.BaseResponse base = 1;
-  repeated int64 video_ids        = 2; // 返回匹配的视频 ID 列表
-  api.common.v1.PageResponse page = 3;
+  string url=2;
 }

@@ -11,4 +11,6 @@ type UserRepo interface {
 	FindUserById(ctx context.Context, uid int64) (user *userData.User, err error)
 	UpdateAvatar(ctx context.Context, id int64, s string) error
 	SaveMFASecret(ctx context.Context, id int64, qcode string) error
+	FindSecretById(ctx context.Context, id int64) (string, error)
+	SetIsSecretEnabled(ctx context.Context, id int64) error
 }
