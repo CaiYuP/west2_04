@@ -19,14 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserService_Register_FullMethodName      = "/api.user.v1.UserService/Register"
-	UserService_Login_FullMethodName         = "/api.user.v1.UserService/Login"
-	UserService_Refresh_FullMethodName       = "/api.user.v1.UserService/Refresh"
-	UserService_GetUserInfo_FullMethodName   = "/api.user.v1.UserService/GetUserInfo"
-	UserService_UploadAvatar_FullMethodName  = "/api.user.v1.UserService/UploadAvatar"
-	UserService_GetMfaQrcode_FullMethodName  = "/api.user.v1.UserService/GetMfaQrcode"
-	UserService_BindMfa_FullMethodName       = "/api.user.v1.UserService/BindMfa"
-	UserService_SearchByImage_FullMethodName = "/api.user.v1.UserService/SearchByImage"
+	UserService_Register_FullMethodName              = "/api.user.v1.UserService/Register"
+	UserService_Login_FullMethodName                 = "/api.user.v1.UserService/Login"
+	UserService_Refresh_FullMethodName               = "/api.user.v1.UserService/Refresh"
+	UserService_GetUserInfo_FullMethodName           = "/api.user.v1.UserService/GetUserInfo"
+	UserService_GetUserInfos_FullMethodName          = "/api.user.v1.UserService/GetUserInfos"
+	UserService_GetUserInfoByUserName_FullMethodName = "/api.user.v1.UserService/GetUserInfoByUserName"
+	UserService_UploadAvatar_FullMethodName          = "/api.user.v1.UserService/UploadAvatar"
+	UserService_GetMfaQrcode_FullMethodName          = "/api.user.v1.UserService/GetMfaQrcode"
+	UserService_BindMfa_FullMethodName               = "/api.user.v1.UserService/BindMfa"
+	UserService_SearchByImage_FullMethodName         = "/api.user.v1.UserService/SearchByImage"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -43,6 +45,8 @@ type UserServiceClient interface {
 	Refresh(ctx context.Context, in *RefreshRequest, opts ...grpc.CallOption) (*RefreshReply, error)
 	// 用户信息
 	GetUserInfo(ctx context.Context, in *UserInfoRequest, opts ...grpc.CallOption) (*UserInfoReply, error)
+	GetUserInfos(ctx context.Context, in *UserInfosRequest, opts ...grpc.CallOption) (*UserInfosReply, error)
+	GetUserInfoByUserName(ctx context.Context, in *UserInfoUserNameRequest, opts ...grpc.CallOption) (*UserInfoUserNameReply, error)
 	// 上传头像（当前登录用户）
 	UploadAvatar(ctx context.Context, in *UploadAvatarRequest, opts ...grpc.CallOption) (*UploadAvatarReply, error)
 	// 获取 MFA qrcode
@@ -95,6 +99,26 @@ func (c *userServiceClient) GetUserInfo(ctx context.Context, in *UserInfoRequest
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UserInfoReply)
 	err := c.cc.Invoke(ctx, UserService_GetUserInfo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetUserInfos(ctx context.Context, in *UserInfosRequest, opts ...grpc.CallOption) (*UserInfosReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserInfosReply)
+	err := c.cc.Invoke(ctx, UserService_GetUserInfos_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetUserInfoByUserName(ctx context.Context, in *UserInfoUserNameRequest, opts ...grpc.CallOption) (*UserInfoUserNameReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserInfoUserNameReply)
+	err := c.cc.Invoke(ctx, UserService_GetUserInfoByUserName_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -155,6 +179,8 @@ type UserServiceServer interface {
 	Refresh(context.Context, *RefreshRequest) (*RefreshReply, error)
 	// 用户信息
 	GetUserInfo(context.Context, *UserInfoRequest) (*UserInfoReply, error)
+	GetUserInfos(context.Context, *UserInfosRequest) (*UserInfosReply, error)
+	GetUserInfoByUserName(context.Context, *UserInfoUserNameRequest) (*UserInfoUserNameReply, error)
 	// 上传头像（当前登录用户）
 	UploadAvatar(context.Context, *UploadAvatarRequest) (*UploadAvatarReply, error)
 	// 获取 MFA qrcode
@@ -184,6 +210,12 @@ func (UnimplementedUserServiceServer) Refresh(context.Context, *RefreshRequest) 
 }
 func (UnimplementedUserServiceServer) GetUserInfo(context.Context, *UserInfoRequest) (*UserInfoReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetUserInfo not implemented")
+}
+func (UnimplementedUserServiceServer) GetUserInfos(context.Context, *UserInfosRequest) (*UserInfosReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetUserInfos not implemented")
+}
+func (UnimplementedUserServiceServer) GetUserInfoByUserName(context.Context, *UserInfoUserNameRequest) (*UserInfoUserNameReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetUserInfoByUserName not implemented")
 }
 func (UnimplementedUserServiceServer) UploadAvatar(context.Context, *UploadAvatarRequest) (*UploadAvatarReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method UploadAvatar not implemented")
@@ -290,6 +322,42 @@ func _UserService_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_GetUserInfos_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserInfosRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetUserInfos(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_GetUserInfos_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetUserInfos(ctx, req.(*UserInfosRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_GetUserInfoByUserName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserInfoUserNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetUserInfoByUserName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_GetUserInfoByUserName_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetUserInfoByUserName(ctx, req.(*UserInfoUserNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _UserService_UploadAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UploadAvatarRequest)
 	if err := dec(in); err != nil {
@@ -384,6 +452,14 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserInfo",
 			Handler:    _UserService_GetUserInfo_Handler,
+		},
+		{
+			MethodName: "GetUserInfos",
+			Handler:    _UserService_GetUserInfos_Handler,
+		},
+		{
+			MethodName: "GetUserInfoByUserName",
+			Handler:    _UserService_GetUserInfoByUserName_Handler,
 		},
 		{
 			MethodName: "UploadAvatar",

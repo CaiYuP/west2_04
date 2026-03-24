@@ -74,26 +74,38 @@ CREATE TABLE `comments` (
     `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     `deleted_at` TIMESTAMP NULL DEFAULT NULL COMMENT '删除时间',
     PRIMARY KEY (`id`),
+    -- 按视频查询评论的索引
     KEY `idx_video_id` (`video_id`),
+    -- 按用户查询评论的索引
     KEY `idx_user_id` (`user_id`),
+    -- 按父评论查询子评论的索引（递归删除、子评论列表）
+    KEY `idx_comments_parent_id` (`parent_id`),
+    -- 视频 + 创建时间的联合索引（按时间分页）
+    KEY `idx_comments_video_created_at` (`video_id`, `created_at`),
     CONSTRAINT `fk_comments_video` FOREIGN KEY (`video_id`) REFERENCES `videos` (`id`) ON DELETE CASCADE,
     CONSTRAINT `fk_comments_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='评论表';
 
 -- =================================================================
 -- 4. Likes Table (likes)
--- Standard join table for user-video likes
+-- 视频/评论点赞共用表，区分 is_comment
 -- =================================================================
 CREATE TABLE `likes` (
-    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '点赞ID',
     `user_id` BIGINT UNSIGNED NOT NULL COMMENT '用户ID',
-    `video_id` BIGINT UNSIGNED NOT NULL COMMENT '视频ID',
+    `video_id` BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '视频ID；评论点赞时为0',
+    `comment_id` BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '评论ID；视频点赞时为0',
+    `is_comment` TINYINT(1) NOT NULL COMMENT '是否为评论点赞',
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uk_user_video` (`user_id`, `video_id`),
-    CONSTRAINT `fk_likes_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `fk_likes_video` FOREIGN KEY (`video_id`) REFERENCES `videos` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='点赞表';
+    -- 视频点赞唯一：同一用户对同一视频只能点赞一次
+    UNIQUE KEY `uk_like_user_video` (`user_id`, `video_id`, `is_comment`),
+    -- 评论点赞唯一：同一用户对同一评论只能点赞一次
+    UNIQUE KEY `uk_like_user_comment` (`user_id`, `comment_id`, `is_comment`),
+    -- 用户点赞列表（按 is_comment 过滤）
+    KEY `idx_like_user_is_comment` (`user_id`, `is_comment`),
+    CONSTRAINT `fk_likes_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='点赞表（视频/评论共用）';
 
 -- =================================================================
 -- 5. Follows Table (follows)
@@ -105,7 +117,10 @@ CREATE TABLE `follows` (
     `followee_id` BIGINT UNSIGNED NOT NULL COMMENT '被关注者ID',
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`id`),
+    -- 防止重复关注 + 加速“我关注了谁 / 是否关注”
     UNIQUE KEY `uk_follower_followee` (`follower_id`, `followee_id`),
+    -- 加速“谁关注了我”（粉丝列表）
+    KEY `idx_follows_followee_id` (`followee_id`),
     CONSTRAINT `fk_follows_follower` FOREIGN KEY (`follower_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
     CONSTRAINT `fk_follows_followee` FOREIGN KEY (`followee_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='关注表';

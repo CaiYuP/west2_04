@@ -2,10 +2,11 @@ go 1.24.3
 
 use (
 	./api
+	./chatService
 	./common
 	./gateway
-	./userService
-	./videoService
 	./interactionService
 	./socialService
+	./userService
+	./videoService
 )

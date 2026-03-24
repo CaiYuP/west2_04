@@ -13,12 +13,12 @@ import (
 
 func main() {
 
-	// 初始化 gRPC 客户端
+	// 初始化 gRPC 客户端（使用 etcd 服务发现）
 	serviceCfg := &client.ServiceConfig{
-		UserServiceAddr:        config.C.Services.UserService,
-		VideoServiceAddr:       config.C.Services.VideoService,
-		InteractionServiceAddr: config.C.Services.InteractionService,
-		SocialServiceAddr:      config.C.Services.SocialService,
+		UserServiceName:        config.C.Services.UserService,
+		VideoServiceName:       config.C.Services.VideoService,
+		InteractionServiceName: config.C.Services.InteractionService,
+		SocialServiceName:      config.C.Services.SocialService,
 	}
 
 	_, err := client.InitClients(serviceCfg)

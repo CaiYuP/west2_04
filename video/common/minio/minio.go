@@ -3,14 +3,12 @@ package minio
 import (
 	"bytes"
 	"context"
+	"github.com/gabriel-vasile/mimetype"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"log"
 	"strconv"
-	"videoService/config"
 )
-
-var MinioCli = NewMinioClientNoErr(config.C.MinIoConfig.Endpoint, config.C.MinIoConfig.AccessKey, config.C.MinIoConfig.SecretKey, config.C.MinIoConfig.UseSSL)
 
 func NewMinioClient(endpoint, accessKey, secretKey string, useSSL bool) (*MinioClient, error) {
 
@@ -90,3 +88,11 @@ func (mc *MinioClient) Compose(
 		srcs...)
 	return object, err
 }
+func GetContentType(data []byte) string {
+	mt := mimetype.Detect(data) // 或 DetectReader
+	ctype := mt.String()        // "video/mp4"
+	//ext := mt.Extension()       // ".mp4"
+	return ctype
+}
+
+var ServerUrl = "http://localhost:9009/"

@@ -14,3 +14,6 @@ type Follow struct {
 
 func (Follow) TableName() string { return "follows" }
 
+
+
+

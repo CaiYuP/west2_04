@@ -1,0 +1,104 @@
+services:
+  mysql:
+    container_name: 04_mysql8
+    image: mysql:${MYSQL_VERSION}
+    restart: always
+    ports:
+      - 3309:3306
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: west2_video
+    volumes:
+      - ${MYSQL_DIR}/data:/var/lib/mysql
+      - ${MYSQL_DIR}/conf:/etc/mysql/conf.d/
+      - ${MYSQL_DIR}/logs:/logs
+      - ${MYSQL_DIR}/init:/docker-entrypoint-initdb.d
+    command:
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --explicit_defaults_for_timestamp=true
+      --lower_case_table_names=1
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  Redis:
+    container_name: 04_redis6
+    image: redis:${REDIS_VERSION}
+    restart: always
+    volumes:
+      - ${REDIS_DIR}/data:/data
+      - ${REDIS_DIR}/conf/redis.conf:/etc/redis/redis.conf
+    ports:
+      - ${REDIS_PORT}:6379
+    command: redis-server /etc/redis/redis.conf
+
+  Etcd:
+    container_name: 04_etcd3
+    image: quay.io/coreos/etcd:${ETCD_VERSION}
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379       #  关键：允许所有网络接口连接
+      - ETCD_ADVERTISE_CLIENT_URLS=http://127.0.0.1:2379  #  关键：告知客户端连接此地址
+    privileged: true
+    volumes:
+      - ${ETCD_DIR}/data:/bitnami/etcd/data
+    ports:
+      - ${ETCD_PORT}:2379
+      - 2380:2380
+  minio:
+    container_name: 04_minio
+    image: "minio/minio:RELEASE.2023-07-21T21-12-44Z"
+    ports:
+      - '9009:9000'
+      - '9001:9001'
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=admin123456
+      - MINIO_DEFAULT_BUCKETS=uploads,backups,logs  # 自动创建桶
+    volumes:
+      - '${MINIO_DIR}/data:/data'
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+  Nacos:
+    container_name: 04_nacos-standalone
+    image: nacos/nacos-server:v2.2.3
+    restart: no
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - MODE=standalone
+      - JVM_XMS=512m                    # 修正：初始堆内存
+      - JVM_XMX=1g                      # 修正：最大堆内存
+      - JVM_XMN=256m                    # 修正：年轻代大小
+      - MYSQL_SERVICE_HOST=mysql
+      - MYSQL_SERVICE_DB_NAME=nacos
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_USER=root
+      - MYSQL_SERVICE_PASSWORD=root
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=UTC
+    privileged: true
+    volumes:
+      - ${NACOS_DIR}/data:/home/nacos/data
+      - ${NACOS_DIR}/logs:/home/nacos/logs
+      - nacos-conf:/home/nacos/conf
+    ports:
+      - 8848:8848
+      - 9848:9848
+      - 9849:9849
+volumes:
+  nacos-conf:
+    driver: local
+    driver_opts:
+      type: none                    # 移除反引号
+      device: ${NACOS_DIR}/conf     # 移除反引号
+      o: bind                       # 移除反引号

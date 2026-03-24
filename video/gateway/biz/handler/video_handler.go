@@ -30,16 +30,15 @@ func Feed(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.VideoClient.Feed(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
-	items := &videoListResp{
-		Items: resp.Items,
+	items := &videoListData{
+		Items: convertVideoListToResponse(resp.Items),
 	}
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPResponseWithData{
 		Base: resp.GetBase(),
 		Data: items,
 	}
@@ -88,18 +87,13 @@ func Publish(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.VideoClient.Publish(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
 
-	httpResp := &HTTPResponse{
-		Base: resp.GetBase(),
-		Data: nil,
-	}
-	c.JSON(http.StatusOK, httpResp)
+	c.JSON(http.StatusOK, resp)
 }
 
 // PublishList 发布列表
@@ -126,24 +120,38 @@ func PublishList(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.VideoClient.PublishList(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
-
-	data := struct {
-		VideoList []*pbvideo.Video       `json:"video_list"`
-		Page      *pbcommon.PageResponse `json:"page"`
-	}{
-		VideoList: resp.GetVideoList(),
-		Page:      resp.GetPage(),
+	data := &videoListWithTotalData{
+		Items: convertVideoListToResponse(resp.GetVideoList()),
+		Total: resp.Total,
 	}
-
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPResponseWithData{
 		Base: resp.GetBase(),
 		Data: data,
+	}
+	c.JSON(http.StatusOK, httpResp)
+}
+
+func Watch(ctx context.Context, c *app.RequestContext) {
+	id, _ := strconv.ParseInt(c.Query("id"), 10, 32)
+	req := &pbvideo.WatchVideoRequest{
+		Id: id,
+	}
+	clientMgr := client.GetClientManager()
+	video, err := clientMgr.VideoClient.WatchVideo(ctx, req)
+	if err != nil {
+		code, msg := errs.ParseGrpcError(err)
+		c.JSON(http.StatusInternalServerError, pbvideo.WatchVideoReply{
+			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
+		})
+	}
+	httpResp := &HTTPResponseWithData{
+		Base: video.GetBase(),
+		Data: video.Video,
 	}
 	c.JSON(http.StatusOK, httpResp)
 }
@@ -170,22 +178,17 @@ func HotRanking(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.VideoClient.HotRanking(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
 
-	data := struct {
-		VideoList []*pbvideo.Video       `json:"video_list"`
-		Page      *pbcommon.PageResponse `json:"page"`
-	}{
-		VideoList: resp.GetVideoList(),
-		Page:      resp.GetPage(),
+	data := &videoListData{
+		Items: convertVideoListToResponse(resp.GetVideoList()),
 	}
 
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPResponseWithData{
 		Base: resp.GetBase(),
 		Data: data,
 	}
@@ -201,7 +204,8 @@ func SearchVideo(ctx context.Context, c *app.RequestContext) {
 	fromDateStr := c.PostForm("from_date")
 	toDateStr := c.PostForm("to_date")
 	username := c.PostForm("username")
-
+	fromDate, _ := strconv.ParseInt(fromDateStr, 10, 64)
+	toDate, _ := strconv.ParseInt(toDateStr, 10, 64)
 	// 参数验证（根据 API 文档，keywords, page_size, page_num 是必需的）
 	if pageNumStr == "" || pageSizeStr == "" {
 		c.JSON(http.StatusBadRequest, pbvideo.SearchReply{
@@ -226,41 +230,32 @@ func SearchVideo(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	// 注意：proto 中只有 keywords 和 page，没有 from_date, to_date, username
-	// 这些字段可能需要扩展 proto 或通过其他方式传递
 	req := &pbvideo.SearchRequest{
 		Keywords: keywords,
 		Page: &pbcommon.PageRequest{
 			PageNum:  int32(pageNum),
 			PageSize: int32(pageSize),
 		},
+		FromDate: fromDate,
+		ToDate:   toDate,
+		Username: username,
 	}
-
-	// TODO: 如果需要支持 from_date, to_date, username，需要扩展 proto 定义
-	_ = fromDateStr
-	_ = toDateStr
-	_ = username
 
 	clientMgr := client.GetClientManager()
 	resp, err := clientMgr.VideoClient.Search(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
 
-	data := struct {
-		VideoList []*pbvideo.Video       `json:"video_list"`
-		Page      *pbcommon.PageResponse `json:"page"`
-	}{
-		VideoList: resp.GetVideoList(),
-		Page:      resp.GetPage(),
+	data := &videoListWithTotalData{
+		Items: convertVideoListToResponse(resp.GetVideoList()),
+		Total: resp.Total,
 	}
-
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPResponseWithData{
 		Base: resp.GetBase(),
 		Data: data,
 	}

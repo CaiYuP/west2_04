@@ -39,14 +39,13 @@ func Register(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.UserClient.Register(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
 
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPResponseWithData{
 		Base: resp.GetBase(),
 		Data: resp.GetUser(),
 	}
@@ -91,9 +90,8 @@ func RefreshToken(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.UserClient.Refresh(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
@@ -110,7 +108,7 @@ func RefreshToken(ctx context.Context, c *app.RequestContext) {
 		RefreshExpiresIn: resp.GetRefreshExpiresIn(),
 	}
 
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPResponseWithData{
 		Base: resp.GetBase(),
 		Data: data,
 	}
@@ -139,9 +137,8 @@ func Login(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.UserClient.Login(ctx, req)
 	if err != nil {
 		code, m := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: m},
-			Data: nil,
 		})
 		return
 	}
@@ -158,7 +155,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		RefreshExpiresIn: resp.GetRefreshExpiresIn(),
 	}
 
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPResponseWithData{
 		Base: resp.GetBase(),
 		Data: data,
 	}
@@ -182,14 +179,13 @@ func GetUserInfo(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.UserClient.GetUserInfo(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
 
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPResponseWithData{
 		Base: resp.GetBase(),
 		Data: resp.GetUser(),
 	}
@@ -256,9 +252,8 @@ func UploadAvatar(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.UserClient.UploadAvatar(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
@@ -273,7 +268,7 @@ func UploadAvatar(ctx context.Context, c *app.RequestContext) {
 		}{
 			AvatarUrl: resp.GetAvatarUrl(),
 		}
-		httpResp := &HTTPResponse{
+		httpResp := &HTTPResponseWithData{
 			Base: resp.GetBase(),
 			Data: data,
 		}
@@ -282,7 +277,7 @@ func UploadAvatar(ctx context.Context, c *app.RequestContext) {
 	}
 
 	// 返回完整的用户信息
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPResponseWithData{
 		Base: resp.GetBase(),
 		Data: userInfoResp.GetUser(),
 	}
@@ -299,9 +294,8 @@ func GetMfaQrcode(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.UserClient.GetMfaQrcode(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
@@ -314,7 +308,7 @@ func GetMfaQrcode(ctx context.Context, c *app.RequestContext) {
 		Qrcode: resp.GetQrcode(),
 	}
 
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPResponseWithData{
 		Base: resp.GetBase(),
 		Data: data,
 	}
@@ -334,16 +328,14 @@ func BindMfa(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.UserClient.BindMfa(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
 
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPBaseResponse{
 		Base: resp.GetBase(),
-		Data: nil,
 	}
 	c.JSON(http.StatusOK, httpResp)
 }
@@ -384,14 +376,13 @@ func SearchByImage(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.UserClient.SearchByImage(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
 
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPResponseWithData{
 		Base: resp.GetBase(),
 		Data: resp.Url,
 	}

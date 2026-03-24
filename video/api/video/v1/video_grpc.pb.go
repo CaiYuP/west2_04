@@ -19,11 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	VideoService_Feed_FullMethodName        = "/api.video.v1.VideoService/Feed"
-	VideoService_Publish_FullMethodName     = "/api.video.v1.VideoService/Publish"
-	VideoService_PublishList_FullMethodName = "/api.video.v1.VideoService/PublishList"
-	VideoService_HotRanking_FullMethodName  = "/api.video.v1.VideoService/HotRanking"
-	VideoService_Search_FullMethodName      = "/api.video.v1.VideoService/Search"
+	VideoService_Feed_FullMethodName            = "/api.video.v1.VideoService/Feed"
+	VideoService_FindVideosByIds_FullMethodName = "/api.video.v1.VideoService/FindVideosByIds"
+	VideoService_FindVideosById_FullMethodName  = "/api.video.v1.VideoService/FindVideosById"
+	VideoService_IncrLikeCount_FullMethodName   = "/api.video.v1.VideoService/IncrLikeCount"
+	VideoService_Publish_FullMethodName         = "/api.video.v1.VideoService/Publish"
+	VideoService_PublishList_FullMethodName     = "/api.video.v1.VideoService/PublishList"
+	VideoService_HotRanking_FullMethodName      = "/api.video.v1.VideoService/HotRanking"
+	VideoService_WatchVideo_FullMethodName      = "/api.video.v1.VideoService/WatchVideo"
+	VideoService_Search_FullMethodName          = "/api.video.v1.VideoService/Search"
 )
 
 // VideoServiceClient is the client API for VideoService service.
@@ -34,12 +38,16 @@ const (
 type VideoServiceClient interface {
 	// 首页视频流
 	Feed(ctx context.Context, in *FeedRequest, opts ...grpc.CallOption) (*FeedReply, error)
+	FindVideosByIds(ctx context.Context, in *FindVideosByIdsRequest, opts ...grpc.CallOption) (*FindVideosByIdsReply, error)
+	FindVideosById(ctx context.Context, in *FindVideosByIdRequest, opts ...grpc.CallOption) (*FindVideosByIdReply, error)
+	IncrLikeCount(ctx context.Context, in *IncrLikeCountRequest, opts ...grpc.CallOption) (*IncrLikeCountReply, error)
 	// 投稿（HTTP 单文件上传）
 	Publish(ctx context.Context, in *PublishRequest, opts ...grpc.CallOption) (*PublishReply, error)
 	// 发布列表
 	PublishList(ctx context.Context, in *PublishListRequest, opts ...grpc.CallOption) (*PublishListReply, error)
 	// 热门排行榜（需要 Redis 缓存）
 	HotRanking(ctx context.Context, in *HotRankingRequest, opts ...grpc.CallOption) (*HotRankingReply, error)
+	WatchVideo(ctx context.Context, in *WatchVideoRequest, opts ...grpc.CallOption) (*WatchVideoReply, error)
 	// 搜索视频（条件全部满足）
 	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchReply, error)
 }
@@ -56,6 +64,36 @@ func (c *videoServiceClient) Feed(ctx context.Context, in *FeedRequest, opts ...
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(FeedReply)
 	err := c.cc.Invoke(ctx, VideoService_Feed_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *videoServiceClient) FindVideosByIds(ctx context.Context, in *FindVideosByIdsRequest, opts ...grpc.CallOption) (*FindVideosByIdsReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FindVideosByIdsReply)
+	err := c.cc.Invoke(ctx, VideoService_FindVideosByIds_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *videoServiceClient) FindVideosById(ctx context.Context, in *FindVideosByIdRequest, opts ...grpc.CallOption) (*FindVideosByIdReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FindVideosByIdReply)
+	err := c.cc.Invoke(ctx, VideoService_FindVideosById_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *videoServiceClient) IncrLikeCount(ctx context.Context, in *IncrLikeCountRequest, opts ...grpc.CallOption) (*IncrLikeCountReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(IncrLikeCountReply)
+	err := c.cc.Invoke(ctx, VideoService_IncrLikeCount_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -92,6 +130,16 @@ func (c *videoServiceClient) HotRanking(ctx context.Context, in *HotRankingReque
 	return out, nil
 }
 
+func (c *videoServiceClient) WatchVideo(ctx context.Context, in *WatchVideoRequest, opts ...grpc.CallOption) (*WatchVideoReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(WatchVideoReply)
+	err := c.cc.Invoke(ctx, VideoService_WatchVideo_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *videoServiceClient) Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SearchReply)
@@ -110,12 +158,16 @@ func (c *videoServiceClient) Search(ctx context.Context, in *SearchRequest, opts
 type VideoServiceServer interface {
 	// 首页视频流
 	Feed(context.Context, *FeedRequest) (*FeedReply, error)
+	FindVideosByIds(context.Context, *FindVideosByIdsRequest) (*FindVideosByIdsReply, error)
+	FindVideosById(context.Context, *FindVideosByIdRequest) (*FindVideosByIdReply, error)
+	IncrLikeCount(context.Context, *IncrLikeCountRequest) (*IncrLikeCountReply, error)
 	// 投稿（HTTP 单文件上传）
 	Publish(context.Context, *PublishRequest) (*PublishReply, error)
 	// 发布列表
 	PublishList(context.Context, *PublishListRequest) (*PublishListReply, error)
 	// 热门排行榜（需要 Redis 缓存）
 	HotRanking(context.Context, *HotRankingRequest) (*HotRankingReply, error)
+	WatchVideo(context.Context, *WatchVideoRequest) (*WatchVideoReply, error)
 	// 搜索视频（条件全部满足）
 	Search(context.Context, *SearchRequest) (*SearchReply, error)
 	mustEmbedUnimplementedVideoServiceServer()
@@ -131,6 +183,15 @@ type UnimplementedVideoServiceServer struct{}
 func (UnimplementedVideoServiceServer) Feed(context.Context, *FeedRequest) (*FeedReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Feed not implemented")
 }
+func (UnimplementedVideoServiceServer) FindVideosByIds(context.Context, *FindVideosByIdsRequest) (*FindVideosByIdsReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method FindVideosByIds not implemented")
+}
+func (UnimplementedVideoServiceServer) FindVideosById(context.Context, *FindVideosByIdRequest) (*FindVideosByIdReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method FindVideosById not implemented")
+}
+func (UnimplementedVideoServiceServer) IncrLikeCount(context.Context, *IncrLikeCountRequest) (*IncrLikeCountReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method IncrLikeCount not implemented")
+}
 func (UnimplementedVideoServiceServer) Publish(context.Context, *PublishRequest) (*PublishReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Publish not implemented")
 }
@@ -139,6 +200,9 @@ func (UnimplementedVideoServiceServer) PublishList(context.Context, *PublishList
 }
 func (UnimplementedVideoServiceServer) HotRanking(context.Context, *HotRankingRequest) (*HotRankingReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method HotRanking not implemented")
+}
+func (UnimplementedVideoServiceServer) WatchVideo(context.Context, *WatchVideoRequest) (*WatchVideoReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method WatchVideo not implemented")
 }
 func (UnimplementedVideoServiceServer) Search(context.Context, *SearchRequest) (*SearchReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Search not implemented")
@@ -178,6 +242,60 @@ func _VideoService_Feed_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(VideoServiceServer).Feed(ctx, req.(*FeedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VideoService_FindVideosByIds_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindVideosByIdsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServiceServer).FindVideosByIds(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoService_FindVideosByIds_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServiceServer).FindVideosByIds(ctx, req.(*FindVideosByIdsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VideoService_FindVideosById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindVideosByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServiceServer).FindVideosById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoService_FindVideosById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServiceServer).FindVideosById(ctx, req.(*FindVideosByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VideoService_IncrLikeCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IncrLikeCountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServiceServer).IncrLikeCount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoService_IncrLikeCount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServiceServer).IncrLikeCount(ctx, req.(*IncrLikeCountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -236,6 +354,24 @@ func _VideoService_HotRanking_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _VideoService_WatchVideo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WatchVideoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServiceServer).WatchVideo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoService_WatchVideo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServiceServer).WatchVideo(ctx, req.(*WatchVideoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _VideoService_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SearchRequest)
 	if err := dec(in); err != nil {
@@ -266,6 +402,18 @@ var VideoService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _VideoService_Feed_Handler,
 		},
 		{
+			MethodName: "FindVideosByIds",
+			Handler:    _VideoService_FindVideosByIds_Handler,
+		},
+		{
+			MethodName: "FindVideosById",
+			Handler:    _VideoService_FindVideosById_Handler,
+		},
+		{
+			MethodName: "IncrLikeCount",
+			Handler:    _VideoService_IncrLikeCount_Handler,
+		},
+		{
 			MethodName: "Publish",
 			Handler:    _VideoService_Publish_Handler,
 		},
@@ -276,6 +424,10 @@ var VideoService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "HotRanking",
 			Handler:    _VideoService_HotRanking_Handler,
+		},
+		{
+			MethodName: "WatchVideo",
+			Handler:    _VideoService_WatchVideo_Handler,
 		},
 		{
 			MethodName: "Search",

@@ -8,8 +8,9 @@ import (
 var C = InitConfig()
 
 type Config struct {
-	viper *viper.Viper
-	UpC   *UploadConfig
+	viper       *viper.Viper
+	UpC         *UploadConfig
+	MinIoConfig *MinIoConfig
 }
 
 func (c *Config) ReloadConfig() {
@@ -19,10 +20,20 @@ func (c *Config) ReloadConfig() {
 func (c *Config) ReadUploadConfig() {
 	c.viper.UnmarshalKey("upload", &c.UpC)
 }
+func (c *Config) ReadMinIoConfig() {
+	c.viper.UnmarshalKey("minio", &c.MinIoConfig)
+}
 
 type UploadConfig struct {
 	APIURL  string `mapstructure:"api_url"`
 	Timeout int    `mapstructure:"timeout"`
+}
+type MinIoConfig struct {
+	Endpoint   string
+	AccessKey  string
+	SecretKey  string
+	UseSSL     bool
+	BucketName string
 }
 
 func InitConfig() *Config {
@@ -37,5 +48,6 @@ func InitConfig() *Config {
 		return nil
 	}
 	conf.ReloadConfig()
+	conf.ReadMinIoConfig()
 	return conf
 }

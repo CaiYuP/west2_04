@@ -23,9 +23,10 @@ func (rr *VideoRouter)Router(r *server.Hertz) {
 	{
 		video.GET("/feed", handler.Feed)                               // 视频流
 		video.POST("/publish",midd.AuthMiddleware(), handler.Publish) // 投稿
-		video.GET("/publish/list",midd.AuthMiddleware(), handler.PublishList)                // 发布列表
-		video.GET("/hot/ranking",midd.AuthMiddleware(), handler.HotRanking)                  // 热门排行榜
-		video.GET("/search",midd.AuthMiddleware(), handler.SearchVideo)                      // 搜索视频
+		video.GET("/list",midd.AuthMiddleware(), handler.PublishList)                // 发布列表
+		video.GET("/popular",midd.AuthMiddleware(), handler.HotRanking)                  // 热门排行榜
+		video.GET("/watch",midd.AuthMiddleware(), handler.Watch)                  // 观看视频
+		video.POST("/search",midd.AuthMiddleware(), handler.SearchVideo)                      // 搜索视频
 	}
 
 }

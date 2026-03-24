@@ -26,7 +26,7 @@ const (
 // Aligned with the simplified OpenAPI specification
 type SocialUser struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
 	AvatarUrl     string                 `protobuf:"bytes,3,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -63,11 +63,11 @@ func (*SocialUser) Descriptor() ([]byte, []int) {
 	return file_api_social_social_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *SocialUser) GetId() int64 {
+func (x *SocialUser) GetId() string {
 	if x != nil {
 		return x.Id
 	}
-	return 0
+	return ""
 }
 
 func (x *SocialUser) GetUsername() string {
@@ -160,6 +160,7 @@ type FollowActionRequest struct {
 	ToUserId int64                  `protobuf:"varint,1,opt,name=to_user_id,json=toUserId,proto3" json:"to_user_id,omitempty"`
 	// action_type: 1 关注, 2 取关
 	ActionType    int32 `protobuf:"varint,2,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty"`
+	Id            int64 `protobuf:"varint,3,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -204,6 +205,13 @@ func (x *FollowActionRequest) GetToUserId() int64 {
 func (x *FollowActionRequest) GetActionType() int32 {
 	if x != nil {
 		return x.ActionType
+	}
+	return 0
+}
+
+func (x *FollowActionRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
 	}
 	return 0
 }
@@ -309,7 +317,7 @@ type FollowListReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
 	Users         []*SocialUser    `protobuf:"bytes,2,rep,name=users,proto3" json:"users,omitempty"`
-	Page          *v1.PageResponse `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
+	Total         int64            `protobuf:"varint,3,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -358,11 +366,11 @@ func (x *FollowListReply) GetUsers() []*SocialUser {
 	return nil
 }
 
-func (x *FollowListReply) GetPage() *v1.PageResponse {
+func (x *FollowListReply) GetTotal() int64 {
 	if x != nil {
-		return x.Page
+		return x.Total
 	}
-	return nil
+	return 0
 }
 
 // ========= 粉丝列表 =========
@@ -422,7 +430,7 @@ type FollowerListReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
 	Users         []*SocialUser    `protobuf:"bytes,2,rep,name=users,proto3" json:"users,omitempty"`
-	Page          *v1.PageResponse `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
+	Total         int64            `protobuf:"varint,3,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -471,17 +479,18 @@ func (x *FollowerListReply) GetUsers() []*SocialUser {
 	return nil
 }
 
-func (x *FollowerListReply) GetPage() *v1.PageResponse {
+func (x *FollowerListReply) GetTotal() int64 {
 	if x != nil {
-		return x.Page
+		return x.Total
 	}
-	return nil
+	return 0
 }
 
 // ========= 好友列表 =========
 type FriendListRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Page          *v1.PageRequest        `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
+	Id            int64                  `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -523,11 +532,18 @@ func (x *FriendListRequest) GetPage() *v1.PageRequest {
 	return nil
 }
 
+func (x *FriendListRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
 type FriendListReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
 	Users         []*SocialUser    `protobuf:"bytes,2,rep,name=users,proto3" json:"users,omitempty"`
-	Page          *v1.PageResponse `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
+	Total         int64            `protobuf:"varint,3,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -576,11 +592,11 @@ func (x *FriendListReply) GetUsers() []*SocialUser {
 	return nil
 }
 
-func (x *FriendListReply) GetPage() *v1.PageResponse {
+func (x *FriendListReply) GetTotal() int64 {
 	if x != nil {
-		return x.Page
+		return x.Total
 	}
-	return nil
+	return 0
 }
 
 var File_api_social_social_proto protoreflect.FileDescriptor
@@ -590,7 +606,7 @@ const file_api_social_social_proto_rawDesc = "" +
 	"\x17api/social/social.proto\x12\rapi.social.v1\x1a\x15api/common/base.proto\"W\n" +
 	"\n" +
 	"SocialUser\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1a\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x1d\n" +
 	"\n" +
 	"avatar_url\x18\x03 \x01(\tR\tavatarUrl\"\xa0\x01\n" +
@@ -601,34 +617,36 @@ const file_api_social_social_proto_rawDesc = "" +
 	"to_user_id\x18\x02 \x01(\x03R\btoUserId\x12\x18\n" +
 	"\acontent\x18\x03 \x01(\tR\acontent\x127\n" +
 	"\n" +
-	"created_at\x18\x04 \x01(\v2\x18.api.common.v1.TimestampR\tcreatedAt\"T\n" +
+	"created_at\x18\x04 \x01(\v2\x18.api.common.v1.TimestampR\tcreatedAt\"d\n" +
 	"\x13FollowActionRequest\x12\x1c\n" +
 	"\n" +
 	"to_user_id\x18\x01 \x01(\x03R\btoUserId\x12\x1f\n" +
 	"\vaction_type\x18\x02 \x01(\x05R\n" +
-	"actionType\"D\n" +
+	"actionType\x12\x0e\n" +
+	"\x02id\x18\x03 \x01(\x03R\x02id\"D\n" +
 	"\x11FollowActionReply\x12/\n" +
 	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\"\\\n" +
 	"\x11FollowListRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12.\n" +
-	"\x04page\x18\x02 \x01(\v2\x1a.api.common.v1.PageRequestR\x04page\"\xa4\x01\n" +
+	"\x04page\x18\x02 \x01(\v2\x1a.api.common.v1.PageRequestR\x04page\"\x89\x01\n" +
 	"\x0fFollowListReply\x12/\n" +
 	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x12/\n" +
-	"\x05users\x18\x02 \x03(\v2\x19.api.social.v1.SocialUserR\x05users\x12/\n" +
-	"\x04page\x18\x03 \x01(\v2\x1b.api.common.v1.PageResponseR\x04page\"^\n" +
+	"\x05users\x18\x02 \x03(\v2\x19.api.social.v1.SocialUserR\x05users\x12\x14\n" +
+	"\x05total\x18\x03 \x01(\x03R\x05total\"^\n" +
 	"\x13FollowerListRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12.\n" +
-	"\x04page\x18\x02 \x01(\v2\x1a.api.common.v1.PageRequestR\x04page\"\xa6\x01\n" +
+	"\x04page\x18\x02 \x01(\v2\x1a.api.common.v1.PageRequestR\x04page\"\x8b\x01\n" +
 	"\x11FollowerListReply\x12/\n" +
 	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x12/\n" +
-	"\x05users\x18\x02 \x03(\v2\x19.api.social.v1.SocialUserR\x05users\x12/\n" +
-	"\x04page\x18\x03 \x01(\v2\x1b.api.common.v1.PageResponseR\x04page\"C\n" +
+	"\x05users\x18\x02 \x03(\v2\x19.api.social.v1.SocialUserR\x05users\x12\x14\n" +
+	"\x05total\x18\x03 \x01(\x03R\x05total\"S\n" +
 	"\x11FriendListRequest\x12.\n" +
-	"\x04page\x18\x01 \x01(\v2\x1a.api.common.v1.PageRequestR\x04page\"\xa4\x01\n" +
+	"\x04page\x18\x01 \x01(\v2\x1a.api.common.v1.PageRequestR\x04page\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\x03R\x02id\"\x89\x01\n" +
 	"\x0fFriendListReply\x12/\n" +
 	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x12/\n" +
-	"\x05users\x18\x02 \x03(\v2\x19.api.social.v1.SocialUserR\x05users\x12/\n" +
-	"\x04page\x18\x03 \x01(\v2\x1b.api.common.v1.PageResponseR\x04page2\xdb\x02\n" +
+	"\x05users\x18\x02 \x03(\v2\x19.api.social.v1.SocialUserR\x05users\x12\x14\n" +
+	"\x05total\x18\x03 \x01(\x03R\x05total2\xdb\x02\n" +
 	"\rSocialService\x12T\n" +
 	"\fFollowAction\x12\".api.social.v1.FollowActionRequest\x1a .api.social.v1.FollowActionReply\x12N\n" +
 	"\n" +
@@ -664,7 +682,6 @@ var file_api_social_social_proto_goTypes = []any{
 	(*v1.Timestamp)(nil),        // 10: api.common.v1.Timestamp
 	(*v1.BaseResponse)(nil),     // 11: api.common.v1.BaseResponse
 	(*v1.PageRequest)(nil),      // 12: api.common.v1.PageRequest
-	(*v1.PageResponse)(nil),     // 13: api.common.v1.PageResponse
 }
 var file_api_social_social_proto_depIdxs = []int32{
 	10, // 0: api.social.v1.ChatMessage.created_at:type_name -> api.common.v1.Timestamp
@@ -672,28 +689,25 @@ var file_api_social_social_proto_depIdxs = []int32{
 	12, // 2: api.social.v1.FollowListRequest.page:type_name -> api.common.v1.PageRequest
 	11, // 3: api.social.v1.FollowListReply.base:type_name -> api.common.v1.BaseResponse
 	0,  // 4: api.social.v1.FollowListReply.users:type_name -> api.social.v1.SocialUser
-	13, // 5: api.social.v1.FollowListReply.page:type_name -> api.common.v1.PageResponse
-	12, // 6: api.social.v1.FollowerListRequest.page:type_name -> api.common.v1.PageRequest
-	11, // 7: api.social.v1.FollowerListReply.base:type_name -> api.common.v1.BaseResponse
-	0,  // 8: api.social.v1.FollowerListReply.users:type_name -> api.social.v1.SocialUser
-	13, // 9: api.social.v1.FollowerListReply.page:type_name -> api.common.v1.PageResponse
-	12, // 10: api.social.v1.FriendListRequest.page:type_name -> api.common.v1.PageRequest
-	11, // 11: api.social.v1.FriendListReply.base:type_name -> api.common.v1.BaseResponse
-	0,  // 12: api.social.v1.FriendListReply.users:type_name -> api.social.v1.SocialUser
-	13, // 13: api.social.v1.FriendListReply.page:type_name -> api.common.v1.PageResponse
-	2,  // 14: api.social.v1.SocialService.FollowAction:input_type -> api.social.v1.FollowActionRequest
-	4,  // 15: api.social.v1.SocialService.FollowList:input_type -> api.social.v1.FollowListRequest
-	6,  // 16: api.social.v1.SocialService.FollowerList:input_type -> api.social.v1.FollowerListRequest
-	8,  // 17: api.social.v1.SocialService.FriendList:input_type -> api.social.v1.FriendListRequest
-	3,  // 18: api.social.v1.SocialService.FollowAction:output_type -> api.social.v1.FollowActionReply
-	5,  // 19: api.social.v1.SocialService.FollowList:output_type -> api.social.v1.FollowListReply
-	7,  // 20: api.social.v1.SocialService.FollowerList:output_type -> api.social.v1.FollowerListReply
-	9,  // 21: api.social.v1.SocialService.FriendList:output_type -> api.social.v1.FriendListReply
-	18, // [18:22] is the sub-list for method output_type
-	14, // [14:18] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	12, // 5: api.social.v1.FollowerListRequest.page:type_name -> api.common.v1.PageRequest
+	11, // 6: api.social.v1.FollowerListReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 7: api.social.v1.FollowerListReply.users:type_name -> api.social.v1.SocialUser
+	12, // 8: api.social.v1.FriendListRequest.page:type_name -> api.common.v1.PageRequest
+	11, // 9: api.social.v1.FriendListReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 10: api.social.v1.FriendListReply.users:type_name -> api.social.v1.SocialUser
+	2,  // 11: api.social.v1.SocialService.FollowAction:input_type -> api.social.v1.FollowActionRequest
+	4,  // 12: api.social.v1.SocialService.FollowList:input_type -> api.social.v1.FollowListRequest
+	6,  // 13: api.social.v1.SocialService.FollowerList:input_type -> api.social.v1.FollowerListRequest
+	8,  // 14: api.social.v1.SocialService.FriendList:input_type -> api.social.v1.FriendListRequest
+	3,  // 15: api.social.v1.SocialService.FollowAction:output_type -> api.social.v1.FollowActionReply
+	5,  // 16: api.social.v1.SocialService.FollowList:output_type -> api.social.v1.FollowListReply
+	7,  // 17: api.social.v1.SocialService.FollowerList:output_type -> api.social.v1.FollowerListReply
+	9,  // 18: api.social.v1.SocialService.FriendList:output_type -> api.social.v1.FriendListReply
+	15, // [15:19] is the sub-list for method output_type
+	11, // [11:15] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_api_social_social_proto_init() }

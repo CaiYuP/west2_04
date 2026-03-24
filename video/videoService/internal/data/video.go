@@ -33,7 +33,7 @@ type Video struct {
 	CommentCount uint64    `gorm:"column:comment_count;default:0;comment:评论数" json:"comment_count"`
 	CreatedAt    time.Time `gorm:"column:created_at;type:timestamp;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"`
 	UpdatedAt    time.Time `gorm:"column:updated_at;type:timestamp;default:CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"`
-	DeletedAt    time.Time `gorm:"column:deleted_at;type:timestamp;comment:删除时间" json:"deleted_at"`
+	DeletedAt    time.Time `gorm:"column:deleted_at;type:timestamp;default:null;comment:删除时间" json:"deleted_at"`
 }
 
 func (Video) TableName() string {
@@ -61,7 +61,7 @@ func CopierVideos(videos []*Video) []*videoPb.Video {
 	return items
 }
 
-func CopierVideo(video Video) *videoPb.Video {
+func CopierVideo(video *Video) *videoPb.Video {
 	items := &videoPb.Video{
 		Id:           strconv.FormatUint(video.ID, 10),
 		UserId:       strconv.FormatUint(video.UserID, 10),

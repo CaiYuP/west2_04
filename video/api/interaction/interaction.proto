@@ -19,9 +19,9 @@ message Comment {
   int64 like_count                  = 6; // Added to match SQL
   int64 child_count                 = 7; // Added to match SQL
   string content                    = 8;
-  api.common.v1.Timestamp created_at = 9;
-  api.common.v1.Timestamp updated_at = 10; // Added to match SQL
-  optional api.common.v1.Timestamp deleted_at = 11; // Added to match SQL, optional for nullability
+  string created_at = 9;
+  string updated_at = 10; // Added to match SQL
+  string deleted_at = 11; // Added to match SQL, optional for nullability
 }
 
 // ========= Service 定义 =========
@@ -45,8 +45,10 @@ service InteractionService {
 // ========= 点赞操作 =========
 message LikeActionRequest {
   int64 video_id   = 1;
+  int64 comment_id   = 2;
   // action_type: 1 点赞, 2 取消点赞
-  int32 action_type = 2;
+  int32 action_type = 3;
+  int64 id=4;
 }
 
 message LikeActionReply {
@@ -71,6 +73,7 @@ message CommentActionRequest {
   string content   = 2;
   // comment_id 字段题目说本次不要求实现，这里仅保留以兼容文档
   int64 comment_id = 3;
+  int64 id=4;
 }
 
 message CommentActionReply {
@@ -81,7 +84,8 @@ message CommentActionReply {
 // ========= 评论列表 =========
 message CommentListRequest {
   int64 video_id                  = 1;
-  api.common.v1.PageRequest page  = 2;
+  int64 comment_id                  = 2;
+  api.common.v1.PageRequest page  = 3;
 }
 
 message CommentListReply {
@@ -93,6 +97,8 @@ message CommentListReply {
 // ========= 删除评论 =========
 message DeleteCommentRequest {
   int64 comment_id = 1;
+  int64 video_id = 2;
+  int64 id=3;
 }
 
 message DeleteCommentReply {

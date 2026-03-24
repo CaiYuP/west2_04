@@ -1,23 +1,50 @@
 package data
 
-import "time"
+import (
+	"time"
+	pbcomment "west2-video/api/interaction/v1"
+	"west2-video/common/tms"
+)
 
 // Comment 表模型，对应 `comments` 表
 // 包含父子层级、点赞数、子评论数等字段
 type Comment struct {
-    ID          uint64     `gorm:"column:id;primaryKey;autoIncrement;comment:评论ID" json:"id"`
-    VideoID     uint64     `gorm:"column:video_id;not null;comment:视频ID" json:"video_id"`
-    UserID      uint64     `gorm:"column:user_id;not null;comment:发表者ID" json:"user_id"`
-    ParentID    uint64     `gorm:"column:parent_id;default:0;comment:父评论ID" json:"parent_id"`
-    LikeCount   uint64     `gorm:"column:like_count;default:0;comment:点赞数" json:"like_count"`
-    ChildCount  uint64     `gorm:"column:child_count;default:0;comment:子评论数" json:"child_count"`
-    Content     string     `gorm:"column:content;type:text;not null;comment:评论内容" json:"content"`
-    CreatedAt   time.Time  `gorm:"column:created_at;type:timestamp;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"`
-    UpdatedAt   time.Time  `gorm:"column:updated_at;type:timestamp;default:CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"`
-    DeletedAt   *time.Time `gorm:"column:deleted_at;type:timestamp;comment:删除时间" json:"deleted_at"`
+	ID         uint64     `gorm:"column:id;primaryKey;autoIncrement;comment:评论ID" json:"id"`
+	VideoID    uint64     `gorm:"column:video_id;not null;comment:视频ID" json:"video_id"`
+	UserID     uint64     `gorm:"column:user_id;not null;comment:发表者ID" json:"user_id"`
+	IsComment  bool       `gorm:"column:is_comment;not null;comment:是否为评论" json:"is_comment"`
+	ParentID   uint64     `gorm:"column:parent_id;default:0;comment:父评论ID" json:"parent_id"`
+	LikeCount  uint64     `gorm:"column:like_count;default:0;comment:点赞数" json:"like_count"`
+	ChildCount uint64     `gorm:"column:child_count;default:0;comment:子评论数" json:"child_count"`
+	Content    string     `gorm:"column:content;type:text;not null;comment:评论内容" json:"content"`
+	CreatedAt  time.Time  `gorm:"column:created_at;type:timestamp;default:CURRENT_TIMESTAMP;comment:创建时间" json:"created_at"`
+	UpdatedAt  time.Time  `gorm:"column:updated_at;type:timestamp;default:CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;comment:更新时间" json:"updated_at"`
+	DeletedAt  *time.Time `gorm:"column:deleted_at;type:timestamp;comment:删除时间" json:"deleted_at"`
 }
 
 // TableName 指定表名
 func (Comment) TableName() string {
 	return "comments"
+}
+
+// ConverToComment 将 []*data.Comment 转换为 []*pbcomment.Comment
+func ConverToComment(comments []*Comment) []*pbcomment.Comment {
+	items := make([]*pbcomment.Comment, len(comments))
+	for i, comment := range comments {
+		items[i] = &pbcomment.Comment{
+			Id:         int64(comment.ID),
+			VideoId:    int64(comment.VideoID),
+			UserId:     int64(comment.UserID),
+			ParentId:   int64(comment.ParentID),
+			LikeCount:  int64(comment.LikeCount),
+			ChildCount: int64(comment.ChildCount),
+			Content:    comment.Content,
+			CreatedAt:  tms.Format(comment.CreatedAt),
+			UpdatedAt:  tms.Format(comment.UpdatedAt),
+		}
+		if comment.DeletedAt != nil {
+			items[i].DeletedAt = tms.Format(*comment.DeletedAt)
+		}
+	}
+	return items
 }

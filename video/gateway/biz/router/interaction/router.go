@@ -19,15 +19,14 @@ type InteractionRouter struct{
 func (rr *InteractionRouter)Router(r *server.Hertz) {
 	//INSERT_POINT: DO NOT DELETE THIS LINE!
 	// 互动相关路由
-	interaction := r.Group("/interaction").Use(midd.AuthMiddleware())
+	interaction := r.Group("").Use(midd.AuthMiddleware())
 	{
-		interaction.POST("/like",  handler.LikeAction)         // 点赞操作
+		interaction.POST("/like/action",  handler.LikeAction)         // 点赞操作
 		interaction.GET("/like/list", handler.LikeList)      // 点赞列表
-		interaction.POST("/comment", handler.CommentAction)   // 评论
+		interaction.POST("/comment/publish", handler.CommentAction)   // 评论
 		interaction.GET("/comment/list", handler.CommentList)  // 评论列表
-		interaction.DELETE("/comment", handler.DeleteComment) // 删除评论
+		interaction.DELETE("/comment/delete", handler.DeleteComment) // 删除评论
 	}
-
 
 }
 func init() {

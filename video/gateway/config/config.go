@@ -13,6 +13,7 @@ var C = InitConfig()
 type Config struct {
 	viper    *viper.Viper
 	Server   ServerConfig   `mapstructure:"server"`
+	Etcd     EtcdConfig     `mapstructure:"etcd"`
 	Services ServicesConfig `mapstructure:"services"`
 	JWT      JWTConfig      `mapstructure:"jwt"`
 }
@@ -21,6 +22,10 @@ type ServerConfig struct {
 	Host string `mapstructure:"host"`
 	Port int    `mapstructure:"port"`
 	Mode string `mapstructure:"mode"`
+}
+
+type EtcdConfig struct {
+	Addrs []string `mapstructure:"addrs"`
 }
 
 type ServicesConfig struct {
@@ -39,7 +44,6 @@ type JWTConfig struct {
 
 var globalConfig *Config
 
-// InitConfig 初始化配置
 func InitConfig() *Config {
 	v := viper.New()
 
@@ -63,7 +67,6 @@ func InitConfig() *Config {
 	return &cfg
 }
 func (c *Config) InitZapLog() {
-	//从配置中读取日志配置，初始化日志
 	lc := &logs.LogConfig{
 		DebugFileName: c.viper.GetString("zap.debugFileName"),
 		InfoFileName:  c.viper.GetString("zap.infoFileName"),

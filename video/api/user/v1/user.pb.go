@@ -33,7 +33,7 @@ type User struct {
 	IsFollow      bool                   `protobuf:"varint,6,opt,name=is_follow,json=isFollow,proto3" json:"is_follow,omitempty"` // 当前登录用户是否已关注该用户
 	CreatedAt     string                 `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt     string                 `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	DeletedAt     string                 `protobuf:"bytes,9,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
+	DeletedAt     *string                `protobuf:"bytes,9,opt,name=deleted_at,json=deletedAt,proto3,oneof" json:"deleted_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -125,8 +125,8 @@ func (x *User) GetUpdatedAt() string {
 }
 
 func (x *User) GetDeletedAt() string {
-	if x != nil {
-		return x.DeletedAt
+	if x != nil && x.DeletedAt != nil {
+		return *x.DeletedAt
 	}
 	return ""
 }
@@ -323,8 +323,8 @@ func (x *RegisterRequest) GetEmail() string {
 
 type RegisterReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *v1.BaseResponse       `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	User          *User                  `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
+	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	User          *User            `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -513,7 +513,7 @@ func (x *LoginReply) GetRefreshExpiresIn() int64 {
 // ========= 用户信息 =========
 type UserInfoRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // 为 0 或未传时，表示当前登录用户
+	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -557,8 +557,8 @@ func (x *UserInfoRequest) GetUserId() int64 {
 
 type UserInfoReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *v1.BaseResponse       `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	User          *User                  `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
+	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	User          *User            `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -607,6 +607,198 @@ func (x *UserInfoReply) GetUser() *User {
 	return nil
 }
 
+type UserInfosRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        []int64                `protobuf:"varint,1,rep,packed,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserInfosRequest) Reset() {
+	*x = UserInfosRequest{}
+	mi := &file_api_user_user_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserInfosRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserInfosRequest) ProtoMessage() {}
+
+func (x *UserInfosRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_user_user_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserInfosRequest.ProtoReflect.Descriptor instead.
+func (*UserInfosRequest) Descriptor() ([]byte, []int) {
+	return file_api_user_user_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *UserInfosRequest) GetUserId() []int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return nil
+}
+
+type UserInfosReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	User          []*User          `protobuf:"bytes,2,rep,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserInfosReply) Reset() {
+	*x = UserInfosReply{}
+	mi := &file_api_user_user_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserInfosReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserInfosReply) ProtoMessage() {}
+
+func (x *UserInfosReply) ProtoReflect() protoreflect.Message {
+	mi := &file_api_user_user_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserInfosReply.ProtoReflect.Descriptor instead.
+func (*UserInfosReply) Descriptor() ([]byte, []int) {
+	return file_api_user_user_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *UserInfosReply) GetBase() *v1.BaseResponse {
+	if x != nil {
+		return x.Base
+	}
+	return nil
+}
+
+func (x *UserInfosReply) GetUser() []*User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
+type UserInfoUserNameRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserInfoUserNameRequest) Reset() {
+	*x = UserInfoUserNameRequest{}
+	mi := &file_api_user_user_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserInfoUserNameRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserInfoUserNameRequest) ProtoMessage() {}
+
+func (x *UserInfoUserNameRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_user_user_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserInfoUserNameRequest.ProtoReflect.Descriptor instead.
+func (*UserInfoUserNameRequest) Descriptor() ([]byte, []int) {
+	return file_api_user_user_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *UserInfoUserNameRequest) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+type UserInfoUserNameReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	User          *User            `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserInfoUserNameReply) Reset() {
+	*x = UserInfoUserNameReply{}
+	mi := &file_api_user_user_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserInfoUserNameReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserInfoUserNameReply) ProtoMessage() {}
+
+func (x *UserInfoUserNameReply) ProtoReflect() protoreflect.Message {
+	mi := &file_api_user_user_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserInfoUserNameReply.ProtoReflect.Descriptor instead.
+func (*UserInfoUserNameReply) Descriptor() ([]byte, []int) {
+	return file_api_user_user_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *UserInfoUserNameReply) GetBase() *v1.BaseResponse {
+	if x != nil {
+		return x.Base
+	}
+	return nil
+}
+
+func (x *UserInfoUserNameReply) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
 // ========= 上传头像 =========
 type UploadAvatarRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -619,7 +811,7 @@ type UploadAvatarRequest struct {
 
 func (x *UploadAvatarRequest) Reset() {
 	*x = UploadAvatarRequest{}
-	mi := &file_api_user_user_proto_msgTypes[9]
+	mi := &file_api_user_user_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -631,7 +823,7 @@ func (x *UploadAvatarRequest) String() string {
 func (*UploadAvatarRequest) ProtoMessage() {}
 
 func (x *UploadAvatarRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_user_proto_msgTypes[9]
+	mi := &file_api_user_user_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -644,7 +836,7 @@ func (x *UploadAvatarRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadAvatarRequest.ProtoReflect.Descriptor instead.
 func (*UploadAvatarRequest) Descriptor() ([]byte, []int) {
-	return file_api_user_user_proto_rawDescGZIP(), []int{9}
+	return file_api_user_user_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *UploadAvatarRequest) GetUrl() string {
@@ -671,7 +863,7 @@ type UploadAvatarReply struct {
 
 func (x *UploadAvatarReply) Reset() {
 	*x = UploadAvatarReply{}
-	mi := &file_api_user_user_proto_msgTypes[10]
+	mi := &file_api_user_user_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -683,7 +875,7 @@ func (x *UploadAvatarReply) String() string {
 func (*UploadAvatarReply) ProtoMessage() {}
 
 func (x *UploadAvatarReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_user_proto_msgTypes[10]
+	mi := &file_api_user_user_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -696,7 +888,7 @@ func (x *UploadAvatarReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadAvatarReply.ProtoReflect.Descriptor instead.
 func (*UploadAvatarReply) Descriptor() ([]byte, []int) {
-	return file_api_user_user_proto_rawDescGZIP(), []int{10}
+	return file_api_user_user_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *UploadAvatarReply) GetBase() *v1.BaseResponse {
@@ -724,7 +916,7 @@ type GetMfaQrcodeRequest struct {
 
 func (x *GetMfaQrcodeRequest) Reset() {
 	*x = GetMfaQrcodeRequest{}
-	mi := &file_api_user_user_proto_msgTypes[11]
+	mi := &file_api_user_user_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -736,7 +928,7 @@ func (x *GetMfaQrcodeRequest) String() string {
 func (*GetMfaQrcodeRequest) ProtoMessage() {}
 
 func (x *GetMfaQrcodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_user_proto_msgTypes[11]
+	mi := &file_api_user_user_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -749,7 +941,7 @@ func (x *GetMfaQrcodeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMfaQrcodeRequest.ProtoReflect.Descriptor instead.
 func (*GetMfaQrcodeRequest) Descriptor() ([]byte, []int) {
-	return file_api_user_user_proto_rawDescGZIP(), []int{11}
+	return file_api_user_user_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GetMfaQrcodeRequest) GetId() int64 {
@@ -777,7 +969,7 @@ type GetMfaQrcodeReply struct {
 
 func (x *GetMfaQrcodeReply) Reset() {
 	*x = GetMfaQrcodeReply{}
-	mi := &file_api_user_user_proto_msgTypes[12]
+	mi := &file_api_user_user_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -789,7 +981,7 @@ func (x *GetMfaQrcodeReply) String() string {
 func (*GetMfaQrcodeReply) ProtoMessage() {}
 
 func (x *GetMfaQrcodeReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_user_proto_msgTypes[12]
+	mi := &file_api_user_user_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -802,7 +994,7 @@ func (x *GetMfaQrcodeReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMfaQrcodeReply.ProtoReflect.Descriptor instead.
 func (*GetMfaQrcodeReply) Descriptor() ([]byte, []int) {
-	return file_api_user_user_proto_rawDescGZIP(), []int{12}
+	return file_api_user_user_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GetMfaQrcodeReply) GetBase() *v1.BaseResponse {
@@ -838,7 +1030,7 @@ type BindMfaRequest struct {
 
 func (x *BindMfaRequest) Reset() {
 	*x = BindMfaRequest{}
-	mi := &file_api_user_user_proto_msgTypes[13]
+	mi := &file_api_user_user_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -850,7 +1042,7 @@ func (x *BindMfaRequest) String() string {
 func (*BindMfaRequest) ProtoMessage() {}
 
 func (x *BindMfaRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_user_proto_msgTypes[13]
+	mi := &file_api_user_user_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -863,7 +1055,7 @@ func (x *BindMfaRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BindMfaRequest.ProtoReflect.Descriptor instead.
 func (*BindMfaRequest) Descriptor() ([]byte, []int) {
-	return file_api_user_user_proto_rawDescGZIP(), []int{13}
+	return file_api_user_user_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *BindMfaRequest) GetCode() string {
@@ -896,7 +1088,7 @@ type BindMfaReply struct {
 
 func (x *BindMfaReply) Reset() {
 	*x = BindMfaReply{}
-	mi := &file_api_user_user_proto_msgTypes[14]
+	mi := &file_api_user_user_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -908,7 +1100,7 @@ func (x *BindMfaReply) String() string {
 func (*BindMfaReply) ProtoMessage() {}
 
 func (x *BindMfaReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_user_proto_msgTypes[14]
+	mi := &file_api_user_user_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -921,7 +1113,7 @@ func (x *BindMfaReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BindMfaReply.ProtoReflect.Descriptor instead.
 func (*BindMfaReply) Descriptor() ([]byte, []int) {
-	return file_api_user_user_proto_rawDescGZIP(), []int{14}
+	return file_api_user_user_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *BindMfaReply) GetBase() *v1.BaseResponse {
@@ -942,7 +1134,7 @@ type SearchByImageRequest struct {
 
 func (x *SearchByImageRequest) Reset() {
 	*x = SearchByImageRequest{}
-	mi := &file_api_user_user_proto_msgTypes[15]
+	mi := &file_api_user_user_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -954,7 +1146,7 @@ func (x *SearchByImageRequest) String() string {
 func (*SearchByImageRequest) ProtoMessage() {}
 
 func (x *SearchByImageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_user_proto_msgTypes[15]
+	mi := &file_api_user_user_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -967,7 +1159,7 @@ func (x *SearchByImageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchByImageRequest.ProtoReflect.Descriptor instead.
 func (*SearchByImageRequest) Descriptor() ([]byte, []int) {
-	return file_api_user_user_proto_rawDescGZIP(), []int{15}
+	return file_api_user_user_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *SearchByImageRequest) GetData() []byte {
@@ -994,7 +1186,7 @@ type SearchByImageReply struct {
 
 func (x *SearchByImageReply) Reset() {
 	*x = SearchByImageReply{}
-	mi := &file_api_user_user_proto_msgTypes[16]
+	mi := &file_api_user_user_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1006,7 +1198,7 @@ func (x *SearchByImageReply) String() string {
 func (*SearchByImageReply) ProtoMessage() {}
 
 func (x *SearchByImageReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_user_user_proto_msgTypes[16]
+	mi := &file_api_user_user_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1019,7 +1211,7 @@ func (x *SearchByImageReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchByImageReply.ProtoReflect.Descriptor instead.
 func (*SearchByImageReply) Descriptor() ([]byte, []int) {
-	return file_api_user_user_proto_rawDescGZIP(), []int{16}
+	return file_api_user_user_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *SearchByImageReply) GetBase() *v1.BaseResponse {
@@ -1040,7 +1232,7 @@ var File_api_user_user_proto protoreflect.FileDescriptor
 
 const file_api_user_user_proto_rawDesc = "" +
 	"\n" +
-	"\x13api/user/user.proto\x12\vapi.user.v1\x1a\x15api/common/base.proto\"\x89\x02\n" +
+	"\x13api/user/user.proto\x12\vapi.user.v1\x1a\x15api/common/base.proto\"\x9d\x02\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
@@ -1052,9 +1244,10 @@ const file_api_user_user_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\a \x01(\tR\tcreatedAt\x12\x1d\n" +
 	"\n" +
-	"updated_at\x18\b \x01(\tR\tupdatedAt\x12\x1d\n" +
+	"updated_at\x18\b \x01(\tR\tupdatedAt\x12\"\n" +
 	"\n" +
-	"deleted_at\x18\t \x01(\tR\tdeletedAt\"D\n" +
+	"deleted_at\x18\t \x01(\tH\x00R\tdeletedAt\x88\x01\x01B\r\n" +
+	"\v_deleted_at\"D\n" +
 	"\x0eRefreshRequest\x12\"\n" +
 	"\frefreshToken\x18\x01 \x01(\tR\frefreshToken\x12\x0e\n" +
 	"\x02ip\x18\x02 \x01(\tR\x02ip\"\xe1\x01\n" +
@@ -1086,6 +1279,16 @@ const file_api_user_user_proto_rawDesc = "" +
 	"\auser_id\x18\x01 \x01(\x03R\x06userId\"g\n" +
 	"\rUserInfoReply\x12/\n" +
 	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x12%\n" +
+	"\x04user\x18\x02 \x01(\v2\x11.api.user.v1.UserR\x04user\"+\n" +
+	"\x10UserInfosRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x03(\x03R\x06userId\"h\n" +
+	"\x0eUserInfosReply\x12/\n" +
+	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x12%\n" +
+	"\x04user\x18\x02 \x03(\v2\x11.api.user.v1.UserR\x04user\"5\n" +
+	"\x17UserInfoUserNameRequest\x12\x1a\n" +
+	"\busername\x18\x01 \x01(\tR\busername\"o\n" +
+	"\x15UserInfoUserNameReply\x12/\n" +
+	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x12%\n" +
 	"\x04user\x18\x02 \x01(\v2\x11.api.user.v1.UserR\x04user\"7\n" +
 	"\x13UploadAvatarRequest\x12\x10\n" +
 	"\x03url\x18\x01 \x01(\tR\x03url\x12\x0e\n" +
@@ -1112,16 +1315,18 @@ const file_api_user_user_proto_rawDesc = "" +
 	"\x02id\x18\x02 \x01(\x03R\x02id\"W\n" +
 	"\x12SearchByImageReply\x12/\n" +
 	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x12\x10\n" +
-	"\x03url\x18\x02 \x01(\tR\x03url2\xd8\x04\n" +
+	"\x03url\x18\x02 \x01(\tR\x03url2\x87\x06\n" +
 	"\vUserService\x12D\n" +
 	"\bRegister\x12\x1c.api.user.v1.RegisterRequest\x1a\x1a.api.user.v1.RegisterReply\x12;\n" +
 	"\x05Login\x12\x19.api.user.v1.LoginRequest\x1a\x17.api.user.v1.LoginReply\x12A\n" +
 	"\aRefresh\x12\x1b.api.user.v1.RefreshRequest\x1a\x19.api.user.v1.RefreshReply\x12G\n" +
-	"\vGetUserInfo\x12\x1c.api.user.v1.UserInfoRequest\x1a\x1a.api.user.v1.UserInfoReply\x12P\n" +
+	"\vGetUserInfo\x12\x1c.api.user.v1.UserInfoRequest\x1a\x1a.api.user.v1.UserInfoReply\x12J\n" +
+	"\fGetUserInfos\x12\x1d.api.user.v1.UserInfosRequest\x1a\x1b.api.user.v1.UserInfosReply\x12a\n" +
+	"\x15GetUserInfoByUserName\x12$.api.user.v1.UserInfoUserNameRequest\x1a\".api.user.v1.UserInfoUserNameReply\x12P\n" +
 	"\fUploadAvatar\x12 .api.user.v1.UploadAvatarRequest\x1a\x1e.api.user.v1.UploadAvatarReply\x12P\n" +
 	"\fGetMfaQrcode\x12 .api.user.v1.GetMfaQrcodeRequest\x1a\x1e.api.user.v1.GetMfaQrcodeReply\x12A\n" +
 	"\aBindMfa\x12\x1b.api.user.v1.BindMfaRequest\x1a\x19.api.user.v1.BindMfaReply\x12S\n" +
-	"\rSearchByImage\x12!.api.user.v1.SearchByImageRequest\x1a\x1f.api.user.v1.SearchByImageReplyB\x10Z\x0eapi/user/v1;v1b\x06proto3"
+	"\rSearchByImage\x12!.api.user.v1.SearchByImageRequest\x1a\x1f.api.user.v1.SearchByImageReplyB\x1cZ\x1awest2-video/api/user/v1;v1b\x06proto3"
 
 var (
 	file_api_user_user_proto_rawDescOnce sync.Once
@@ -1135,59 +1340,71 @@ func file_api_user_user_proto_rawDescGZIP() []byte {
 	return file_api_user_user_proto_rawDescData
 }
 
-var file_api_user_user_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_api_user_user_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_api_user_user_proto_goTypes = []any{
-	(*User)(nil),                 // 0: api.user.v1.User
-	(*RefreshRequest)(nil),       // 1: api.user.v1.RefreshRequest
-	(*RefreshReply)(nil),         // 2: api.user.v1.RefreshReply
-	(*RegisterRequest)(nil),      // 3: api.user.v1.RegisterRequest
-	(*RegisterReply)(nil),        // 4: api.user.v1.RegisterReply
-	(*LoginRequest)(nil),         // 5: api.user.v1.LoginRequest
-	(*LoginReply)(nil),           // 6: api.user.v1.LoginReply
-	(*UserInfoRequest)(nil),      // 7: api.user.v1.UserInfoRequest
-	(*UserInfoReply)(nil),        // 8: api.user.v1.UserInfoReply
-	(*UploadAvatarRequest)(nil),  // 9: api.user.v1.UploadAvatarRequest
-	(*UploadAvatarReply)(nil),    // 10: api.user.v1.UploadAvatarReply
-	(*GetMfaQrcodeRequest)(nil),  // 11: api.user.v1.GetMfaQrcodeRequest
-	(*GetMfaQrcodeReply)(nil),    // 12: api.user.v1.GetMfaQrcodeReply
-	(*BindMfaRequest)(nil),       // 13: api.user.v1.BindMfaRequest
-	(*BindMfaReply)(nil),         // 14: api.user.v1.BindMfaReply
-	(*SearchByImageRequest)(nil), // 15: api.user.v1.SearchByImageRequest
-	(*SearchByImageReply)(nil),   // 16: api.user.v1.SearchByImageReply
-	(*v1.BaseResponse)(nil),      // 17: api.common.v1.BaseResponse
+	(*User)(nil),                    // 0: api.user.v1.User
+	(*RefreshRequest)(nil),          // 1: api.user.v1.RefreshRequest
+	(*RefreshReply)(nil),            // 2: api.user.v1.RefreshReply
+	(*RegisterRequest)(nil),         // 3: api.user.v1.RegisterRequest
+	(*RegisterReply)(nil),           // 4: api.user.v1.RegisterReply
+	(*LoginRequest)(nil),            // 5: api.user.v1.LoginRequest
+	(*LoginReply)(nil),              // 6: api.user.v1.LoginReply
+	(*UserInfoRequest)(nil),         // 7: api.user.v1.UserInfoRequest
+	(*UserInfoReply)(nil),           // 8: api.user.v1.UserInfoReply
+	(*UserInfosRequest)(nil),        // 9: api.user.v1.UserInfosRequest
+	(*UserInfosReply)(nil),          // 10: api.user.v1.UserInfosReply
+	(*UserInfoUserNameRequest)(nil), // 11: api.user.v1.UserInfoUserNameRequest
+	(*UserInfoUserNameReply)(nil),   // 12: api.user.v1.UserInfoUserNameReply
+	(*UploadAvatarRequest)(nil),     // 13: api.user.v1.UploadAvatarRequest
+	(*UploadAvatarReply)(nil),       // 14: api.user.v1.UploadAvatarReply
+	(*GetMfaQrcodeRequest)(nil),     // 15: api.user.v1.GetMfaQrcodeRequest
+	(*GetMfaQrcodeReply)(nil),       // 16: api.user.v1.GetMfaQrcodeReply
+	(*BindMfaRequest)(nil),          // 17: api.user.v1.BindMfaRequest
+	(*BindMfaReply)(nil),            // 18: api.user.v1.BindMfaReply
+	(*SearchByImageRequest)(nil),    // 19: api.user.v1.SearchByImageRequest
+	(*SearchByImageReply)(nil),      // 20: api.user.v1.SearchByImageReply
+	(*v1.BaseResponse)(nil),         // 21: api.common.v1.BaseResponse
 }
 var file_api_user_user_proto_depIdxs = []int32{
-	17, // 0: api.user.v1.RefreshReply.base:type_name -> api.common.v1.BaseResponse
-	17, // 1: api.user.v1.RegisterReply.base:type_name -> api.common.v1.BaseResponse
+	21, // 0: api.user.v1.RefreshReply.base:type_name -> api.common.v1.BaseResponse
+	21, // 1: api.user.v1.RegisterReply.base:type_name -> api.common.v1.BaseResponse
 	0,  // 2: api.user.v1.RegisterReply.user:type_name -> api.user.v1.User
-	17, // 3: api.user.v1.LoginReply.base:type_name -> api.common.v1.BaseResponse
-	17, // 4: api.user.v1.UserInfoReply.base:type_name -> api.common.v1.BaseResponse
+	21, // 3: api.user.v1.LoginReply.base:type_name -> api.common.v1.BaseResponse
+	21, // 4: api.user.v1.UserInfoReply.base:type_name -> api.common.v1.BaseResponse
 	0,  // 5: api.user.v1.UserInfoReply.user:type_name -> api.user.v1.User
-	17, // 6: api.user.v1.UploadAvatarReply.base:type_name -> api.common.v1.BaseResponse
-	17, // 7: api.user.v1.GetMfaQrcodeReply.base:type_name -> api.common.v1.BaseResponse
-	17, // 8: api.user.v1.BindMfaReply.base:type_name -> api.common.v1.BaseResponse
-	17, // 9: api.user.v1.SearchByImageReply.base:type_name -> api.common.v1.BaseResponse
-	3,  // 10: api.user.v1.UserService.Register:input_type -> api.user.v1.RegisterRequest
-	5,  // 11: api.user.v1.UserService.Login:input_type -> api.user.v1.LoginRequest
-	1,  // 12: api.user.v1.UserService.Refresh:input_type -> api.user.v1.RefreshRequest
-	7,  // 13: api.user.v1.UserService.GetUserInfo:input_type -> api.user.v1.UserInfoRequest
-	9,  // 14: api.user.v1.UserService.UploadAvatar:input_type -> api.user.v1.UploadAvatarRequest
-	11, // 15: api.user.v1.UserService.GetMfaQrcode:input_type -> api.user.v1.GetMfaQrcodeRequest
-	13, // 16: api.user.v1.UserService.BindMfa:input_type -> api.user.v1.BindMfaRequest
-	15, // 17: api.user.v1.UserService.SearchByImage:input_type -> api.user.v1.SearchByImageRequest
-	4,  // 18: api.user.v1.UserService.Register:output_type -> api.user.v1.RegisterReply
-	6,  // 19: api.user.v1.UserService.Login:output_type -> api.user.v1.LoginReply
-	2,  // 20: api.user.v1.UserService.Refresh:output_type -> api.user.v1.RefreshReply
-	8,  // 21: api.user.v1.UserService.GetUserInfo:output_type -> api.user.v1.UserInfoReply
-	10, // 22: api.user.v1.UserService.UploadAvatar:output_type -> api.user.v1.UploadAvatarReply
-	12, // 23: api.user.v1.UserService.GetMfaQrcode:output_type -> api.user.v1.GetMfaQrcodeReply
-	14, // 24: api.user.v1.UserService.BindMfa:output_type -> api.user.v1.BindMfaReply
-	16, // 25: api.user.v1.UserService.SearchByImage:output_type -> api.user.v1.SearchByImageReply
-	18, // [18:26] is the sub-list for method output_type
-	10, // [10:18] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	21, // 6: api.user.v1.UserInfosReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 7: api.user.v1.UserInfosReply.user:type_name -> api.user.v1.User
+	21, // 8: api.user.v1.UserInfoUserNameReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 9: api.user.v1.UserInfoUserNameReply.user:type_name -> api.user.v1.User
+	21, // 10: api.user.v1.UploadAvatarReply.base:type_name -> api.common.v1.BaseResponse
+	21, // 11: api.user.v1.GetMfaQrcodeReply.base:type_name -> api.common.v1.BaseResponse
+	21, // 12: api.user.v1.BindMfaReply.base:type_name -> api.common.v1.BaseResponse
+	21, // 13: api.user.v1.SearchByImageReply.base:type_name -> api.common.v1.BaseResponse
+	3,  // 14: api.user.v1.UserService.Register:input_type -> api.user.v1.RegisterRequest
+	5,  // 15: api.user.v1.UserService.Login:input_type -> api.user.v1.LoginRequest
+	1,  // 16: api.user.v1.UserService.Refresh:input_type -> api.user.v1.RefreshRequest
+	7,  // 17: api.user.v1.UserService.GetUserInfo:input_type -> api.user.v1.UserInfoRequest
+	9,  // 18: api.user.v1.UserService.GetUserInfos:input_type -> api.user.v1.UserInfosRequest
+	11, // 19: api.user.v1.UserService.GetUserInfoByUserName:input_type -> api.user.v1.UserInfoUserNameRequest
+	13, // 20: api.user.v1.UserService.UploadAvatar:input_type -> api.user.v1.UploadAvatarRequest
+	15, // 21: api.user.v1.UserService.GetMfaQrcode:input_type -> api.user.v1.GetMfaQrcodeRequest
+	17, // 22: api.user.v1.UserService.BindMfa:input_type -> api.user.v1.BindMfaRequest
+	19, // 23: api.user.v1.UserService.SearchByImage:input_type -> api.user.v1.SearchByImageRequest
+	4,  // 24: api.user.v1.UserService.Register:output_type -> api.user.v1.RegisterReply
+	6,  // 25: api.user.v1.UserService.Login:output_type -> api.user.v1.LoginReply
+	2,  // 26: api.user.v1.UserService.Refresh:output_type -> api.user.v1.RefreshReply
+	8,  // 27: api.user.v1.UserService.GetUserInfo:output_type -> api.user.v1.UserInfoReply
+	10, // 28: api.user.v1.UserService.GetUserInfos:output_type -> api.user.v1.UserInfosReply
+	12, // 29: api.user.v1.UserService.GetUserInfoByUserName:output_type -> api.user.v1.UserInfoUserNameReply
+	14, // 30: api.user.v1.UserService.UploadAvatar:output_type -> api.user.v1.UploadAvatarReply
+	16, // 31: api.user.v1.UserService.GetMfaQrcode:output_type -> api.user.v1.GetMfaQrcodeReply
+	18, // 32: api.user.v1.UserService.BindMfa:output_type -> api.user.v1.BindMfaReply
+	20, // 33: api.user.v1.UserService.SearchByImage:output_type -> api.user.v1.SearchByImageReply
+	24, // [24:34] is the sub-list for method output_type
+	14, // [14:24] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_api_user_user_proto_init() }
@@ -1195,13 +1412,14 @@ func file_api_user_user_proto_init() {
 	if File_api_user_user_proto != nil {
 		return
 	}
+	file_api_user_user_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_user_user_proto_rawDesc), len(file_api_user_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   17,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

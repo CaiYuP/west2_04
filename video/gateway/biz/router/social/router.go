@@ -20,12 +20,12 @@ func (rr *SocialRouter)Router(r *server.Hertz) {
 	//INSERT_POINT: DO NOT DELETE THIS LINE!
 	// 视频相关路由
 	// 社交相关路由
-	social := r.Group("/social").Use(midd.AuthMiddleware())
+	social := r.Group("").Use(midd.AuthMiddleware())
 	{
-		social.POST("/follow",  handler.FollowAction)   // 关注操作
-		social.GET("/follow/list", handler.FollowList)     // 关注列表
+		social.POST("/relation/action",  handler.FollowAction)   // 关注操作
+		social.GET("/following/list", handler.FollowList)     // 关注列表
 		social.GET("/follower/list", handler.FollowerList)  // 粉丝列表
-		social.GET("/friend/list",  handler.FriendList) // 好友列表
+		social.GET("/friends/list",  handler.FriendList) // 好友列表
 	}
 
 }

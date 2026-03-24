@@ -13,4 +13,5 @@ type UserRepo interface {
 	SaveMFASecret(ctx context.Context, id int64, qcode string) error
 	FindSecretById(ctx context.Context, id int64) (string, error)
 	SetIsSecretEnabled(ctx context.Context, id int64) error
+	FindUserByIds(ctx context.Context, uids []int64) (user []*userData.User, err error)
 }

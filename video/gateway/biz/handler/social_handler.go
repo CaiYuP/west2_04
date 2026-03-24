@@ -7,10 +7,11 @@ import (
 	"west2-video/common/errs"
 	"west2-video/gateway/biz/model"
 
-	"github.com/cloudwego/hertz/pkg/app"
 	pbcommon "west2-video/api/common/v1"
 	pbsocial "west2-video/api/social/v1"
 	"west2-video/gateway/biz/client"
+
+	"github.com/cloudwego/hertz/pkg/app"
 )
 
 // FollowAction 关注操作
@@ -43,14 +44,7 @@ func FollowAction(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	// API 文档：0-关注, 1-取关；但 proto 中：1-关注, 2-取关
-	// 需要转换：0->1(关注), 1->2(取关)
-	var protoActionType int32
-	if actionType == 0 {
-		protoActionType = 1 // 关注
-	} else if actionType == 1 {
-		protoActionType = 2 // 取关
-	} else {
+	if actionType != 0 && actionType != 1 {
 		c.JSON(http.StatusBadRequest, pbsocial.FollowActionReply{
 			Base: &pbcommon.BaseResponse{Code: model.Failed, Msg: "参数错误: action_type 必须是 0(关注) 或 1(取关)"},
 		})
@@ -58,24 +52,23 @@ func FollowAction(ctx context.Context, c *app.RequestContext) {
 	}
 
 	req := &pbsocial.FollowActionRequest{
+		Id:         c.GetInt64("user_id"),
 		ToUserId:   toUserID,
-		ActionType: protoActionType,
+		ActionType: int32(actionType),
 	}
 
 	clientMgr := client.GetClientManager()
 	resp, err := clientMgr.SocialClient.FollowAction(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
 
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPBaseResponse{
 		Base: resp.GetBase(),
-		Data: nil,
 	}
 	c.JSON(http.StatusOK, httpResp)
 }
@@ -104,22 +97,18 @@ func FollowList(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.SocialClient.FollowList(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
 
-	data := struct {
-		Users []*pbsocial.SocialUser   `json:"users"`
-		Page  *pbcommon.PageResponse `json:"page"`
-	}{
-		Users: resp.GetUsers(),
-		Page:  resp.GetPage(),
+	data := &socialListData{
+		Items: convertUserListToResponse(resp.GetUsers()),
+		Total: resp.Total,
 	}
 
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPResponseWithData{
 		Base: resp.GetBase(),
 		Data: data,
 	}
@@ -150,22 +139,18 @@ func FollowerList(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.SocialClient.FollowerList(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
 
-	data := struct {
-		Users []*pbsocial.SocialUser   `json:"users"`
-		Page  *pbcommon.PageResponse `json:"page"`
-	}{
-		Users: resp.GetUsers(),
-		Page:  resp.GetPage(),
+	data := &socialListData{
+		Items: convertUserListToResponse(resp.GetUsers()),
+		Total: resp.Total,
 	}
 
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPResponseWithData{
 		Base: resp.GetBase(),
 		Data: data,
 	}
@@ -184,6 +169,7 @@ func FriendList(ctx context.Context, c *app.RequestContext) {
 	}
 
 	req := &pbsocial.FriendListRequest{
+		Id: c.GetInt64("user_id"),
 		Page: &pbcommon.PageRequest{
 			PageNum:  int32(pageNum),
 			PageSize: int32(pageSize),
@@ -194,25 +180,20 @@ func FriendList(ctx context.Context, c *app.RequestContext) {
 	resp, err := clientMgr.SocialClient.FriendList(ctx, req)
 	if err != nil {
 		code, msg := errs.ParseGrpcError(err)
-		c.JSON(http.StatusInternalServerError, HTTPResponse{
+		c.JSON(http.StatusInternalServerError, HTTPBaseResponse{
 			Base: &pbcommon.BaseResponse{Code: code, Msg: msg},
-			Data: nil,
 		})
 		return
 	}
 
-	data := struct {
-		Users []*pbsocial.SocialUser   `json:"users"`
-		Page  *pbcommon.PageResponse `json:"page"`
-	}{
-		Users: resp.GetUsers(),
-		Page:  resp.GetPage(),
+	data := &socialListData{
+		Items: convertUserListToResponse(resp.GetUsers()),
+		Total: resp.Total,
 	}
 
-	httpResp := &HTTPResponse{
+	httpResp := &HTTPResponseWithData{
 		Base: resp.GetBase(),
 		Data: data,
 	}
 	c.JSON(http.StatusOK, httpResp)
 }
-

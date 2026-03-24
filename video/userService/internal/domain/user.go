@@ -97,6 +97,15 @@ func (d *UserDomain) FindUserById(ctx context.Context, uid int64) (*userData.Use
 	return userById, nil
 }
 
+func (d *UserDomain) FindUserByIds(ctx context.Context, uids []int64) ([]*userData.User, *errs.BError) {
+	userById, err := d.userRepo.FindUserByIds(ctx, uids)
+	if err != nil {
+		logs.LG.Error("UserDomain FindUserByIds error", zap.Error(err))
+		return nil, model.DBError
+	}
+	return userById, nil
+}
+
 func (d *UserDomain) UpdateAvatar(ctx context.Context, id int64, url string) *errs.BError {
 	err := d.userRepo.UpdateAvatar(ctx, id, url)
 	if err != nil {
@@ -179,4 +188,13 @@ func (d *UserDomain) CreatePngUrl(ctx context.Context, data []byte, idStr string
 		return "", model.UploadImgError
 	}
 	return image, nil
+}
+
+func (d *UserDomain) GetUserInfoByUserName(ctx context.Context, username string) (*userData.User, *errs.BError) {
+	u, err := d.userRepo.FindUserByUserName(ctx, username)
+	if err != nil {
+		logs.LG.Error("UserDomain GetUserInfoByUserName error", zap.Error(err))
+		return nil, model.DBError
+	}
+	return u, nil
 }

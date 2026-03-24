@@ -16,7 +16,7 @@ message User {
   bool   is_follow            = 6; // 当前登录用户是否已关注该用户
   string created_at = 7;
   string updated_at = 8;
-  string deleted_at = 9;
+  optional string deleted_at = 9;
 }
 
 // ========= Service 定义 =========
@@ -32,6 +32,8 @@ service UserService {
 
   // 用户信息
   rpc GetUserInfo(UserInfoRequest) returns (UserInfoReply);
+  rpc GetUserInfos(UserInfosRequest) returns (UserInfosReply);
+  rpc GetUserInfoByUserName(UserInfoUserNameRequest) returns (UserInfoUserNameReply);
 
   // 上传头像（当前登录用户）
   rpc UploadAvatar(UploadAvatarRequest) returns (UploadAvatarReply);
@@ -86,14 +88,28 @@ message LoginReply {
 
 // ========= 用户信息 =========
 message UserInfoRequest {
-  int64 user_id = 1; // 为 0 或未传时，表示当前登录用户
+  int64 user_id = 1;
 }
 
 message UserInfoReply {
   api.common.v1.BaseResponse base = 1;
   User user                       = 2;
 }
+message UserInfosRequest {
+  repeated int64 user_id = 1;
+}
 
+message UserInfosReply {
+  api.common.v1.BaseResponse base = 1;
+  repeated User user                       = 2;
+}
+message UserInfoUserNameRequest{
+  string username=1;
+}
+message UserInfoUserNameReply {
+  api.common.v1.BaseResponse base = 1;
+  User user                       = 2;
+}
 // ========= 上传头像 =========
 message UploadAvatarRequest {
   // 当前登录用户从 Token 中获取，这里只需要文件数据

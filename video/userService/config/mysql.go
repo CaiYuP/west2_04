@@ -2,13 +2,14 @@ package config
 
 import (
 	"fmt"
+	"time"
+	"userService/internal/database/gorms"
+	"west2-video/common/logs"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/plugin/dbresolver"
-	"time"
-	"userService/internal/database/gorms"
-	"west2-video/common/logs"
 )
 
 var _db *gorm.DB

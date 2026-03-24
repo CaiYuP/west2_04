@@ -17,14 +17,22 @@ type UserDao struct {
 	conn *gorms.GormConn
 }
 
+func (u *UserDao) FindUserByIds(ctx context.Context, uids []int64) (user []*userData.User, err error) {
+	err = u.conn.Session(ctx).Where("id in (?) and deleted_at IS NULL", uids).Find(&user).Error
+	if err == gorm.ErrRecordNotFound {
+		return nil, nil
+	}
+	return
+}
+
 func (u *UserDao) SetIsSecretEnabled(ctx context.Context, id int64) error {
-	err := u.conn.Session(ctx).Model(&userData.User{}).Where("id=?", id).Update("is_mfa_enabled", 1).Error
+	err := u.conn.Session(ctx).Model(&userData.User{}).Where("id=? and deleted_at IS NULL", id).Update("is_mfa_enabled", 1).Error
 	return err
 }
 
 func (u *UserDao) FindSecretById(ctx context.Context, id int64) (string, error) {
 	secret := ""
-	err := u.conn.Session(ctx).Model(&userData.User{}).Select("mfa_secret").Where("id=?", id).First(&secret).Error
+	err := u.conn.Session(ctx).Model(&userData.User{}).Select("mfa_secret").Where("id=? and deleted_at IS NULL", id).First(&secret).Error
 	if err == gorm.ErrRecordNotFound {
 		return "", nil
 	}
@@ -32,17 +40,17 @@ func (u *UserDao) FindSecretById(ctx context.Context, id int64) (string, error) 
 }
 
 func (u *UserDao) SaveMFASecret(ctx context.Context, id int64, qcode string) error {
-	err := u.conn.Session(ctx).Model(&userData.User{}).Where("id=?", id).Update("mfa_secret", qcode).Error
+	err := u.conn.Session(ctx).Model(&userData.User{}).Where("id=? and deleted_at IS NULL", id).Update("mfa_secret", qcode).Error
 	return err
 }
 
 func (u *UserDao) UpdateAvatar(ctx context.Context, id int64, url string) error {
-	err := u.conn.Session(ctx).Model(&userData.User{}).Where("id=?", id).Update("avatar_url", url).Error
+	err := u.conn.Session(ctx).Model(&userData.User{}).Where("id=? and deleted_at IS NULL", id).Update("avatar_url", url).Error
 	return err
 }
 
 func (u *UserDao) FindUserById(ctx context.Context, uid int64) (user *userData.User, err error) {
-	err = u.conn.Session(ctx).Where("id = ? ", uid).First(&user).Error
+	err = u.conn.Session(ctx).Where("id = ? and deleted_at IS NULL", uid).First(&user).Error
 	if err == gorm.ErrRecordNotFound {
 		return nil, nil
 	}
@@ -55,7 +63,7 @@ func (u *UserDao) Create(ctx context.Context, user *userData.User) error {
 }
 
 func (u *UserDao) FindUserByUserName(ctx context.Context, username string) (us *userData.User, err error) {
-	err = u.conn.Session(ctx).Where("username = ?", username).First(&us).Error
+	err = u.conn.Session(ctx).Where("username = ? and deleted_at IS NULL", username).First(&us).Error
 	if err == gorm.ErrRecordNotFound {
 		return nil, nil
 	}

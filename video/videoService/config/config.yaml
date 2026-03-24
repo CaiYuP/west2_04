@@ -21,6 +21,11 @@ grpc:
 etcd:
   addrs:
     - "127.0.0.1:2379"
+services:
+  userService: "user"
+  videoService: "video"
+  interactionService: "interaction"
+  socialService: "social"
 mysql:
   username: root
   password: root
@@ -46,7 +51,8 @@ db:
   max_open_conns: 200
   conn_max_lifetime: 3600
 minio:
-  endpoint: localhost:9000
-  accessKey: ""
-  secretKey: ""
-
+  endpoint: localhost:9009
+  accessKey: O7TUtHOJfKO8YL9gUUuz
+  secretKey: E4ffA2ji7sPrxxkN7b7DXiZBoIctugIBgHT60kx2
+  bucketName: west2
+  useSSL: false

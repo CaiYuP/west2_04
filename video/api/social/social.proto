@@ -9,7 +9,7 @@ import "api/common/base.proto";
 // ========= 社交对象 (SocialUser Message) =========
 // Aligned with the simplified OpenAPI specification
 message SocialUser {
-  int64 id                       = 1;
+  string id                       = 1;
   string username                = 2;
   string avatar_url              = 3;
 }
@@ -43,6 +43,7 @@ message FollowActionRequest {
   int64 to_user_id  = 1;
   // action_type: 1 关注, 2 取关
   int32 action_type = 2;
+  int64 id=3;
 }
 
 message FollowActionReply {
@@ -58,7 +59,7 @@ message FollowListRequest {
 message FollowListReply {
   api.common.v1.BaseResponse base  = 1;
   repeated SocialUser users        = 2;
-  api.common.v1.PageResponse page  = 3;
+  int64 total=3;
 }
 
 // ========= 粉丝列表 =========
@@ -70,16 +71,17 @@ message FollowerListRequest {
 message FollowerListReply {
   api.common.v1.BaseResponse base  = 1;
   repeated SocialUser users        = 2;
-  api.common.v1.PageResponse page  = 3;
+  int64 total=3;
 }
 
 // ========= 好友列表 =========
 message FriendListRequest {
   api.common.v1.PageRequest page = 1;
+  int64 id=2;
 }
 
 message FriendListReply {
   api.common.v1.BaseResponse base  = 1;
   repeated SocialUser users        = 2;
-  api.common.v1.PageResponse page  = 3;
+  int64 total=3;
 }

@@ -12,8 +12,7 @@ import (
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
-	v11 "west2-video/api/common/v1"
-	v1 "west2-video/api/user/v1"
+	v1 "west2-video/api/common/v1"
 )
 
 const (
@@ -29,7 +28,7 @@ type Video struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`       // Corresponds to user_id in SQL
-	Author        *v1.User               `protobuf:"bytes,3,opt,name=author,proto3" json:"author,omitempty"`                     // Populated by the service layer
+	Author        string                 `protobuf:"bytes,3,opt,name=author,proto3" json:"author,omitempty"`                     // Populated by the service layer
 	VideoUrl      string                 `protobuf:"bytes,4,opt,name=video_url,json=videoUrl,proto3" json:"video_url,omitempty"` // Corresponds to video_url in SQL
 	CoverUrl      string                 `protobuf:"bytes,5,opt,name=cover_url,json=coverUrl,proto3" json:"cover_url,omitempty"`
 	Title         string                 `protobuf:"bytes,6,opt,name=title,proto3" json:"title,omitempty"`
@@ -88,11 +87,11 @@ func (x *Video) GetUserId() string {
 	return ""
 }
 
-func (x *Video) GetAuthor() *v1.User {
+func (x *Video) GetAuthor() string {
 	if x != nil {
 		return x.Author
 	}
-	return nil
+	return ""
 }
 
 func (x *Video) GetVideoUrl() string {
@@ -220,8 +219,8 @@ func (x *FeedRequest) GetPageSize() int32 {
 
 type FeedReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *v11.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	Items         []*Video          `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
+	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	Items         []*Video         `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -256,7 +255,7 @@ func (*FeedReply) Descriptor() ([]byte, []int) {
 	return file_api_video_video_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *FeedReply) GetBase() *v11.BaseResponse {
+func (x *FeedReply) GetBase() *v1.BaseResponse {
 	if x != nil {
 		return x.Base
 	}
@@ -266,6 +265,294 @@ func (x *FeedReply) GetBase() *v11.BaseResponse {
 func (x *FeedReply) GetItems() []*Video {
 	if x != nil {
 		return x.Items
+	}
+	return nil
+}
+
+type FindVideosByIdsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Ids           []int64                `protobuf:"varint,1,rep,packed,name=ids,proto3" json:"ids,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FindVideosByIdsRequest) Reset() {
+	*x = FindVideosByIdsRequest{}
+	mi := &file_api_video_video_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FindVideosByIdsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FindVideosByIdsRequest) ProtoMessage() {}
+
+func (x *FindVideosByIdsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_video_video_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FindVideosByIdsRequest.ProtoReflect.Descriptor instead.
+func (*FindVideosByIdsRequest) Descriptor() ([]byte, []int) {
+	return file_api_video_video_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *FindVideosByIdsRequest) GetIds() []int64 {
+	if x != nil {
+		return x.Ids
+	}
+	return nil
+}
+
+type FindVideosByIdsReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	Items         []*Video         `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FindVideosByIdsReply) Reset() {
+	*x = FindVideosByIdsReply{}
+	mi := &file_api_video_video_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FindVideosByIdsReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FindVideosByIdsReply) ProtoMessage() {}
+
+func (x *FindVideosByIdsReply) ProtoReflect() protoreflect.Message {
+	mi := &file_api_video_video_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FindVideosByIdsReply.ProtoReflect.Descriptor instead.
+func (*FindVideosByIdsReply) Descriptor() ([]byte, []int) {
+	return file_api_video_video_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *FindVideosByIdsReply) GetBase() *v1.BaseResponse {
+	if x != nil {
+		return x.Base
+	}
+	return nil
+}
+
+func (x *FindVideosByIdsReply) GetItems() []*Video {
+	if x != nil {
+		return x.Items
+	}
+	return nil
+}
+
+type FindVideosByIdRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Ids           int64                  `protobuf:"varint,1,opt,name=ids,proto3" json:"ids,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FindVideosByIdRequest) Reset() {
+	*x = FindVideosByIdRequest{}
+	mi := &file_api_video_video_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FindVideosByIdRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FindVideosByIdRequest) ProtoMessage() {}
+
+func (x *FindVideosByIdRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_video_video_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FindVideosByIdRequest.ProtoReflect.Descriptor instead.
+func (*FindVideosByIdRequest) Descriptor() ([]byte, []int) {
+	return file_api_video_video_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *FindVideosByIdRequest) GetIds() int64 {
+	if x != nil {
+		return x.Ids
+	}
+	return 0
+}
+
+type FindVideosByIdReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	Items         *Video           `protobuf:"bytes,2,opt,name=items,proto3" json:"items,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FindVideosByIdReply) Reset() {
+	*x = FindVideosByIdReply{}
+	mi := &file_api_video_video_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FindVideosByIdReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FindVideosByIdReply) ProtoMessage() {}
+
+func (x *FindVideosByIdReply) ProtoReflect() protoreflect.Message {
+	mi := &file_api_video_video_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FindVideosByIdReply.ProtoReflect.Descriptor instead.
+func (*FindVideosByIdReply) Descriptor() ([]byte, []int) {
+	return file_api_video_video_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *FindVideosByIdReply) GetBase() *v1.BaseResponse {
+	if x != nil {
+		return x.Base
+	}
+	return nil
+}
+
+func (x *FindVideosByIdReply) GetItems() *Video {
+	if x != nil {
+		return x.Items
+	}
+	return nil
+}
+
+type IncrLikeCountRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Ids           int64                  `protobuf:"varint,1,opt,name=ids,proto3" json:"ids,omitempty"`
+	IsLike        bool                   `protobuf:"varint,2,opt,name=isLike,proto3" json:"isLike,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IncrLikeCountRequest) Reset() {
+	*x = IncrLikeCountRequest{}
+	mi := &file_api_video_video_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *IncrLikeCountRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IncrLikeCountRequest) ProtoMessage() {}
+
+func (x *IncrLikeCountRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_video_video_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IncrLikeCountRequest.ProtoReflect.Descriptor instead.
+func (*IncrLikeCountRequest) Descriptor() ([]byte, []int) {
+	return file_api_video_video_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *IncrLikeCountRequest) GetIds() int64 {
+	if x != nil {
+		return x.Ids
+	}
+	return 0
+}
+
+func (x *IncrLikeCountRequest) GetIsLike() bool {
+	if x != nil {
+		return x.IsLike
+	}
+	return false
+}
+
+type IncrLikeCountReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Base          *v1.BaseResponse       `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IncrLikeCountReply) Reset() {
+	*x = IncrLikeCountReply{}
+	mi := &file_api_video_video_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *IncrLikeCountReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IncrLikeCountReply) ProtoMessage() {}
+
+func (x *IncrLikeCountReply) ProtoReflect() protoreflect.Message {
+	mi := &file_api_video_video_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IncrLikeCountReply.ProtoReflect.Descriptor instead.
+func (*IncrLikeCountReply) Descriptor() ([]byte, []int) {
+	return file_api_video_video_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *IncrLikeCountReply) GetBase() *v1.BaseResponse {
+	if x != nil {
+		return x.Base
 	}
 	return nil
 }
@@ -283,7 +570,7 @@ type PublishRequest struct {
 
 func (x *PublishRequest) Reset() {
 	*x = PublishRequest{}
-	mi := &file_api_video_video_proto_msgTypes[3]
+	mi := &file_api_video_video_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -295,7 +582,7 @@ func (x *PublishRequest) String() string {
 func (*PublishRequest) ProtoMessage() {}
 
 func (x *PublishRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_video_video_proto_msgTypes[3]
+	mi := &file_api_video_video_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -308,7 +595,7 @@ func (x *PublishRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublishRequest.ProtoReflect.Descriptor instead.
 func (*PublishRequest) Descriptor() ([]byte, []int) {
-	return file_api_video_video_proto_rawDescGZIP(), []int{3}
+	return file_api_video_video_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *PublishRequest) GetTitle() string {
@@ -341,14 +628,14 @@ func (x *PublishRequest) GetId() int64 {
 
 type PublishReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *v11.BaseResponse      `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	Base          *v1.BaseResponse       `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *PublishReply) Reset() {
 	*x = PublishReply{}
-	mi := &file_api_video_video_proto_msgTypes[4]
+	mi := &file_api_video_video_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -360,7 +647,7 @@ func (x *PublishReply) String() string {
 func (*PublishReply) ProtoMessage() {}
 
 func (x *PublishReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_video_video_proto_msgTypes[4]
+	mi := &file_api_video_video_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -373,10 +660,10 @@ func (x *PublishReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublishReply.ProtoReflect.Descriptor instead.
 func (*PublishReply) Descriptor() ([]byte, []int) {
-	return file_api_video_video_proto_rawDescGZIP(), []int{4}
+	return file_api_video_video_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *PublishReply) GetBase() *v11.BaseResponse {
+func (x *PublishReply) GetBase() *v1.BaseResponse {
 	if x != nil {
 		return x.Base
 	}
@@ -387,14 +674,14 @@ func (x *PublishReply) GetBase() *v11.BaseResponse {
 type PublishListRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Page          *v11.PageRequest       `protobuf:"bytes,2,opt,name=page,proto3" json:"page,omitempty"`
+	Page          *v1.PageRequest        `protobuf:"bytes,2,opt,name=page,proto3" json:"page,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *PublishListRequest) Reset() {
 	*x = PublishListRequest{}
-	mi := &file_api_video_video_proto_msgTypes[5]
+	mi := &file_api_video_video_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -406,7 +693,7 @@ func (x *PublishListRequest) String() string {
 func (*PublishListRequest) ProtoMessage() {}
 
 func (x *PublishListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_video_video_proto_msgTypes[5]
+	mi := &file_api_video_video_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -419,7 +706,7 @@ func (x *PublishListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublishListRequest.ProtoReflect.Descriptor instead.
 func (*PublishListRequest) Descriptor() ([]byte, []int) {
-	return file_api_video_video_proto_rawDescGZIP(), []int{5}
+	return file_api_video_video_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *PublishListRequest) GetUserId() int64 {
@@ -429,7 +716,7 @@ func (x *PublishListRequest) GetUserId() int64 {
 	return 0
 }
 
-func (x *PublishListRequest) GetPage() *v11.PageRequest {
+func (x *PublishListRequest) GetPage() *v1.PageRequest {
 	if x != nil {
 		return x.Page
 	}
@@ -438,16 +725,16 @@ func (x *PublishListRequest) GetPage() *v11.PageRequest {
 
 type PublishListReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *v11.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	VideoList     []*Video          `protobuf:"bytes,2,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
-	Page          *v11.PageResponse `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
+	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	VideoList     []*Video         `protobuf:"bytes,2,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
+	Total         int64            `protobuf:"varint,3,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *PublishListReply) Reset() {
 	*x = PublishListReply{}
-	mi := &file_api_video_video_proto_msgTypes[6]
+	mi := &file_api_video_video_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -459,7 +746,7 @@ func (x *PublishListReply) String() string {
 func (*PublishListReply) ProtoMessage() {}
 
 func (x *PublishListReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_video_video_proto_msgTypes[6]
+	mi := &file_api_video_video_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -472,10 +759,10 @@ func (x *PublishListReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublishListReply.ProtoReflect.Descriptor instead.
 func (*PublishListReply) Descriptor() ([]byte, []int) {
-	return file_api_video_video_proto_rawDescGZIP(), []int{6}
+	return file_api_video_video_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *PublishListReply) GetBase() *v11.BaseResponse {
+func (x *PublishListReply) GetBase() *v1.BaseResponse {
 	if x != nil {
 		return x.Base
 	}
@@ -489,24 +776,24 @@ func (x *PublishListReply) GetVideoList() []*Video {
 	return nil
 }
 
-func (x *PublishListReply) GetPage() *v11.PageResponse {
+func (x *PublishListReply) GetTotal() int64 {
 	if x != nil {
-		return x.Page
+		return x.Total
 	}
-	return nil
+	return 0
 }
 
 // ========= 热门排行榜 =========
 type HotRankingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Page          *v11.PageRequest       `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
+	Page          *v1.PageRequest        `protobuf:"bytes,1,opt,name=page,proto3" json:"page,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *HotRankingRequest) Reset() {
 	*x = HotRankingRequest{}
-	mi := &file_api_video_video_proto_msgTypes[7]
+	mi := &file_api_video_video_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -518,7 +805,7 @@ func (x *HotRankingRequest) String() string {
 func (*HotRankingRequest) ProtoMessage() {}
 
 func (x *HotRankingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_video_video_proto_msgTypes[7]
+	mi := &file_api_video_video_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -531,10 +818,10 @@ func (x *HotRankingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HotRankingRequest.ProtoReflect.Descriptor instead.
 func (*HotRankingRequest) Descriptor() ([]byte, []int) {
-	return file_api_video_video_proto_rawDescGZIP(), []int{7}
+	return file_api_video_video_proto_rawDescGZIP(), []int{13}
 }
 
-func (x *HotRankingRequest) GetPage() *v11.PageRequest {
+func (x *HotRankingRequest) GetPage() *v1.PageRequest {
 	if x != nil {
 		return x.Page
 	}
@@ -543,16 +830,16 @@ func (x *HotRankingRequest) GetPage() *v11.PageRequest {
 
 type HotRankingReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *v11.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	VideoList     []*Video          `protobuf:"bytes,2,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
-	Page          *v11.PageResponse `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
+	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	VideoList     []*Video         `protobuf:"bytes,2,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
+	Total         int64            `protobuf:"varint,3,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *HotRankingReply) Reset() {
 	*x = HotRankingReply{}
-	mi := &file_api_video_video_proto_msgTypes[8]
+	mi := &file_api_video_video_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -564,7 +851,7 @@ func (x *HotRankingReply) String() string {
 func (*HotRankingReply) ProtoMessage() {}
 
 func (x *HotRankingReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_video_video_proto_msgTypes[8]
+	mi := &file_api_video_video_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -577,10 +864,10 @@ func (x *HotRankingReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HotRankingReply.ProtoReflect.Descriptor instead.
 func (*HotRankingReply) Descriptor() ([]byte, []int) {
-	return file_api_video_video_proto_rawDescGZIP(), []int{8}
+	return file_api_video_video_proto_rawDescGZIP(), []int{14}
 }
 
-func (x *HotRankingReply) GetBase() *v11.BaseResponse {
+func (x *HotRankingReply) GetBase() *v1.BaseResponse {
 	if x != nil {
 		return x.Base
 	}
@@ -594,9 +881,106 @@ func (x *HotRankingReply) GetVideoList() []*Video {
 	return nil
 }
 
-func (x *HotRankingReply) GetPage() *v11.PageResponse {
+func (x *HotRankingReply) GetTotal() int64 {
 	if x != nil {
-		return x.Page
+		return x.Total
+	}
+	return 0
+}
+
+// ========= 观看视频 =========
+type WatchVideoRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WatchVideoRequest) Reset() {
+	*x = WatchVideoRequest{}
+	mi := &file_api_video_video_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WatchVideoRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WatchVideoRequest) ProtoMessage() {}
+
+func (x *WatchVideoRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_video_video_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WatchVideoRequest.ProtoReflect.Descriptor instead.
+func (*WatchVideoRequest) Descriptor() ([]byte, []int) {
+	return file_api_video_video_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *WatchVideoRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type WatchVideoReply struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	Video         *Video           `protobuf:"bytes,2,opt,name=video,proto3" json:"video,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WatchVideoReply) Reset() {
+	*x = WatchVideoReply{}
+	mi := &file_api_video_video_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WatchVideoReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WatchVideoReply) ProtoMessage() {}
+
+func (x *WatchVideoReply) ProtoReflect() protoreflect.Message {
+	mi := &file_api_video_video_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WatchVideoReply.ProtoReflect.Descriptor instead.
+func (*WatchVideoReply) Descriptor() ([]byte, []int) {
+	return file_api_video_video_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *WatchVideoReply) GetBase() *v1.BaseResponse {
+	if x != nil {
+		return x.Base
+	}
+	return nil
+}
+
+func (x *WatchVideoReply) GetVideo() *Video {
+	if x != nil {
+		return x.Video
 	}
 	return nil
 }
@@ -605,14 +989,17 @@ func (x *HotRankingReply) GetPage() *v11.PageResponse {
 type SearchRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Keywords      string                 `protobuf:"bytes,1,opt,name=keywords,proto3" json:"keywords,omitempty"` // 搜索关键字
-	Page          *v11.PageRequest       `protobuf:"bytes,2,opt,name=page,proto3" json:"page,omitempty"`
+	Page          *v1.PageRequest        `protobuf:"bytes,2,opt,name=page,proto3" json:"page,omitempty"`
+	FromDate      int64                  `protobuf:"varint,3,opt,name=from_date,json=fromDate,proto3" json:"from_date,omitempty"`
+	ToDate        int64                  `protobuf:"varint,4,opt,name=to_date,json=toDate,proto3" json:"to_date,omitempty"`
+	Username      string                 `protobuf:"bytes,5,opt,name=username,proto3" json:"username,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SearchRequest) Reset() {
 	*x = SearchRequest{}
-	mi := &file_api_video_video_proto_msgTypes[9]
+	mi := &file_api_video_video_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -624,7 +1011,7 @@ func (x *SearchRequest) String() string {
 func (*SearchRequest) ProtoMessage() {}
 
 func (x *SearchRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_video_video_proto_msgTypes[9]
+	mi := &file_api_video_video_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -637,7 +1024,7 @@ func (x *SearchRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchRequest.ProtoReflect.Descriptor instead.
 func (*SearchRequest) Descriptor() ([]byte, []int) {
-	return file_api_video_video_proto_rawDescGZIP(), []int{9}
+	return file_api_video_video_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *SearchRequest) GetKeywords() string {
@@ -647,25 +1034,46 @@ func (x *SearchRequest) GetKeywords() string {
 	return ""
 }
 
-func (x *SearchRequest) GetPage() *v11.PageRequest {
+func (x *SearchRequest) GetPage() *v1.PageRequest {
 	if x != nil {
 		return x.Page
 	}
 	return nil
 }
 
+func (x *SearchRequest) GetFromDate() int64 {
+	if x != nil {
+		return x.FromDate
+	}
+	return 0
+}
+
+func (x *SearchRequest) GetToDate() int64 {
+	if x != nil {
+		return x.ToDate
+	}
+	return 0
+}
+
+func (x *SearchRequest) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
 type SearchReply struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Base          *v11.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
-	VideoList     []*Video          `protobuf:"bytes,2,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
-	Page          *v11.PageResponse `protobuf:"bytes,3,opt,name=page,proto3" json:"page,omitempty"`
+	Base          *v1.BaseResponse `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	VideoList     []*Video         `protobuf:"bytes,2,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
+	Total         int64            `protobuf:"varint,3,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SearchReply) Reset() {
 	*x = SearchReply{}
-	mi := &file_api_video_video_proto_msgTypes[10]
+	mi := &file_api_video_video_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -677,7 +1085,7 @@ func (x *SearchReply) String() string {
 func (*SearchReply) ProtoMessage() {}
 
 func (x *SearchReply) ProtoReflect() protoreflect.Message {
-	mi := &file_api_video_video_proto_msgTypes[10]
+	mi := &file_api_video_video_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -690,10 +1098,10 @@ func (x *SearchReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchReply.ProtoReflect.Descriptor instead.
 func (*SearchReply) Descriptor() ([]byte, []int) {
-	return file_api_video_video_proto_rawDescGZIP(), []int{10}
+	return file_api_video_video_proto_rawDescGZIP(), []int{18}
 }
 
-func (x *SearchReply) GetBase() *v11.BaseResponse {
+func (x *SearchReply) GetBase() *v1.BaseResponse {
 	if x != nil {
 		return x.Base
 	}
@@ -707,22 +1115,22 @@ func (x *SearchReply) GetVideoList() []*Video {
 	return nil
 }
 
-func (x *SearchReply) GetPage() *v11.PageResponse {
+func (x *SearchReply) GetTotal() int64 {
 	if x != nil {
-		return x.Page
+		return x.Total
 	}
-	return nil
+	return 0
 }
 
 var File_api_video_video_proto protoreflect.FileDescriptor
 
 const file_api_video_video_proto_rawDesc = "" +
 	"\n" +
-	"\x15api/video/video.proto\x12\fapi.video.v1\x1a\x15api/common/base.proto\x1a\x13api/user/user.proto\"\x8f\x03\n" +
+	"\x15api/video/video.proto\x12\fapi.video.v1\x1a\x15api/common/base.proto\"\xfc\x02\n" +
 	"\x05Video\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\tR\x06userId\x12)\n" +
-	"\x06author\x18\x03 \x01(\v2\x11.api.user.v1.UserR\x06author\x12\x1b\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x16\n" +
+	"\x06author\x18\x03 \x01(\tR\x06author\x12\x1b\n" +
 	"\tvideo_url\x18\x04 \x01(\tR\bvideoUrl\x12\x1b\n" +
 	"\tcover_url\x18\x05 \x01(\tR\bcoverUrl\x12\x14\n" +
 	"\x05title\x18\x06 \x01(\tR\x05title\x12 \n" +
@@ -745,7 +1153,22 @@ const file_api_video_video_proto_rawDesc = "" +
 	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\"g\n" +
 	"\tFeedReply\x12/\n" +
 	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x12)\n" +
-	"\x05items\x18\x02 \x03(\v2\x13.api.video.v1.VideoR\x05items\"l\n" +
+	"\x05items\x18\x02 \x03(\v2\x13.api.video.v1.VideoR\x05items\"*\n" +
+	"\x16FindVideosByIdsRequest\x12\x10\n" +
+	"\x03ids\x18\x01 \x03(\x03R\x03ids\"r\n" +
+	"\x14FindVideosByIdsReply\x12/\n" +
+	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x12)\n" +
+	"\x05items\x18\x02 \x03(\v2\x13.api.video.v1.VideoR\x05items\")\n" +
+	"\x15FindVideosByIdRequest\x12\x10\n" +
+	"\x03ids\x18\x01 \x01(\x03R\x03ids\"q\n" +
+	"\x13FindVideosByIdReply\x12/\n" +
+	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x12)\n" +
+	"\x05items\x18\x02 \x01(\v2\x13.api.video.v1.VideoR\x05items\"@\n" +
+	"\x14IncrLikeCountRequest\x12\x10\n" +
+	"\x03ids\x18\x01 \x01(\x03R\x03ids\x12\x16\n" +
+	"\x06isLike\x18\x02 \x01(\bR\x06isLike\"E\n" +
+	"\x12IncrLikeCountReply\x12/\n" +
+	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\"l\n" +
 	"\x0ePublishRequest\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x12\n" +
@@ -755,33 +1178,46 @@ const file_api_video_video_proto_rawDesc = "" +
 	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\"]\n" +
 	"\x12PublishListRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12.\n" +
-	"\x04page\x18\x02 \x01(\v2\x1a.api.common.v1.PageRequestR\x04page\"\xa8\x01\n" +
+	"\x04page\x18\x02 \x01(\v2\x1a.api.common.v1.PageRequestR\x04page\"\x8d\x01\n" +
 	"\x10PublishListReply\x12/\n" +
 	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x122\n" +
 	"\n" +
-	"video_list\x18\x02 \x03(\v2\x13.api.video.v1.VideoR\tvideoList\x12/\n" +
-	"\x04page\x18\x03 \x01(\v2\x1b.api.common.v1.PageResponseR\x04page\"C\n" +
+	"video_list\x18\x02 \x03(\v2\x13.api.video.v1.VideoR\tvideoList\x12\x14\n" +
+	"\x05total\x18\x03 \x01(\x03R\x05total\"C\n" +
 	"\x11HotRankingRequest\x12.\n" +
-	"\x04page\x18\x01 \x01(\v2\x1a.api.common.v1.PageRequestR\x04page\"\xa7\x01\n" +
+	"\x04page\x18\x01 \x01(\v2\x1a.api.common.v1.PageRequestR\x04page\"\x8c\x01\n" +
 	"\x0fHotRankingReply\x12/\n" +
 	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x122\n" +
 	"\n" +
-	"video_list\x18\x02 \x03(\v2\x13.api.video.v1.VideoR\tvideoList\x12/\n" +
-	"\x04page\x18\x03 \x01(\v2\x1b.api.common.v1.PageResponseR\x04page\"[\n" +
+	"video_list\x18\x02 \x03(\v2\x13.api.video.v1.VideoR\tvideoList\x12\x14\n" +
+	"\x05total\x18\x03 \x01(\x03R\x05total\"#\n" +
+	"\x11WatchVideoRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"m\n" +
+	"\x0fWatchVideoReply\x12/\n" +
+	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x12)\n" +
+	"\x05video\x18\x02 \x01(\v2\x13.api.video.v1.VideoR\x05video\"\xad\x01\n" +
 	"\rSearchRequest\x12\x1a\n" +
 	"\bkeywords\x18\x01 \x01(\tR\bkeywords\x12.\n" +
-	"\x04page\x18\x02 \x01(\v2\x1a.api.common.v1.PageRequestR\x04page\"\xa3\x01\n" +
+	"\x04page\x18\x02 \x01(\v2\x1a.api.common.v1.PageRequestR\x04page\x12\x1b\n" +
+	"\tfrom_date\x18\x03 \x01(\x03R\bfromDate\x12\x17\n" +
+	"\ato_date\x18\x04 \x01(\x03R\x06toDate\x12\x1a\n" +
+	"\busername\x18\x05 \x01(\tR\busername\"\x88\x01\n" +
 	"\vSearchReply\x12/\n" +
 	"\x04base\x18\x01 \x01(\v2\x1b.api.common.v1.BaseResponseR\x04base\x122\n" +
 	"\n" +
-	"video_list\x18\x02 \x03(\v2\x13.api.video.v1.VideoR\tvideoList\x12/\n" +
-	"\x04page\x18\x03 \x01(\v2\x1b.api.common.v1.PageResponseR\x04page2\xf0\x02\n" +
+	"video_list\x18\x02 \x03(\v2\x13.api.video.v1.VideoR\tvideoList\x12\x14\n" +
+	"\x05total\x18\x03 \x01(\x03R\x05total2\xcc\x05\n" +
 	"\fVideoService\x12:\n" +
-	"\x04Feed\x12\x19.api.video.v1.FeedRequest\x1a\x17.api.video.v1.FeedReply\x12C\n" +
+	"\x04Feed\x12\x19.api.video.v1.FeedRequest\x1a\x17.api.video.v1.FeedReply\x12[\n" +
+	"\x0fFindVideosByIds\x12$.api.video.v1.FindVideosByIdsRequest\x1a\".api.video.v1.FindVideosByIdsReply\x12X\n" +
+	"\x0eFindVideosById\x12#.api.video.v1.FindVideosByIdRequest\x1a!.api.video.v1.FindVideosByIdReply\x12U\n" +
+	"\rIncrLikeCount\x12\".api.video.v1.IncrLikeCountRequest\x1a .api.video.v1.IncrLikeCountReply\x12C\n" +
 	"\aPublish\x12\x1c.api.video.v1.PublishRequest\x1a\x1a.api.video.v1.PublishReply\x12O\n" +
 	"\vPublishList\x12 .api.video.v1.PublishListRequest\x1a\x1e.api.video.v1.PublishListReply\x12L\n" +
 	"\n" +
-	"HotRanking\x12\x1f.api.video.v1.HotRankingRequest\x1a\x1d.api.video.v1.HotRankingReply\x12@\n" +
+	"HotRanking\x12\x1f.api.video.v1.HotRankingRequest\x1a\x1d.api.video.v1.HotRankingReply\x12L\n" +
+	"\n" +
+	"WatchVideo\x12\x1f.api.video.v1.WatchVideoRequest\x1a\x1d.api.video.v1.WatchVideoReply\x12@\n" +
 	"\x06Search\x12\x1b.api.video.v1.SearchRequest\x1a\x19.api.video.v1.SearchReplyB\x1dZ\x1bwest2-video/api/video/v1;v1b\x06proto3"
 
 var (
@@ -796,56 +1232,73 @@ func file_api_video_video_proto_rawDescGZIP() []byte {
 	return file_api_video_video_proto_rawDescData
 }
 
-var file_api_video_video_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_api_video_video_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_api_video_video_proto_goTypes = []any{
-	(*Video)(nil),              // 0: api.video.v1.Video
-	(*FeedRequest)(nil),        // 1: api.video.v1.FeedRequest
-	(*FeedReply)(nil),          // 2: api.video.v1.FeedReply
-	(*PublishRequest)(nil),     // 3: api.video.v1.PublishRequest
-	(*PublishReply)(nil),       // 4: api.video.v1.PublishReply
-	(*PublishListRequest)(nil), // 5: api.video.v1.PublishListRequest
-	(*PublishListReply)(nil),   // 6: api.video.v1.PublishListReply
-	(*HotRankingRequest)(nil),  // 7: api.video.v1.HotRankingRequest
-	(*HotRankingReply)(nil),    // 8: api.video.v1.HotRankingReply
-	(*SearchRequest)(nil),      // 9: api.video.v1.SearchRequest
-	(*SearchReply)(nil),        // 10: api.video.v1.SearchReply
-	(*v1.User)(nil),            // 11: api.user.v1.User
-	(*v11.BaseResponse)(nil),   // 12: api.common.v1.BaseResponse
-	(*v11.PageRequest)(nil),    // 13: api.common.v1.PageRequest
-	(*v11.PageResponse)(nil),   // 14: api.common.v1.PageResponse
+	(*Video)(nil),                  // 0: api.video.v1.Video
+	(*FeedRequest)(nil),            // 1: api.video.v1.FeedRequest
+	(*FeedReply)(nil),              // 2: api.video.v1.FeedReply
+	(*FindVideosByIdsRequest)(nil), // 3: api.video.v1.FindVideosByIdsRequest
+	(*FindVideosByIdsReply)(nil),   // 4: api.video.v1.FindVideosByIdsReply
+	(*FindVideosByIdRequest)(nil),  // 5: api.video.v1.FindVideosByIdRequest
+	(*FindVideosByIdReply)(nil),    // 6: api.video.v1.FindVideosByIdReply
+	(*IncrLikeCountRequest)(nil),   // 7: api.video.v1.IncrLikeCountRequest
+	(*IncrLikeCountReply)(nil),     // 8: api.video.v1.IncrLikeCountReply
+	(*PublishRequest)(nil),         // 9: api.video.v1.PublishRequest
+	(*PublishReply)(nil),           // 10: api.video.v1.PublishReply
+	(*PublishListRequest)(nil),     // 11: api.video.v1.PublishListRequest
+	(*PublishListReply)(nil),       // 12: api.video.v1.PublishListReply
+	(*HotRankingRequest)(nil),      // 13: api.video.v1.HotRankingRequest
+	(*HotRankingReply)(nil),        // 14: api.video.v1.HotRankingReply
+	(*WatchVideoRequest)(nil),      // 15: api.video.v1.WatchVideoRequest
+	(*WatchVideoReply)(nil),        // 16: api.video.v1.WatchVideoReply
+	(*SearchRequest)(nil),          // 17: api.video.v1.SearchRequest
+	(*SearchReply)(nil),            // 18: api.video.v1.SearchReply
+	(*v1.BaseResponse)(nil),        // 19: api.common.v1.BaseResponse
+	(*v1.PageRequest)(nil),         // 20: api.common.v1.PageRequest
 }
 var file_api_video_video_proto_depIdxs = []int32{
-	11, // 0: api.video.v1.Video.author:type_name -> api.user.v1.User
-	12, // 1: api.video.v1.FeedReply.base:type_name -> api.common.v1.BaseResponse
-	0,  // 2: api.video.v1.FeedReply.items:type_name -> api.video.v1.Video
-	12, // 3: api.video.v1.PublishReply.base:type_name -> api.common.v1.BaseResponse
-	13, // 4: api.video.v1.PublishListRequest.page:type_name -> api.common.v1.PageRequest
-	12, // 5: api.video.v1.PublishListReply.base:type_name -> api.common.v1.BaseResponse
-	0,  // 6: api.video.v1.PublishListReply.video_list:type_name -> api.video.v1.Video
-	14, // 7: api.video.v1.PublishListReply.page:type_name -> api.common.v1.PageResponse
-	13, // 8: api.video.v1.HotRankingRequest.page:type_name -> api.common.v1.PageRequest
-	12, // 9: api.video.v1.HotRankingReply.base:type_name -> api.common.v1.BaseResponse
-	0,  // 10: api.video.v1.HotRankingReply.video_list:type_name -> api.video.v1.Video
-	14, // 11: api.video.v1.HotRankingReply.page:type_name -> api.common.v1.PageResponse
-	13, // 12: api.video.v1.SearchRequest.page:type_name -> api.common.v1.PageRequest
-	12, // 13: api.video.v1.SearchReply.base:type_name -> api.common.v1.BaseResponse
-	0,  // 14: api.video.v1.SearchReply.video_list:type_name -> api.video.v1.Video
-	14, // 15: api.video.v1.SearchReply.page:type_name -> api.common.v1.PageResponse
-	1,  // 16: api.video.v1.VideoService.Feed:input_type -> api.video.v1.FeedRequest
-	3,  // 17: api.video.v1.VideoService.Publish:input_type -> api.video.v1.PublishRequest
-	5,  // 18: api.video.v1.VideoService.PublishList:input_type -> api.video.v1.PublishListRequest
-	7,  // 19: api.video.v1.VideoService.HotRanking:input_type -> api.video.v1.HotRankingRequest
-	9,  // 20: api.video.v1.VideoService.Search:input_type -> api.video.v1.SearchRequest
-	2,  // 21: api.video.v1.VideoService.Feed:output_type -> api.video.v1.FeedReply
-	4,  // 22: api.video.v1.VideoService.Publish:output_type -> api.video.v1.PublishReply
-	6,  // 23: api.video.v1.VideoService.PublishList:output_type -> api.video.v1.PublishListReply
-	8,  // 24: api.video.v1.VideoService.HotRanking:output_type -> api.video.v1.HotRankingReply
-	10, // 25: api.video.v1.VideoService.Search:output_type -> api.video.v1.SearchReply
-	21, // [21:26] is the sub-list for method output_type
-	16, // [16:21] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	19, // 0: api.video.v1.FeedReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 1: api.video.v1.FeedReply.items:type_name -> api.video.v1.Video
+	19, // 2: api.video.v1.FindVideosByIdsReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 3: api.video.v1.FindVideosByIdsReply.items:type_name -> api.video.v1.Video
+	19, // 4: api.video.v1.FindVideosByIdReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 5: api.video.v1.FindVideosByIdReply.items:type_name -> api.video.v1.Video
+	19, // 6: api.video.v1.IncrLikeCountReply.base:type_name -> api.common.v1.BaseResponse
+	19, // 7: api.video.v1.PublishReply.base:type_name -> api.common.v1.BaseResponse
+	20, // 8: api.video.v1.PublishListRequest.page:type_name -> api.common.v1.PageRequest
+	19, // 9: api.video.v1.PublishListReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 10: api.video.v1.PublishListReply.video_list:type_name -> api.video.v1.Video
+	20, // 11: api.video.v1.HotRankingRequest.page:type_name -> api.common.v1.PageRequest
+	19, // 12: api.video.v1.HotRankingReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 13: api.video.v1.HotRankingReply.video_list:type_name -> api.video.v1.Video
+	19, // 14: api.video.v1.WatchVideoReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 15: api.video.v1.WatchVideoReply.video:type_name -> api.video.v1.Video
+	20, // 16: api.video.v1.SearchRequest.page:type_name -> api.common.v1.PageRequest
+	19, // 17: api.video.v1.SearchReply.base:type_name -> api.common.v1.BaseResponse
+	0,  // 18: api.video.v1.SearchReply.video_list:type_name -> api.video.v1.Video
+	1,  // 19: api.video.v1.VideoService.Feed:input_type -> api.video.v1.FeedRequest
+	3,  // 20: api.video.v1.VideoService.FindVideosByIds:input_type -> api.video.v1.FindVideosByIdsRequest
+	5,  // 21: api.video.v1.VideoService.FindVideosById:input_type -> api.video.v1.FindVideosByIdRequest
+	7,  // 22: api.video.v1.VideoService.IncrLikeCount:input_type -> api.video.v1.IncrLikeCountRequest
+	9,  // 23: api.video.v1.VideoService.Publish:input_type -> api.video.v1.PublishRequest
+	11, // 24: api.video.v1.VideoService.PublishList:input_type -> api.video.v1.PublishListRequest
+	13, // 25: api.video.v1.VideoService.HotRanking:input_type -> api.video.v1.HotRankingRequest
+	15, // 26: api.video.v1.VideoService.WatchVideo:input_type -> api.video.v1.WatchVideoRequest
+	17, // 27: api.video.v1.VideoService.Search:input_type -> api.video.v1.SearchRequest
+	2,  // 28: api.video.v1.VideoService.Feed:output_type -> api.video.v1.FeedReply
+	4,  // 29: api.video.v1.VideoService.FindVideosByIds:output_type -> api.video.v1.FindVideosByIdsReply
+	6,  // 30: api.video.v1.VideoService.FindVideosById:output_type -> api.video.v1.FindVideosByIdReply
+	8,  // 31: api.video.v1.VideoService.IncrLikeCount:output_type -> api.video.v1.IncrLikeCountReply
+	10, // 32: api.video.v1.VideoService.Publish:output_type -> api.video.v1.PublishReply
+	12, // 33: api.video.v1.VideoService.PublishList:output_type -> api.video.v1.PublishListReply
+	14, // 34: api.video.v1.VideoService.HotRanking:output_type -> api.video.v1.HotRankingReply
+	16, // 35: api.video.v1.VideoService.WatchVideo:output_type -> api.video.v1.WatchVideoReply
+	18, // 36: api.video.v1.VideoService.Search:output_type -> api.video.v1.SearchReply
+	28, // [28:37] is the sub-list for method output_type
+	19, // [19:28] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_api_video_video_proto_init() }
@@ -859,7 +1312,7 @@ func file_api_video_video_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_video_video_proto_rawDesc), len(file_api_video_video_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

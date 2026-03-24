@@ -8,9 +8,9 @@ import (
 	userData "userService/internal/data"
 	"userService/internal/domain"
 	v1 "west2-video/api/common/v1"
+	userpb "west2-video/api/user/v1"
 	"west2-video/common/errs"
 	"west2-video/common/logs"
-	userpb "west2-video/api/user/v1"
 )
 
 type UserServiceService struct {
@@ -81,6 +81,36 @@ func (s *UserServiceService) GetUserInfo(ctx context.Context, req *userpb.UserIn
 	}
 	u := userData.UserFormat(userById)
 	rsp := &userpb.UserInfoReply{
+		User: u,
+	}
+	rsp.Base = v1.Success()
+	return rsp, nil
+}
+func (s *UserServiceService) GetUserInfoByUserName(ctx context.Context, req *userpb.UserInfoUserNameRequest) (*userpb.UserInfoUserNameReply, error) {
+	c, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+	uInfo, err := s.userDomain.GetUserInfoByUserName(c, req.Username)
+	if err != nil {
+		logs.LG.Error("UserServiceService userDomain GetUserInfoByUserName error", zap.Error(err))
+		return nil, errs.GrpcError(err)
+	}
+	rsp := &userpb.UserInfoUserNameReply{
+		User: userData.UserFormat(uInfo),
+	}
+	rsp.Base = v1.Success()
+	return rsp, nil
+}
+func (s *UserServiceService) GetUserInfos(ctx context.Context, req *userpb.UserInfosRequest) (*userpb.UserInfosReply, error) {
+	uids := req.UserId
+	c, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+	userByIds, err := s.userDomain.FindUserByIds(c, uids)
+	if err != nil {
+		logs.LG.Error("UserServiceService userDomain FindUserById error", zap.Error(err))
+		return nil, errs.GrpcError(err)
+	}
+	u := userData.UserFormatAll(userByIds)
+	rsp := &userpb.UserInfosReply{
 		User: u,
 	}
 	rsp.Base = v1.Success()

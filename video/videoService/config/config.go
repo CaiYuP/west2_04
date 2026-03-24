@@ -1,7 +1,10 @@
 package config
 
 import (
+	"bytes"
+	"fmt"
 	"github.com/go-redis/redis/v8"
+	"github.com/nacos-group/nacos-sdk-go/v2/vo"
 	"github.com/spf13/viper"
 	"log"
 	"os"
@@ -20,6 +23,13 @@ type Config struct {
 	RedisConfig *RedisConfig
 	Mc          *MysqlConfig
 	Dbc         *DbConfig
+	ESc         *EServer
+}
+type EServer struct {
+	UserService        string
+	VideoService       string
+	InteractionService string
+	SocialService      string
 }
 type JwtConfig struct {
 	AccessSecret  string
@@ -73,6 +83,7 @@ func (c *Config) ReloadConfig() {
 	c.ReConnMysql()
 	c.ReConnRedis()
 	c.ReadGrpcConfig()
+	c.ReadEServerConfig()
 }
 
 type DbConfig struct {
@@ -87,17 +98,50 @@ type DbConfig struct {
 func InitConfig() *Config {
 	v := viper.New()
 	conf := &Config{viper: v}
-	workDir, _ := os.Getwd()
-	conf.viper.SetConfigName("config")
-	conf.viper.SetConfigType("yaml")
-	conf.viper.AddConfigPath(workDir + "/config")
-	err := conf.viper.ReadInConfig()
+	//先从nacos读取配置 如果读取不到在本地读取
+	nacosClient := InitNacosClient()
+	configYaml, err := nacosClient.confClient.GetConfig(vo.ConfigParam{
+		DataId: "config.yaml",
+		Group:  nacosClient.group,
+	})
 	if err != nil {
 		log.Fatalln(err)
-		return nil
+	}
+	err = nacosClient.confClient.ListenConfig(vo.ConfigParam{
+		DataId: "config.yaml",
+		Group:  nacosClient.group,
+		OnChange: func(namespace, group, dataId, data string) {
+			logs.LG.Info(fmt.Sprintf("load nacos config changed %s\n", data))
+			err = conf.viper.ReadConfig(bytes.NewBuffer([]byte(data)))
+			if err != nil {
+				logs.LG.Error(fmt.Sprintf("load nacos changed config fail %s\n", err))
+			}
+			//所有的配置应该重新读取
+			conf.ReloadConfig()
+		},
+	})
+	conf.viper.SetConfigType("yaml")
+	if configYaml != "" {
+		err = conf.viper.ReadConfig(bytes.NewBuffer([]byte(configYaml)))
+		if err != nil {
+			log.Fatalln(err)
+			return nil
+		}
+		//	fmt.Println(fmt.Sprintf("load nacos config success %s\n", configYaml))
+	} else {
+		workDir, _ := os.Getwd()
+		conf.viper.SetConfigName("config")
+		conf.viper.SetConfigType("yaml")
+		conf.viper.AddConfigPath(workDir + "/config")
+		err := conf.viper.ReadInConfig()
+		if err != nil {
+			log.Fatalln(err)
+			return nil
+		}
 	}
 	conf.ReloadConfig()
 	return conf
+
 }
 func (c *Config) ReadServerConfig() {
 	sc := &ServerConfig{
@@ -195,7 +239,8 @@ func (c *Config) InitDbConfig() {
 	c.Dbc = mc
 }
 func (c *Config) ReadMinIoConfig() {
-	c.viper.UnmarshalKey("minio", &c.MinIoConfig)
+	c.MinIoConfig = &MinIoConfig{}
+	c.viper.UnmarshalKey("minio", c.MinIoConfig)
 }
 
 func (c *Config) ReadGrpcConfig() {
@@ -206,4 +251,8 @@ func (c *Config) ReadGrpcConfig() {
 		Weight:  c.viper.GetInt64("grpc.weight"),
 	}
 	c.Gc = gc
+}
+
+func (c *Config) ReadEServerConfig() {
+	c.viper.UnmarshalKey("services", &c.ESc)
 }
